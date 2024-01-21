@@ -25,6 +25,6 @@ public class PlaceController {
         RsData<Place> place = placeService.save(placeReqDto.getName(), placeReqDto.getAddress(), placeReqDto.getCoordinates());
 
         // TODO 장소 저장 완료를 보여줄 필요가 있을까?
-        return "main";
+        return "main"; // TODO 임시로 main.html을 사용 나중에 다른거로 보여줘야 함
     }
 }
