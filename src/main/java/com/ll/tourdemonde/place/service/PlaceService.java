@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,11 +19,11 @@ public class PlaceService {
 
     // 장소 여러개 저장
     @Transactional
-    public RsData<Place> saveList(PlaceReqDtoList placeReqDtoList) {
+    public RsData<Place> save(PlaceReqDtoList placeReqDtoList) {
         for (PlaceReqDto placeReqDto : placeReqDtoList.getPlaceReqDtoList()) {
             String name = placeReqDto.getName();
             String address = placeReqDto.getAddress();
-            List<String> coordinates = placeReqDto.getCoordinates();
+            String coordinates = placeReqDto.getCoordinates();
 
             // 장소가 이미 존재 하는 경우, 장소를 저장 하지 않음
             Optional<Place> existingPlaceOptional = placeRepository.findByNameAndAddress(name, address);
@@ -39,7 +38,7 @@ public class PlaceService {
         return new RsData<>(
                 "S-1",
                 "장소 저장 완료",
-                null // TODO 저장 완료 후 데이터를 줘야할까?
+                null
         );
     }
 }
