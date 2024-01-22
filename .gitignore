@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### 비공개 ###
+application-secret.yml
+TdM_dev.mv.db
+TdM_dev.trace.db
