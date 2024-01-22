@@ -16,7 +16,7 @@ spring:
       ddl-auto: create
 logging:
   level:
-    com.ll.medium: DEBUG
+    com.ll.tourdemonde: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
