@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Builder
 @NoArgsConstructor
@@ -20,10 +22,15 @@ public class ReservationDetail {
     @JoinColumn(name = "reservation_Id")
     private Reservation reservation;
 
-    @NotNull
-    private String type;
+    @NotNull(message = "시작날짜는 빈칸일 수 없습니다.")
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
 
     @NotNull
     private String time;
+
+    @NotNull
+    private Long price;
 
 }
