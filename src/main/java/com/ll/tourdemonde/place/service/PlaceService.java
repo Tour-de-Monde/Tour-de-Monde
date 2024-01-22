@@ -41,4 +41,15 @@ public class PlaceService {
                 null
         );
     }
+
+    public RsData<Place> findPlace(PlaceReqDto placeReqDto) {
+        Place place = placeRepository.findByNameAndAddress(placeReqDto.getName(), placeReqDto.getAddress())
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 장소는 없습니다."));
+
+        return new RsData<>(
+                "S-2",
+                "%s 장소를 찾았습니다.".formatted(place.getName()),
+                place
+        );
+    }
 }
