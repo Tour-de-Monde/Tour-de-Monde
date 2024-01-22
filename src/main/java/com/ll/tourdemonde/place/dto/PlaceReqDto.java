@@ -11,6 +11,5 @@ public class PlaceReqDto {
     private String name; // 이름
     @NotBlank
     private String address; // 주소
-    @NotBlank
-    private List<String> coordinates; // [latitude(위도), longitude(경도)]
+    private List<String> coordinates; // [latitude(위도), longitude(경도)] TODO 프론트단에서 무조건 들어오게 하기
 }
