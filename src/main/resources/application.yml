@@ -1,0 +1,46 @@
+spring:
+  profiles:
+    active: dev
+    include: secret # ?? yml ??
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: jdbc:h2:./TdM_dev;MODE=MYSQL # DB ?? : TdM_dev
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+  thymeleaf: # Thymeleaf? ??? ??? ????
+    cache: false # ?? ?? ???? ??? ??? ???? ???? ?? ???? ???? ??? ?? ??? ??? ? ??? ???.
+  mvc: # Spring MVC? Hidden Method Filter ???
+    hiddenmethod:
+      filter: # HTTP ???? ???? ? ???? _method ????? ???? ??
+        enabled: true # HTML ??? PUT ?? DELETE? ?? HTTP ???? ??? ? ?? ?
+logging:
+  level:
+    com.ll.medium: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.extract: TRACE
+    org.springframework.transaction.interceptor: TRACE
+#    org.springframework.security: DEBUG #??? ???? ?? ??
+custom:
+  site:
+    name: Tour-de-Monde
+    baseUrl: "http://localhost:${server.port}"
+  tempDirPath: c:/temp/TdM_dev/temp
+  genFile:
+    dirPath: c:/temp/TdM_dev
