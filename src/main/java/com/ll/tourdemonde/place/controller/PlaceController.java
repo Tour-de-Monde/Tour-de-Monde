@@ -33,4 +33,12 @@ public class PlaceController {
 
         return "domain/place/test"; // TODO 임시로 test.html을 사용 나중에 다른거로 보여줘야 함
     }
+
+    //    @PreAuthorize("isAuthenticated()") // 로그인한 회원만 글쓰기 접근 가능 TODO 로그인 할 때 주석 해제
+    @PostMapping("/delete") // @DeleteMapping
+    public String deletePlace(PlaceReqDto placeReqDto) {
+        RsData<Place> place = placeService.deletePlace(placeReqDto);
+
+        return "domain/place/test"; // TODO 임시로 test.html을 사용 나중에 다른거로 보여줘야 함
+    }
 }

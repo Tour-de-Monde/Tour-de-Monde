@@ -52,4 +52,18 @@ public class PlaceService {
                 place
         );
     }
+
+    @Transactional
+    public RsData<Place> deletePlace(PlaceReqDto placeReqDto) {
+        // 장소 찾기
+        RsData<Place> place = findPlace(placeReqDto);
+
+        placeRepository.delete(place.getData());
+
+        return new RsData<>(
+                "S-3",
+                "%s 장소를 삭제했습니다.".formatted(place.getData().getName()),
+                null
+        );
+    }
 }
