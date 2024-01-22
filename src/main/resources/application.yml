@@ -1,7 +1,7 @@
 spring:
   profiles:
     active: dev
-    include: secret # \uD574\uB2F9 yml \uD3EC\uD568
+    include: secret # personal yml
   servlet:
     multipart:
       max-file-size: 50MB
@@ -10,33 +10,32 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:h2:./TdM_dev;MODE=MYSQL # DB \uC774\uB984 : TdM_dev
+    url: jdbc:h2:./TdM_dev;MODE=MYSQL # DB : TdM_dev
     username: sa
     password:
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: update # TODO update\uB85C \uBC14\uAFB8\uAE30
+      ddl-auto: update
     properties:
       hibernate:
         default_batch_fetch_size: 100
         format_sql: true
         highlight_sql: true
         use_sql_comments: true
-  thymeleaf: # Thymeleaf\uC758 \uD15C\uD50C\uB9BF \uCE90\uC2DC\uAC00 \uBE44\uD65C\uC131\uD654
-    cache: false # \uAC1C\uBC1C \uC911\uC5D0 \uD15C\uD50C\uB9BF\uC774 \uBCC0\uACBD\uB420 \uB54C\uB9C8\uB2E4 \uC790\uB3D9\uC73C\uB85C \uC801\uC6A9\uB418\uB294 \uAC83\uC744 \uB3C4\uC640\uC8FC\uC5B4 \uAC1C\uBC1C\uC790\uAC00 \uBE60\uB974\uAC8C \uBCC0\uACBD \uC0AC\uD56D\uC744 \uD655\uC778\uD560 \uC218 \uC788\uB3C4\uB85D \uD569\uB2C8\uB2E4.
-  mvc: # Spring MVC\uC758 Hidden Method Filter \uD65C\uC131\uD654
+  thymeleaf:
+    cache: false
+  mvc:
     hiddenmethod:
-      filter: # HTTP \uBA54\uC11C\uB4DC\uB97C \uC9C0\uC815\uD558\uB294 \uB370 \uC0AC\uC6A9\uB418\uB294 _method \uD30C\uB77C\uBBF8\uD130\uB97C \uCC98\uB9AC\uD558\uB294 \uD544\uD130
-        enabled: true # HTML \uD3FC\uC5D0\uC11C PUT \uB610\uB294 DELETE\uC640 \uAC19\uC740 HTTP \uBA54\uC11C\uB4DC\uB97C \uC0AC\uC6A9\uD560 \uC218 \uC788\uAC8C \uB428
+      filter:
+        enabled: true
 logging:
   level:
-    com.ll.medium: DEBUG
+    com.ll.tourdemonde: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
-#    org.springframework.security: DEBUG #\uC2A4\uD504\uB9C1 \uC2DC\uD050\uB9AC\uD2F0 \uB85C\uADF8 \uD655\uC778
 custom:
   site:
     name: Tour-de-Monde
