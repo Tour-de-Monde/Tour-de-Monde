@@ -15,13 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PlaceController {
     private final PlaceService placeService;
 
-    // 장소 1~N개 저장 TODO 게시글 저장시 한번에 여러장소 저장 그리고 게시글:장소는 1:N이 아닌 N:1이 아닌가?
+    // 장소 1~N개 저장
 //    @PreAuthorize("isAuthenticated()") // 로그인한 회원만 글쓰기 접근 가능 TODO 로그인 할 때 주석 해제
-    @PostMapping("/saveList")
+    @PostMapping("/save")
     public String saveListPlace(PlaceReqDtoList placeReqDtoList) {
-        RsData<Place> place = placeService.saveList(placeReqDtoList);
+        RsData<Place> place = placeService.save(placeReqDtoList);
 
-        // TODO 장소 저장 완료를 보여줄 필요가 있을까?
-        return "main"; // TODO 임시로 main.html을 사용 나중에 다른거로 보여줘야 함
+        return "domain/place/test"; // TODO 임시로 test.html을 사용 나중에 다른거로 보여줘야 함
     }
 }
