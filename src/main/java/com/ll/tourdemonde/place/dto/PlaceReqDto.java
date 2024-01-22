@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class PlaceReqDto {
+public class PlaceReqDto { // 1 개의 장소
     @NotBlank
     private String name; // 이름
     @NotBlank
