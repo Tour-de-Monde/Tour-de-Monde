@@ -4,7 +4,7 @@ import com.ll.tourdemonde.place.dto.PlaceReqDto;
 import com.ll.tourdemonde.place.dto.PlaceReqDtoList;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -64,9 +65,9 @@ class PlaceControllerTest {
         // 검증
         Place place = placeService.findLatest().get();
 
-        Assertions.assertThat(place.getName()).isEqualTo("아름식당");
-        Assertions.assertThat(place.getAddress()).isEqualTo("대구 달서구");
-        Assertions.assertThat(place.getCoordinates()).isEqualTo("24.5, 34");
+        assertThat(place.getName()).isEqualTo("아름식당");
+        assertThat(place.getAddress()).isEqualTo("대구 달서구");
+        assertThat(place.getCoordinates()).isEqualTo("24.5, 34");
     }
 
     // 장소 등록 POST /place/save
@@ -104,5 +105,37 @@ class PlaceControllerTest {
     }
 
     // 장소 수정 POST /place/modify
+
+
     // 장소 삭제 POST /place/delete
+    @DisplayName("장소를 삭제한다.")
+    @Test
+    void t4() throws Exception {
+        // GIVEN
+        PlaceReqDto placeReqDto = new PlaceReqDto("아름식당", "대구 달서구", "24.5, 34");
+        List<PlaceReqDto> placeReqDtos = new ArrayList<>();
+        placeReqDtos.add(placeReqDto);
+        PlaceReqDtoList placeReqDtoList = new PlaceReqDtoList(placeReqDtos);
+        placeService.save(placeReqDtoList);
+
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(post("/place/delete")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("name", "아름식당")
+                        .param("address", "대구 달서구")
+                        .param("coordinates", "24.5, 34")
+                )
+                .andDo(print());
+
+        // THEN
+        resultActions.andExpect(status().isOk())
+                .andExpect(view().name("domain/place/test"))
+                .andExpect(handler().handlerType(PlaceController.class))
+                .andExpect(handler().methodName("deletePlace"));
+
+        // 검증
+        // assertThrows(에러 class, 에러가 발생해야 하는 로직)
+        Assertions.assertThrows(IllegalArgumentException.class, () -> placeService.findPlace(placeReqDto));
+    }
 }
