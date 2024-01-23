@@ -41,4 +41,14 @@ public class PlaceService {
                 null
         );
     }
+
+
+    // ToDo 임시로 작성. 차후 경이님이 수정하거나 그대로 사용 결정.
+    public Place findById(Long id) {
+        if (id == null){
+            throw new IllegalArgumentException("잘못된 입력입니다. 장소를 찾을 수 없습니다.");
+        }
+        return placeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Place를 찾을 수 없습니다."));
+    }
 }

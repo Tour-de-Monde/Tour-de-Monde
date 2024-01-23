@@ -23,7 +23,7 @@ public class Reservation {
     private String sellerName;
 
     @NotNull
-    private String type;
+    private ReservationType type;
 
     @OneToMany(mappedBy = "reservation")
     private List<ReservationDetail> details;
