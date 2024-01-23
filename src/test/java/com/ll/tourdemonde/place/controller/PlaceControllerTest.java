@@ -81,16 +81,12 @@ class PlaceControllerTest {
         placeReqDtos.add(placeReqDto);
         placeReqDtos.add(placeReqDto2);
         PlaceReqDtoList placeReqDtoList = new PlaceReqDtoList(placeReqDtos);
-        System.out.println("String.valueOf(placeReqDtoList) : " + String.valueOf(placeReqDtoList));
-        System.out.println("placeReqDtoList[0] : " + String.valueOf(placeReqDtoList.getPlaceReqDtoList().get(0)));
-        System.out.println("placeReqDtoList[1] : " + String.valueOf(placeReqDtoList.getPlaceReqDtoList().get(1)));
 
         // WHEN
         ResultActions resultActions = mvc
                 .perform(post("/place/save")
 //                        .with(csrf()) // csrf 토큰은 보안을 위해 POST요청에 필요하다.
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-//                                .contentType(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
 //                                .param("placeReqDtoList[0]", String.valueOf(placeReqDtoList.getPlaceReqDtoList().get(0)))
 //                                .param("placeReqDtoList[1]", String.valueOf(placeReqDtoList.getPlaceReqDtoList().get(1)))
                                 .param("placeReqDtoList", String.valueOf(placeReqDtoList))
@@ -170,6 +166,7 @@ class PlaceControllerTest {
 
         // 검증
         // assertThrows(에러 class, 에러가 발생해야 하는 로직)
-        Assertions.assertThrows(IllegalArgumentException.class, () -> placeService.findPlace(placeReqDto));
+        IllegalArgumentException error = Assertions.assertThrows(IllegalArgumentException.class, () -> placeService.findPlace(placeReqDto));
+        assertThat(error.getMessage()).isEqualTo("해당하는 장소는 없습니다.");
     }
 }
