@@ -42,6 +42,7 @@ public class PlaceService {
         );
     }
 
+    // 장소의 이름, 주소로 장소 찾기
     public RsData<Place> findPlace(PlaceReqDto placeReqDto) {
         Place place = placeRepository.findByNameAndAddress(placeReqDto.getName(), placeReqDto.getAddress())
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 장소는 없습니다."));
@@ -53,17 +54,34 @@ public class PlaceService {
         );
     }
 
-    @Transactional
-    public RsData<Place> deletePlace(PlaceReqDto placeReqDto) {
-        // 장소 찾기
-        RsData<Place> place = findPlace(placeReqDto);
-
-        placeRepository.delete(place.getData());
+    // 장소의 ID로 장소 찾기
+    public RsData<Place> findByPlace(Long id) {
+        Place place = placeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 장소는 없습니다."));
 
         return new RsData<>(
                 "S-3",
-                "%s 장소를 삭제했습니다.".formatted(place.getData().getName()),
-                null
+                "%s 장소를 찾았습니다.".formatted(place.getName()),
+                place
         );
+    }
+
+    // 장소 수정
+    @Transactional
+    public void modifyPlace(Long id, PlaceReqDto placeReqDto) {
+        // 장소 찾기
+        Place place = findByPlace(id).getData();
+
+        place.setName(placeReqDto.getName());
+        place.setAddress(placeReqDto.getAddress());
+        place.setCoordinates(placeReqDto.getCoordinates());
+    }
+
+    @Transactional
+    public void deletePlace(PlaceReqDto placeReqDto) {
+        // 장소 찾기
+        Place place = findPlace(placeReqDto).getData();
+
+        placeRepository.delete(place);
     }
 }
