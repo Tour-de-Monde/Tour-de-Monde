@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,8 +25,14 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public String showReservationFromPlace(@PathVariable("id") Long id
+    public String showReservationFromPlace(@PathVariable("id") Long id,
+                                           @RequestParam(name = "startDate", required = false) String startDate,
+                                           @RequestParam(name = "endDate", required = false) String endDate,
+                                           Model model
     ){
+        //ToDo 순환참조의 위험이 있으니 차후 가져오는 데이터를 개선하도록 한다.
+        Reservation reservation = reservationService.findById(id);
+        model.addAttribute("reservation", reservation);
         return "/domain/reservation/reservation";
     }
 

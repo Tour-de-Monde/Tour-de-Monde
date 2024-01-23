@@ -16,18 +16,20 @@
         <button>예약하기</button>
         <hr>
         <section>
-            <div>
-                <div>type</div>
-                <span>예약시간 : </span><span>11:00</span>
-                <div>
-                    <span>가격 : </span><span>000,000</span><span>원</span>
+            <div th:if="${!reservation.getOptions().isEmpty()}">
+                <div th:each="option : ${reservation.getOptions()}">
+                    <div><span th:text="${reservation.getType()}"></span></div>
+                    <span>예약시간 : </span><span th:text="${option.time}"></span>
+                    <div>
+                        <span>가격 : </span><span th:text="${option.price}"></span><span>원</span>
+                    </div>
                 </div>
             </div>
         </section>
     </section>
 </main>
 <script>
-    function makeSearchParam(){
+    function makeSearchParam() {
         const startDate = document.getElementById("startDate").value;
         const endDate = document.getElementById("endDate").value;
 
@@ -35,8 +37,8 @@
         console.log(endDate);
 
         const searchParams = new URLSearchParams({
-            startDate : startDate,
-            endDate : endDate
+                startDate: startDate,
+                endDate: endDate
             }
         );
 
@@ -46,6 +48,6 @@
 
         console.log(currentURL);
 
-        window.location.href=currentURL + "?" + queryString;
+        window.location.href = currentURL + "?" + queryString;
     }
 </script>
