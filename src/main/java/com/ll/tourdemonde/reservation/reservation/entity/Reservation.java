@@ -23,9 +23,10 @@ public class Reservation {
     private String sellerName;
 
     @NotNull
+    @Enumerated(value = EnumType.STRING) // String 형태로 데이터 저장, 기본은 enum의 순서를 명시(0,1,...)
     private ReservationType type;
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReservationDetail> details;
 
     @OneToOne

@@ -41,7 +41,7 @@ public class ReservationController {
             return "/domain/reservation/createNewReservation";
         }
         reservationService.createNewReservation(form);
-        return "/domain/reservation/createNewReservation";
+        return "/domain/reservation/createNewReservationDetail";
     }
 
     @GetMapping("/create/detail")
