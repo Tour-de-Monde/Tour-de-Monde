@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -69,6 +70,39 @@ class PlaceControllerTest {
     }
 
     // 장소 등록 POST /place/save
+    @DisplayName("장소를 등록한다.")
+    @Test
+    void t2() throws Exception {
+        // GIVEN
+        PlaceReqDto placeReqDto = new PlaceReqDto("아름식당", "대구 달서구", "24.5, 34");
+        PlaceReqDto placeReqDto2 = new PlaceReqDto("다운식당", "대구 칠곡", "35.8203809,128.5389325");
+        List<PlaceReqDto> placeReqDtos = new ArrayList<>();
+        placeReqDtos.add(placeReqDto);
+        placeReqDtos.add(placeReqDto2);
+        PlaceReqDtoList placeReqDtoList = new PlaceReqDtoList(placeReqDtos);
+        System.out.println("String.valueOf(placeReqDtoList) : " + String.valueOf(placeReqDtoList));
+        System.out.println("placeReqDtoList[0] : " + String.valueOf(placeReqDtoList.getPlaceReqDtoList().get(0)));
+        System.out.println("placeReqDtoList[1] : " + String.valueOf(placeReqDtoList.getPlaceReqDtoList().get(1)));
+
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(post("/place/save")
+//                        .with(csrf()) // csrf 토큰은 보안을 위해 POST요청에 필요하다.
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .param("placeReqDtoList[0]", String.valueOf(placeReqDtoList.getPlaceReqDtoList().get(0)))
+//                                .param("placeReqDtoList[1]", String.valueOf(placeReqDtoList.getPlaceReqDtoList().get(1)))
+                                .param("placeReqDtoList", String.valueOf(placeReqDtoList))
+                )
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(handler().handlerType(PlaceController.class))
+                .andExpect(handler().methodName("savePlaceList"));
+    }
+
     // 장소 수정 POST /place/modify
     // 장소 삭제 POST /place/delete
 }
