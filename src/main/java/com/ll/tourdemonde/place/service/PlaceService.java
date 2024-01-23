@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -83,5 +84,10 @@ public class PlaceService {
         Place place = findPlace(placeReqDto).getData();
 
         placeRepository.delete(place);
+    }
+
+    // 마지막에 등록한 장소
+    public Optional<Place> findLatest() {
+        return placeRepository.findFirstByOrderByIdDesc();
     }
 }
