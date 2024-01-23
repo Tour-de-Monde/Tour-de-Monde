@@ -3,17 +3,26 @@ package com.ll.tourdemonde.reservation.reservation.service;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
 import com.ll.tourdemonde.reservation.reservation.dto.ReservationCreateForm;
+import com.ll.tourdemonde.reservation.reservation.dto.ReservationOptionForm;
 import com.ll.tourdemonde.reservation.reservation.entity.Reservation;
+import com.ll.tourdemonde.reservation.reservation.entity.ReservationOption;
+import com.ll.tourdemonde.reservation.reservation.repository.ReservationOptionRepository;
 import com.ll.tourdemonde.reservation.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final ReservationOptionRepository reservationOptionRepository;
     private final PlaceService placeService;
 
     @Transactional
@@ -30,5 +39,37 @@ public class ReservationService {
     public Reservation findById(Long id) {
         return reservationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 입력입니다."));
+    }
+
+    @Transactional
+    public ReservationOption createNewReservationOption(ReservationOptionForm form) {
+        Reservation reservation = findById(form.getReservationId());
+
+        // endDate가 없으면 시작일로 설정
+        if (!form.hasEndDate()) {
+            form.setEndDate(form.getStartDate());
+        }
+
+        ReservationOption reservationOption = ReservationOption.builder()
+                .reservation(reservation)
+                .startDate(StringToLocalDateTime(form.getStartDate()))
+                .endDate(StringToLocalDateTime(form.getEndDate()))
+                .time(form.getTime())
+                .price(form.getPrice())
+                .build();
+
+        reservation.addOption(reservationOption);
+        System.out.println(reservation.getOptions().get(0).getTime() + "\n" + reservation.getOptions().get(0).getPrice());
+        reservationRepository.save(reservation);
+        return reservationOption;
+    }
+
+    public LocalDateTime StringToLocalDateTime(String string){
+        // html input은 String으로 날짜만 반환한다. ex) 2024-01-24
+        LocalDate date = LocalDate.parse(string, DateTimeFormatter.ISO_LOCAL_DATE);
+        // 00시 00분으로 설정
+        LocalTime time = LocalTime.of(0,0,0);
+        // LocalDateTime으로 parse
+        return date.atTime(time);
     }
 }

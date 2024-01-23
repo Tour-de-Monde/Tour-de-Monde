@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,17 +22,24 @@ public class Reservation {
     @GeneratedValue
     private Long id;
 
-//    @OneToMany // 추후 변경 필요
+    //    @OneToMany // 추후 변경 필요
     private String sellerName;
 
     @NotNull
     @Enumerated(value = EnumType.STRING) // String 형태로 데이터 저장, 기본은 enum의 순서를 명시(0,1,...)
     private ReservationType type;
 
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReservationDetail> details;
+    @Builder.Default
+    @OneToMany(mappedBy = "reservation",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<ReservationOption> options = new ArrayList<>();
 
     @OneToOne
     private Place place;
 
+
+    public void addOption(ReservationOption option) {
+        this.options.add(option);
+    }
 }

@@ -1,7 +1,7 @@
 package com.ll.tourdemonde.reservation.reservation.controller;
 
 import com.ll.tourdemonde.reservation.reservation.dto.ReservationCreateForm;
-import com.ll.tourdemonde.reservation.reservation.dto.ReservationDetailForm;
+import com.ll.tourdemonde.reservation.reservation.dto.ReservationOptionForm;
 import com.ll.tourdemonde.reservation.reservation.entity.Reservation;
 import com.ll.tourdemonde.reservation.reservation.service.ReservationService;
 import jakarta.validation.Valid;
@@ -60,12 +60,12 @@ public class ReservationController {
     @PostMapping("/create/{id}/detail")
     public String createNewReservationDetail(
             @PathVariable("id") Long id,
-            @Valid ReservationDetailForm form,
+            @Valid ReservationOptionForm form,
             BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            return "/domain/reservation/createNewReservationDetail";
+            return "redirect:/reserve";
         }
-//        reservationService.createNewReservationDetail(form);
-        return "/domain/reservation/createNewReservationDetail";
+        reservationService.createNewReservationOption(form);
+        return "redirect:/reserve";
     }
 }

@@ -3,20 +3,22 @@ package com.ll.tourdemonde.reservation.reservation.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
-public class ReservationDetailForm {
-    private Long reservationID;
+public class ReservationOptionForm {
+    private Long reservationId;
 
-    private LocalDateTime startDate;
+    private String startDate;
 
-    private LocalDateTime endDate;
+    private String endDate;
 
     @NotNull
     private String time;
 
     @NotNull
     private Long price;
+
+    public boolean hasEndDate(){
+        return !endDate.isBlank();
+    }
 
 }
