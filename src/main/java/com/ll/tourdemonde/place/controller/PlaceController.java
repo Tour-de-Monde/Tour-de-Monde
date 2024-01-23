@@ -4,6 +4,7 @@ import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.place.dto.PlaceReqDtoList;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;

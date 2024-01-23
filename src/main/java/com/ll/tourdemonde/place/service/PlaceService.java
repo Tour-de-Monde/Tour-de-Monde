@@ -41,4 +41,24 @@ public class PlaceService {
                 null
         );
     }
+
+    // 장소 여러개 저장
+    public RsData<Place> saveList(PlaceReqDtoList placeReqDtoList) {
+        for (PlaceReqDto placeReqDto : placeReqDtoList.getPlaceReqDtoList()) {
+            String name = placeReqDto.getName();
+            String address = placeReqDto.getAddress();
+            List<String> coordinates = placeReqDto.getCoordinates();
+
+            Place place = new Place(name, address, coordinates);
+
+            // TODO 같은 장소의 경우 원래 있던 장소를 저장
+            placeRepository.save(place);
+        }
+
+        return new RsData<>(
+                "S-1",
+                "장소 저장 완료",
+                null
+        );
+    }
 }
