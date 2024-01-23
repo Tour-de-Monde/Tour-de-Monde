@@ -24,7 +24,7 @@ public class Place { // 장소 테이블
     private String address; // 주소
 
 //    @ElementCollection // 1:N의 매핑으로 테이블에 데이터가 저장 TODO Reservation 테이블 있으면 주석 해제
-//    private List<Reservation> reservation.html; // 예약 현황
+//    private List<Reservation> reservationExample.html; // 예약 현황
 
     private String coordinates; // 좌표(latitude(위도), longitude(경도)), 2자리 소수 리스트 필드
 

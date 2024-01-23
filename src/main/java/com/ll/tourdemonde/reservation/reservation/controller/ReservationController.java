@@ -24,6 +24,12 @@ public class ReservationController {
     @GetMapping("")
     public String reservateItem(){
 //        reservationService.createNewReservation(place, reservationDto);
+        return "/domain/reservation/reservationExample";
+    }
+
+    @GetMapping("/{id}")
+    public String showReservationFromPlace(@PathVariable("id") Long id
+    ){
         return "/domain/reservation/reservation";
     }
 
