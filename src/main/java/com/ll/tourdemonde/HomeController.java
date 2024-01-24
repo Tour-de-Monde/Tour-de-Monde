@@ -16,7 +16,7 @@ public class HomeController {
 
     }
     @GetMapping("/map")
-    @ResponseBody
+//    @ResponseBody
     String showMap(){
         return "map";
     }
