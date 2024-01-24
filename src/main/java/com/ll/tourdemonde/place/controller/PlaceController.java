@@ -28,7 +28,15 @@ public class PlaceController {
 
     // 장소 이름과 장소 주소로 장소 찾기
     @GetMapping("")
-    public String findPlace(@RequestParam(name = "name", required = false)String name,
+    public String findPlace(PlaceReqDto placeReqDto) {
+        RsData<Place> placeRsData = placeService.findPlace(placeReqDto);
+
+        return "domain/place/test"; // TODO 임시로 test.html을 사용 나중에 다른거로 보여줘야 함
+    }
+
+    // 장소 이름과 장소 주소로 장소 찾기
+    @GetMapping("/search")
+    public String searchPlace(@RequestParam(name = "name", required = false)String name,
                             @RequestParam(name = "address", required = false)String address,
                             Model model) {
         // 검색어 쿼리를 사용 -> 임시로 placeReqDto에 담아서 기존 코드를 사용
@@ -36,14 +44,14 @@ public class PlaceController {
 
         // 에러를 피하기 위한 임시 조건문
         if(placeReqDto.getName() == null || placeReqDto.getAddress() == null){
-            return "domain/place/findPlace";
+            return "domain/place/searchPlace";
         }
 
         RsData<Place> placeRsData = placeService.findPlace(placeReqDto);
 
         //model에 담아서 사용
         model.addAttribute("page", placeRsData.getData());
-        return "domain/place/findPlace";
+        return "searchPlace";
     }
 
     // 장소 수정
