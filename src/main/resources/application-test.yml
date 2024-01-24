@@ -6,6 +6,9 @@ spring:
     console:
       enabled: true
       path: /h2-console
+  output:
+    ansi:
+      enabled: always
   datasource:
     url: jdbc:h2:mem:TdM_dev_test;MODE=MYSQL # DB : memory mode
     username: sa

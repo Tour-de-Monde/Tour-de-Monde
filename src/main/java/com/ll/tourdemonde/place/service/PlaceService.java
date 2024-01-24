@@ -41,4 +41,52 @@ public class PlaceService {
                 null
         );
     }
+
+    // 장소의 이름, 주소로 장소 찾기
+    public RsData<Place> findPlace(PlaceReqDto placeReqDto) {
+        Place place = placeRepository.findByNameAndAddress(placeReqDto.getName(), placeReqDto.getAddress())
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 장소는 없습니다."));
+
+        return new RsData<>(
+                "S-2",
+                "%s 장소를 찾았습니다.".formatted(place.getName()),
+                place
+        );
+    }
+
+    // 장소의 ID로 장소 찾기
+    public RsData<Place> findByPlace(Long id) {
+        Place place = placeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 장소는 없습니다."));
+
+        return new RsData<>(
+                "S-3",
+                "%s 장소를 찾았습니다.".formatted(place.getName()),
+                place
+        );
+    }
+
+    // 장소 수정
+    @Transactional
+    public void modifyPlace(Long id, PlaceReqDto placeReqDto) {
+        // 장소 찾기
+        Place place = findByPlace(id).getData();
+
+        place.setName(placeReqDto.getName());
+        place.setAddress(placeReqDto.getAddress());
+        place.setCoordinates(placeReqDto.getCoordinates());
+    }
+
+    @Transactional
+    public void deletePlace(PlaceReqDto placeReqDto) {
+        // 장소 찾기
+        Place place = findPlace(placeReqDto).getData();
+
+        placeRepository.delete(place);
+    }
+
+    // 마지막에 등록한 장소
+    public Optional<Place> findLatest() {
+        return placeRepository.findFirstByOrderByIdDesc();
+    }
 }
