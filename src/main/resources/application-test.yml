@@ -1,11 +1,4 @@
 spring:
-  profiles:
-    active: test
-    include: secret
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   output:
     ansi:
       enabled: always
