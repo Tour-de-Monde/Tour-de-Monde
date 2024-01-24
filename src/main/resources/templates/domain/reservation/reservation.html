@@ -1,7 +1,8 @@
 <main>
     <section>
         <div>장소</div>
-        <div>장소명</div>
+        <span>[[${reservation.getPlace().getName()}]]</span><a th:href="|/reserve/manage/${reservation.getPlace().id}|">관리페이지</a>
+
         <div>
             <label>
                 <span>시작일</span>

@@ -1,5 +1,6 @@
 package com.ll.tourdemonde.reservation.reservation.service;
 
+import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
 import com.ll.tourdemonde.reservation.reservation.dto.ReservationCreateForm;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -71,5 +73,16 @@ public class ReservationService {
         LocalTime time = LocalTime.of(0,0,0);
         // LocalDateTime으로 parse
         return date.atTime(time);
+    }
+
+    public RsData<List<Reservation>> findAllByPlace(Place place) {
+        List<Reservation> reservationList = reservationRepository.findAllByPlaceOrderByIdAsc(place);
+
+        // 생성된 예약이 전혀 없을 때
+        if (reservationList.isEmpty()){
+            return new RsData<>("F", "예약을 찾을 수 없습니다.", null);
+        }
+
+        return new RsData<>("S-searchList", "성공", reservationList);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -26,13 +27,9 @@ public class ReservationInit implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-        PlaceReqDtoList list = new PlaceReqDtoList();
+        PlaceReqDtoList list = new PlaceReqDtoList(new ArrayList<>());
         list.setPlaceReqDtoList(IntStream.range(1, 4).mapToObj(i -> {
-            PlaceReqDto placeReqDto = new PlaceReqDto();
-            placeReqDto.setName("장소" + i);
-            placeReqDto.setAddress("서울시 강남구 " + i + "동");
-            placeReqDto.setCoordinates("23.1, 35." + i);
-            return placeReqDto;
+            return new PlaceReqDto("장소" + i, "서울시 강남구 " + i + "동", "23.1, 35." + i);
         }).collect(Collectors.toList()));
         placeService.save(list);
     }
