@@ -1,7 +1,6 @@
 package com.ll.tourdemonde.place.controller;
 
 import com.ll.tourdemonde.global.rsData.RsData;
-
 import com.ll.tourdemonde.place.dto.PlaceReqDto;
 import com.ll.tourdemonde.place.dto.PlaceReqDtoList;
 import com.ll.tourdemonde.place.entity.Place;
@@ -9,10 +8,8 @@ import com.ll.tourdemonde.place.service.PlaceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/place")
@@ -31,10 +28,22 @@ public class PlaceController {
 
     // 장소 이름과 장소 주소로 장소 찾기
     @GetMapping("")
-    public String findPlace(PlaceReqDto placeReqDto) {
+    public String findPlace(@RequestParam(name = "name", required = false)String name,
+                            @RequestParam(name = "address", required = false)String address,
+                            Model model) {
+        // 검색어 쿼리를 사용 -> 임시로 placeReqDto에 담아서 기존 코드를 사용
+        PlaceReqDto placeReqDto = new PlaceReqDto(name, address, null);
+
+        // 에러를 피하기 위한 임시 조건문
+        if(placeReqDto.getName() == null || placeReqDto.getAddress() == null){
+            return "domain/place/findPlace";
+        }
+
         RsData<Place> placeRsData = placeService.findPlace(placeReqDto);
 
-        return "domain/place/test"; // TODO 임시로 test.html을 사용 나중에 다른거로 보여줘야 함
+        //model에 담아서 사용
+        model.addAttribute("page", placeRsData.getData());
+        return "domain/place/findPlace";
     }
 
     // 장소 수정
