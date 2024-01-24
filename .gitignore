@@ -36,11 +36,7 @@ out/
 ### VS Code ###
 .vscode/
 
-<<<<<<< HEAD
-### 비공개 ###
-=======
 ### CUSTOM ###
->>>>>>> enhancement/1
 application-secret.yml
 TdM_dev.mv.db
 TdM_dev.trace.db

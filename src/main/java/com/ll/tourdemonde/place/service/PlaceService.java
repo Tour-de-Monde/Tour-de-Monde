@@ -42,13 +42,60 @@ public class PlaceService {
         );
     }
 
-
     // ToDo 임시로 작성. 차후 경이님이 수정하거나 그대로 사용 결정.
     public Place findById(Long id) {
-        if (id == null){
+        if (id == null) {
             throw new IllegalArgumentException("잘못된 입력입니다. 장소를 찾을 수 없습니다.");
         }
         return placeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Place를 찾을 수 없습니다."));
+    }
+
+    // 장소의 이름, 주소로 장소 찾기
+    public RsData<Place> findPlace(PlaceReqDto placeReqDto) {
+        Place place = placeRepository.findByNameAndAddress(placeReqDto.getName(), placeReqDto.getAddress())
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 장소는 없습니다."));
+
+        return new RsData<>(
+                "S-2",
+                "%s 장소를 찾았습니다.".formatted(place.getName()),
+                place
+        );
+    }
+
+    // 장소의 ID로 장소 찾기
+    public RsData<Place> findByPlace(Long id) {
+        Place place = placeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 장소는 없습니다."));
+
+        return new RsData<>(
+                "S-3",
+                "%s 장소를 찾았습니다.".formatted(place.getName()),
+                place
+        );
+    }
+
+    // 장소 수정
+    @Transactional
+    public void modifyPlace(Long id, PlaceReqDto placeReqDto) {
+        // 장소 찾기
+        Place place = findByPlace(id).getData();
+
+        place.setName(placeReqDto.getName());
+        place.setAddress(placeReqDto.getAddress());
+        place.setCoordinates(placeReqDto.getCoordinates());
+    }
+
+    @Transactional
+    public void deletePlace(PlaceReqDto placeReqDto) {
+        // 장소 찾기
+        Place place = findPlace(placeReqDto).getData();
+
+        placeRepository.delete(place);
+    }
+
+    // 마지막에 등록한 장소
+    public Optional<Place> findLatest() {
+        return placeRepository.findFirstByOrderByIdDesc();
     }
 }

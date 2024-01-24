@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface PlaceRepository extends JpaRepository<Place, Long> {
     Optional<Place> findByNameAndAddress(String name, String address);
+
+    Optional<Place> findFirstByOrderByIdDesc();
 }
