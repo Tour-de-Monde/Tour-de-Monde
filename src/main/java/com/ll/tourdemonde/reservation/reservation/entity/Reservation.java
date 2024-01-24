@@ -42,4 +42,8 @@ public class Reservation {
     public void addOption(ReservationOption option) {
         this.options.add(option);
     }
+
+    public void setType(ReservationType type) {
+        this.type = type;
+    }
 }

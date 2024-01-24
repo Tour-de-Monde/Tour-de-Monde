@@ -85,4 +85,16 @@ public class ReservationService {
 
         return new RsData<>("S-searchList", "성공", reservationList);
     }
+
+    @Transactional
+    public RsData<Reservation> modifyReservation(Reservation reservation, ReservationCreateForm form) {
+        // 셀러와 수정한 사람이 동일인인지 확인
+        if(reservation.getSellerName().equals(form.getSeller())){
+            throw new RuntimeException("권한이 없는 사용자입니다.");
+        }
+
+        reservation.setType(form.getType());
+
+        return new RsData<>("S-modify", "성공", reservation);
+    }
 }

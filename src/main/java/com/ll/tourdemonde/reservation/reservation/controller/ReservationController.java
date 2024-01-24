@@ -95,4 +95,31 @@ public class ReservationController {
         reservationService.createNewReservationOption(form);
         return "redirect:/reserve";
     }
+
+    @GetMapping("/modify/{reservationId}")
+    public String modifyReservation(@PathVariable("reservationId")Long id,
+                                    Model model){
+        Reservation reservation = reservationService.findById(id);
+
+        model.addAttribute("reservation", reservation);
+        return "/domain/reservation/modifyReservation";
+    }
+
+    @PostMapping("/modify/{reservationId}")
+    public String modifyReservation(@PathVariable("reservationId")Long id,
+                                    ReservationCreateForm form,
+                                    BindingResult bindingResult,
+                                    Model model){
+        Reservation reservation = reservationService.findById(id);
+
+        RsData<Reservation> reservationRsData = reservationService.modifyReservation(reservation, form);
+
+        if(reservationRsData.isFail()){
+            throw new RuntimeException();
+        }
+
+        reservation = reservationRsData.getData();
+        model.addAttribute("reservation", reservation);
+        return "/domain/reservation/manageReservation";
+    }
 }
