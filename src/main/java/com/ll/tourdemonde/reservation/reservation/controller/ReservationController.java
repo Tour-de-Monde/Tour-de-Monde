@@ -90,12 +90,14 @@ public class ReservationController {
         RsData<Place> placeRsData = placeService.findByPlace(placeId);
         RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(placeRsData.getData());
 
+        model.addAttribute("place", placeRsData.getData());
+        model.addAttribute("reservationList", listRsData.getData());
+
         if (listRsData.isFail()){
             // ToDo 차후 메세지와 함께 페이지 이동하도록 수정
             return "/domain/reservation/manageReservation";
         }
-        model.addAttribute("place", placeRsData.getData());
-        model.addAttribute("reservationList", listRsData.getData());
+
         return "/domain/reservation/manageReservation";
     }
 
@@ -108,7 +110,7 @@ public class ReservationController {
         return "/domain/reservation/modifyReservation";
     }
 
-    @PostMapping("/modify/{reservationId}")
+    @PutMapping("/modify/{reservationId}")
     public String modifyReservation(@PathVariable("reservationId")Long id,
                                     @Valid ReservationCreateForm form,
                                     BindingResult bindingResult,
@@ -143,7 +145,7 @@ public class ReservationController {
         return "/domain/reservation/modifyReservationOption";
     }
 
-    @PostMapping("/modify/{reservationId}/detail/{optionId}")
+    @PutMapping("/modify/{reservationId}/detail/{optionId}")
     public String modifyOption(
             @PathVariable("reservationId") Long reservationId,
             @PathVariable("optionId") Long optionId,
@@ -160,6 +162,19 @@ public class ReservationController {
         // move ManagePage
         Reservation reservation = reservationService.findById(reservationId);
         Long placeId = reservation.getPlace().getId();
+
+        return manageReservation(placeId, model);
+    }
+
+    @DeleteMapping("/delete/{reservationId}")
+    public String deleteReservation(@PathVariable("reservationId") Long reservationId,
+                                    Model model){
+        // move ManagePage
+        Reservation reservation = reservationService.findById(reservationId);
+        Long placeId = reservation.getPlace().getId();
+
+        // 예약 삭제
+        reservationService.deleteReservation(reservationId);
 
         return manageReservation(placeId, model);
     }
