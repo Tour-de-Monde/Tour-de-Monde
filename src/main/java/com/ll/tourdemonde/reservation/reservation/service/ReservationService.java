@@ -48,9 +48,7 @@ public class ReservationService {
         Reservation reservation = findById(form.getReservationId());
 
         // endDate가 없으면 시작일로 설정
-        if (!form.hasEndDate()) {
-            form.setEndDate(form.getStartDate());
-        }
+        form.initEndDateIfNotExists();
 
         ReservationOption reservationOption = ReservationOption.builder()
                 .reservation(reservation)
@@ -61,7 +59,6 @@ public class ReservationService {
                 .build();
 
         reservation.addOption(reservationOption);
-        System.out.println(reservation.getOptions().get(0).getTime() + "\n" + reservation.getOptions().get(0).getPrice());
         reservationRepository.save(reservation);
         return reservationOption;
     }
@@ -96,5 +93,32 @@ public class ReservationService {
         reservation.setType(form.getType());
 
         return new RsData<>("S-modify", "성공", reservation);
+    }
+
+    public ReservationOption findOptionById(Long id) {
+        return reservationOptionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 입력입니다."));
+
+    }
+
+    @Transactional
+    public ReservationOption modifyReservationOption(Long optionId, ReservationOptionForm form) {
+        ReservationOption option = reservationRepository.findById(form.getReservationId())
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 입력입니다."))
+                .getOptions().stream()
+                .filter(opt -> opt.getId().equals(optionId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("해당 옵션을 찾을 수 없습니다."));
+
+        // endDate 초기화
+        form.initEndDateIfNotExists();
+
+        option.modifyValues(
+                StringToLocalDateTime(form.getStartDate()),
+                StringToLocalDateTime(form.getEndDate()),
+                form.getTime(), form.getPrice());
+
+        reservationOptionRepository.save(option);
+        return option;
     }
 }

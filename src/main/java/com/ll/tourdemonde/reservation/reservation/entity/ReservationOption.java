@@ -35,4 +35,21 @@ public class ReservationOption {
     @NotNull
     private Long price;
 
+    public void modifyValues(LocalDateTime startDate, LocalDateTime endDate, String time, Long price) {
+        if(!this.startDate.equals(startDate)){
+            this.startDate = startDate;
+        }
+
+        if(!this.startDate.equals(startDate)){
+            this.startDate = startDate;
+        }
+
+        if(!this.startDate.equals(startDate)){
+            this.startDate = startDate;
+        }
+
+        if(!this.startDate.equals(startDate)){
+            this.startDate = startDate;
+        }
+    }
 }
