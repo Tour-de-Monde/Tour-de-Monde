@@ -30,8 +30,8 @@ public class ReservationController {
         return "/domain/reservation/reservationExample";
     }
 
-    @GetMapping("/{id}")
-    public String showReservationFromPlace(@PathVariable("id") Long id,
+    @GetMapping("/{reservationId}")
+    public String showReservationFromPlace(@PathVariable("reservationId") Long id,
                                            @RequestParam(name = "startDate", required = false) String startDate,
                                            @RequestParam(name = "endDate", required = false) String endDate,
                                            Model model
@@ -43,8 +43,8 @@ public class ReservationController {
         return "/domain/reservation/reservation";
     }
 
-    @GetMapping("/manage/{id}")
-    public String manageReservation(@PathVariable("id") long id,
+    @GetMapping("/manage/{placeId}")
+    public String manageReservation(@PathVariable("placeId") long id,
                                     Model model){
         // ToDo 차후 place id로 검색을 하여 place에 있는 예약, 예약 옵션 다 보여주기
         RsData<Place> placeRsData = placeService.findByPlace(id);
@@ -75,18 +75,18 @@ public class ReservationController {
         return "redirect:/reserve/create/%d/detail".formatted(reservation.getId());
     }
 
-    @GetMapping("/create/{id}/detail")
+    @GetMapping("/create/{reservationId}/detail")
     public String createNewReservationDetail(
-            @PathVariable("id") Long id,
+            @PathVariable("reservationId") Long id,
             Model model){
         Reservation reservation = reservationService.findById(id);
         model.addAttribute("reservation", reservation);
         return "/domain/reservation/createNewReservationDetail";
     }
 
-    @PostMapping("/create/{id}/detail")
+    @PostMapping("/create/{reservationId}/detail")
     public String createNewReservationDetail(
-            @PathVariable("id") Long id,
+            @PathVariable("reservationId") Long id,
             @Valid ReservationOptionForm form,
             BindingResult bindingResult){
         if (bindingResult.hasErrors()){
@@ -110,6 +110,10 @@ public class ReservationController {
                                     ReservationCreateForm form,
                                     BindingResult bindingResult,
                                     Model model){
+        if(bindingResult.hasErrors()){
+            throw new RuntimeException("잘못된 값을 입력했습니다.");
+        }
+
         Reservation reservation = reservationService.findById(id);
 
         RsData<Reservation> reservationRsData = reservationService.modifyReservation(reservation, form);
@@ -118,8 +122,6 @@ public class ReservationController {
             throw new RuntimeException();
         }
 
-        reservation = reservationRsData.getData();
-        model.addAttribute("reservation", reservation);
-        return "/domain/reservation/manageReservation";
+        return manageReservation(id, model);
     }
 }
