@@ -1,6 +1,8 @@
 package com.ll.tourdemonde.reservation.reservation.entity;
 
+import com.ll.tourdemonde.global.util.Ut;
 import com.ll.tourdemonde.place.entity.Place;
+import com.ll.tourdemonde.reservation.reservation.dto.ReservationOptionForm;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -39,11 +41,19 @@ public class Reservation {
     private Place place;
 
 
-    public void addOption(ReservationOption option) {
-        this.options.add(option);
+    public void addOption(ReservationOptionForm form) {
+        ReservationOption option = ReservationOption.builder()
+                .reservation(this)
+                .startDate(Ut.stringToLocalDateTime(form.getStartDate()))
+                .endDate(Ut.stringToLocalDateTime(form.getEndDate()))
+                .time(form.getTime())
+                .price(form.getPrice())
+                .build();
+        options.add(option);
     }
 
     public void setType(ReservationType type) {
         this.type = type;
     }
+    
 }

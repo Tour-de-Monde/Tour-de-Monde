@@ -98,4 +98,5 @@ public class PlaceService {
     public Optional<Place> findLatest() {
         return placeRepository.findFirstByOrderByIdDesc();
     }
+
 }
