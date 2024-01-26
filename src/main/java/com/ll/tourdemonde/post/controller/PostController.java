@@ -3,6 +3,7 @@ package com.ll.tourdemonde.post.controller;
 
 import com.ll.tourdemonde.post.dto.PostCreateForm;
 import com.ll.tourdemonde.post.entity.Post;
+import com.ll.tourdemonde.post.entity.PostPlaceReview;
 import com.ll.tourdemonde.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -33,7 +35,6 @@ public class PostController {
         if (bindingResult.hasErrors()) {
             return "post/post_create";
         }
-
         postService.writePost(postCreateForm);
         return "redirect:/post/list";
     }
@@ -43,5 +44,14 @@ public class PostController {
         List<Post> postList = postService.showPostList();
         model.addAttribute("postList", postList);
         return "post/post_list";
+    }
+
+    @GetMapping("/detail/{id}")
+    public String showPostDetail(Model model, @PathVariable("id") Long id) {
+        Post post = postService.getPost(id);
+        List<PostPlaceReview> postPlaceReviewList = postService.getPostPlaceReview(id);
+        model.addAttribute("post", post);
+        model.addAttribute("postPlaceReviewList", postPlaceReviewList); // 속성 이름을 정확히 맞춥니다
+        return "post/post_detail";
     }
 }

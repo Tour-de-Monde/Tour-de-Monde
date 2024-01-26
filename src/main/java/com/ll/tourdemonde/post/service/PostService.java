@@ -10,6 +10,7 @@ import com.ll.tourdemonde.post.entity.Post;
 import com.ll.tourdemonde.post.entity.PostPlaceReview;
 import com.ll.tourdemonde.post.repository.PostPlaceReviewRepository;
 import com.ll.tourdemonde.post.repository.PostRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -102,5 +103,18 @@ public class PostService {
 
     public List<Post> showPostList() {
         return postRepository.findAll();
+    }
+
+    public Post getPost(Long id) {
+        Optional<Post> post = postRepository.findById(id);
+        if (post.isPresent()){
+            return post.get();
+        } else {
+            throw new EntityNotFoundException("해당 게시물이 존재하지 않습니다.");
+        }
+    }
+
+    public List<PostPlaceReview> getPostPlaceReview(Long postId) {
+        return postPlaceReviewRepository.findByPostId(postId); // postId에 해당하는 모든 PostPlaceReview 객체를 조회
     }
 }

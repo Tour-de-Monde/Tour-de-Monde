@@ -99,7 +99,6 @@ class TourDeMondeApplicationTests {
 						.build()
 		);
 
-
 		Optional<Post> post = postRepository.findById(1L);
 
 		if (post.isEmpty()){
