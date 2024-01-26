@@ -27,6 +27,6 @@ public class PostPlaceReview extends BaseTime{
     @OneToOne
     private PostPlace postPlace;
     private int rating;
-    private String body;
+    private String review;
 
 }

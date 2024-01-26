@@ -21,5 +21,7 @@ public class PostPlace extends BaseTime{
     private Post post;
     @ManyToOne
     private Place place;
+    @OneToOne
+    private PostPlaceReview postPlaceReview;
 
 }

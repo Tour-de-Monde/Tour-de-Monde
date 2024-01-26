@@ -16,5 +16,8 @@ public class Place extends BaseTime {
 
     private String name;
     private String coordinate;
-
 }
+
+
+
+

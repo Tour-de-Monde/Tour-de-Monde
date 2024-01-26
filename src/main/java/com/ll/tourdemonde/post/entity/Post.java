@@ -25,7 +25,8 @@ public class Post extends BaseTime {
     @OrderBy("id ASC")
     @Builder.Default
     private List<PostPlace> postPlaces = new ArrayList<>();
-
+    @OneToMany
+    private List<PostPlaceReview> review;
 
     public void addPlace(Place place) {
         PostPlace postPlace = PostPlace.builder()
