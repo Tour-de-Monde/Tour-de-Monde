@@ -32,15 +32,17 @@ public class ReservationController {
         return "/domain/reservation/reservationExample";
     }
 
-    @GetMapping("/{reservationId}")
-    public String showReservationFromPlace(@PathVariable("reservationId") Long id,
+    @GetMapping("/{placeId}")
+    public String showReservationFromPlace(@PathVariable("placeId") Long placeId,
                                            @RequestParam(name = "startDate", required = false) String startDate,
                                            @RequestParam(name = "endDate", required = false) String endDate,
                                            Model model
     ) {
         //ToDo 순환참조의 위험이 있으니 차후 가져오는 데이터를 개선하도록 한다.
         // ToDo 차후 place id로 검색을 하여 place에 있는 예약, 예약 옵션 다 보여주기
-        Reservation reservation = reservationService.findById(id);
+        Place place = placeService.findById(placeId);
+        Reservation reservation = reservationService.findById(placeId);
+        model.addAttribute("place",place);
         model.addAttribute("reservation", reservation);
         return "/domain/reservation/reservation";
     }
