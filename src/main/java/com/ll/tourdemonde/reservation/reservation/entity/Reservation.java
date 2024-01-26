@@ -40,7 +40,6 @@ public class Reservation {
     @OneToOne
     private Place place;
 
-
     public void addOption(ReservationOptionForm form) {
         ReservationOption option = ReservationOption.builder()
                 .reservation(this)
@@ -52,8 +51,13 @@ public class Reservation {
         options.add(option);
     }
 
+    public void removeOption(Long optionId) {
+        // Todo 옵션이 있는지 확인 하고 없다면 예외처리
+        options.removeIf(option -> option.getId().equals(optionId));
+    }
+
     public void setType(ReservationType type) {
         this.type = type;
     }
-    
+
 }

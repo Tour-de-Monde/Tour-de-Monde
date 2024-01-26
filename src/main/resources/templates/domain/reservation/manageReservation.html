@@ -32,6 +32,7 @@
                     <div>시간 : [[${option.time}]]</div>
                     <div>가격 : [[${option.price}]]</div>
                     <a method="PUT" th:href="|/reserve/modify/${reservation.id}/detail/${option.id}|">옵션설정</a>
+                    <a method="DELETE" th:href="|/reserve/delete/${reservation.id}/${option.id}|">옵션 삭제</a>
                 </div>
 
             </article>

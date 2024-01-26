@@ -111,4 +111,9 @@ public class ReservationService {
 
         reservationRepository.delete(reservation);
     }
+
+    @Transactional
+    public void deleteOption(Reservation reservation, Long optionId) {
+        reservation.removeOption(optionId);
+    }
 }

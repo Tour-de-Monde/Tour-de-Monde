@@ -27,7 +27,7 @@ public class ReservationController {
     private final PlaceService placeService;
 
     @GetMapping("")
-    public String reservateItem(){
+    public String reservateItem() {
 //        reservationService.createNewReservation(place, reservationDto);
         return "/domain/reservation/reservationExample";
     }
@@ -37,7 +37,7 @@ public class ReservationController {
                                            @RequestParam(name = "startDate", required = false) String startDate,
                                            @RequestParam(name = "endDate", required = false) String endDate,
                                            Model model
-    ){
+    ) {
         //ToDo 순환참조의 위험이 있으니 차후 가져오는 데이터를 개선하도록 한다.
         // ToDo 차후 place id로 검색을 하여 place에 있는 예약, 예약 옵션 다 보여주기
         Reservation reservation = reservationService.findById(id);
@@ -46,15 +46,15 @@ public class ReservationController {
     }
 
     @GetMapping("/create")
-    public String createNewReservation(){
+    public String createNewReservation() {
         return "/domain/reservation/createNewReservation";
     }
 
     @PostMapping("/create")
     public String createNewReservation(
             @Valid ReservationCreateForm form,
-            BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return "/domain/reservation/createNewReservation";
         }
         Reservation reservation = reservationService.createNewReservation(form);
@@ -64,7 +64,7 @@ public class ReservationController {
     @GetMapping("/create/{reservationId}/detail")
     public String createNewReservationOption(
             @PathVariable("reservationId") Long id,
-            Model model){
+            Model model) {
         Reservation reservation = reservationService.findById(id);
         model.addAttribute("reservation", reservation);
         return "/domain/reservation/createNewReservationOption";
@@ -74,8 +74,8 @@ public class ReservationController {
     public String createNewReservationOption(
             @PathVariable("reservationId") Long id,
             @Valid ReservationOptionForm form,
-            BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return "redirect:/reserve";
         }
         reservationService.createNewReservationOption(form);
@@ -85,7 +85,7 @@ public class ReservationController {
     //관리자 페이지
     @GetMapping("/manage/{placeId}")
     public String manageReservation(@PathVariable("placeId") long placeId,
-                                    Model model){
+                                    Model model) {
         // ToDo 차후 place id로 검색을 하여 place에 있는 예약, 예약 옵션 다 보여주기
         RsData<Place> placeRsData = placeService.findByPlace(placeId);
         RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(placeRsData.getData());
@@ -93,7 +93,7 @@ public class ReservationController {
         model.addAttribute("place", placeRsData.getData());
         model.addAttribute("reservationList", listRsData.getData());
 
-        if (listRsData.isFail()){
+        if (listRsData.isFail()) {
             // ToDo 차후 메세지와 함께 페이지 이동하도록 수정
             return "/domain/reservation/manageReservation";
         }
@@ -102,8 +102,8 @@ public class ReservationController {
     }
 
     @GetMapping("/modify/{reservationId}")
-    public String modifyReservation(@PathVariable("reservationId")Long id,
-                                    Model model){
+    public String modifyReservation(@PathVariable("reservationId") Long id,
+                                    Model model) {
         Reservation reservation = reservationService.findById(id);
 
         model.addAttribute("reservation", reservation);
@@ -111,31 +111,33 @@ public class ReservationController {
     }
 
     @PutMapping("/modify/{reservationId}")
-    public String modifyReservation(@PathVariable("reservationId")Long id,
+    public String modifyReservation(@PathVariable("reservationId") Long reservationId,
                                     @Valid ReservationCreateForm form,
                                     BindingResult bindingResult,
                                     HttpServletRequest request,
-                                    Model model){
-        if(bindingResult.hasErrors()){
+                                    Model model) {
+        if (bindingResult.hasErrors()) {
             throw new RuntimeException("잘못된 값을 입력했습니다.");
         }
 
-        Reservation reservation = reservationService.findById(id);
+        Reservation reservation = reservationService.findById(reservationId);
+        Long placeId = reservation.getPlace().getId();
 
         RsData<Reservation> reservationRsData = reservationService.modifyReservation(reservation, form);
 
-        if(reservationRsData.isFail()){
+        if (reservationRsData.isFail()) {
             String preURL = request.getHeader("Referer");
             return "redirect:" + preURL;
         }
 
-        return manageReservation(id, model);
+        // 관리페이지로 이동
+        return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
     @GetMapping("/modify/{reservationId}/detail/{optionId}")
     public String modifyOption(Model model,
                                @PathVariable("reservationId") Long reservationId,
-                               @PathVariable("optionId") Long optionId){
+                               @PathVariable("optionId") Long optionId) {
 
         ReservationOption option = reservationService.findOptionById(reservationId, optionId);
         Reservation reservation = reservationService.findById(option.getReservation().getId());
@@ -163,12 +165,13 @@ public class ReservationController {
         Reservation reservation = reservationService.findById(reservationId);
         Long placeId = reservation.getPlace().getId();
 
-        return manageReservation(placeId, model);
+        // 관리페이지로 이동
+        return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
     @DeleteMapping("/delete/{reservationId}")
     public String deleteReservation(@PathVariable("reservationId") Long reservationId,
-                                    Model model){
+                                    Model model) {
         // move ManagePage
         Reservation reservation = reservationService.findById(reservationId);
         Long placeId = reservation.getPlace().getId();
@@ -176,6 +179,22 @@ public class ReservationController {
         // 예약 삭제
         reservationService.deleteReservation(reservationId);
 
-        return manageReservation(placeId, model);
+        // 관리페이지로 이동
+        return "redirect:/reserve/manage/%d".formatted(placeId);
+    }
+
+    @DeleteMapping("/delete/{reservationId}/{optionId}")
+    public String deleteReservationOption(@PathVariable("reservationId") Long reservationId,
+                                          @PathVariable("optionId") Long optionId,
+                                          Model model) {
+        // move ManagePage
+        Reservation reservation = reservationService.findById(reservationId);
+        Long placeId = reservation.getPlace().getId();
+
+        // 예약 옵션 삭제
+        reservationService.deleteOption(reservation, optionId);
+
+        // 관리페이지로 이동
+        return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 }
