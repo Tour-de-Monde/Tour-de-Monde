@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @TestPropertySource(properties = "classpath:application-test.yml")
@@ -88,6 +89,25 @@ class TourDeMondeApplicationTests {
 
 		List<Post> postList = postRepository.findAll();
 		Assertions.assertEquals(false, postList.isEmpty());
+	}
+
+	@Test
+	public void 게시물상세페이지테스트() {
+		Post post1 = postRepository.save(
+				Post.builder()
+						.title("게시글1")
+						.build()
+		);
+
+
+		Optional<Post> post = postRepository.findById(1L);
+
+		if (post.isEmpty()){
+			System.out.println("게시물이 존재하지 않습니다.");
+		} else {
+			Post post2 = post.get();
+			Assertions.assertEquals("게시글1", post2.getTitle());
+		}
 	}
 }
 
