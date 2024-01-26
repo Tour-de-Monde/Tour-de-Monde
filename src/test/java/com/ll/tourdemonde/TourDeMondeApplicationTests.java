@@ -6,10 +6,13 @@ import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.repository.PlaceRepository;
 import com.ll.tourdemonde.post.entity.Post;
 import com.ll.tourdemonde.post.repository.PostRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import java.util.List;
 
 @SpringBootTest
 @TestPropertySource(properties = "classpath:application-test.yml")
@@ -74,6 +77,18 @@ class TourDeMondeApplicationTests {
 		post2.addPlace(place1);
 	}
 
+	@Test
+	public void 게시물리스트테스트() {
+
+		Post post1 = postRepository.save(
+				Post.builder()
+						.title("게시글1")
+						.build()
+		);
+
+		List<Post> postList = postRepository.findAll();
+		Assertions.assertEquals(false, postList.isEmpty());
+	}
 }
 
 
