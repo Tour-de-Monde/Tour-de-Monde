@@ -99,4 +99,8 @@ public class PostService {
         }
         return postPlaceReviews;
     }
+
+    public List<Post> showPostList() {
+        return postRepository.findAll();
+    }
 }
