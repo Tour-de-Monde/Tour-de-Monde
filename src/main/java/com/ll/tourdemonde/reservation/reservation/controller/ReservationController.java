@@ -47,6 +47,7 @@ public class ReservationController {
         return "/domain/reservation/reservation";
     }
 
+    //TODO 차후 특정장소에 대응하도록 변경 필요
     @GetMapping("/create")
     public String createNewReservation() {
         return "/domain/reservation/createNewReservation";
@@ -185,7 +186,7 @@ public class ReservationController {
         return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
-    @DeleteMapping("/delete/{reservationId}/{optionId}")
+    @DeleteMapping("/delete/{reservationId}/detail/{optionId}")
     public String deleteReservationOption(@PathVariable("reservationId") Long reservationId,
                                           @PathVariable("optionId") Long optionId,
                                           Model model) {
