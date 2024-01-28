@@ -3,6 +3,10 @@ package com.ll.tourdemonde.reservation.reservation;
 import com.ll.tourdemonde.place.dto.PlaceReqDto;
 import com.ll.tourdemonde.place.dto.PlaceReqDtoList;
 import com.ll.tourdemonde.place.service.PlaceService;
+import com.ll.tourdemonde.reservation.reservation.controller.ReservationController;
+import com.ll.tourdemonde.reservation.reservation.entity.Reservation;
+import com.ll.tourdemonde.reservation.reservation.entity.ReservationType;
+import com.ll.tourdemonde.reservation.reservation.service.ReservationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +22,12 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -30,6 +38,8 @@ public class ReservationControllerTest {
     private MockMvc mvc;
     @Autowired
     private PlaceService placeService;
+    @Autowired
+    private ReservationService reservationService;
 
     @BeforeEach
     public void testInit(){
@@ -60,13 +70,59 @@ public class ReservationControllerTest {
     @Test
     @DisplayName("장소페이지(id=1) GET")
     public void T2ShowplacePage() throws Exception{
-        long id = 1;
         ResultActions resultActions = mvc
-                .perform(get("/reserve/1"))
+                .perform(get("/reserve/1")) //장소ID 임의지정
                 .andDo(print());
+
+        resultActions
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(handler().handlerType(ReservationController.class))
+                .andExpect(handler().methodName("showReservationFromPlace"))
+                .andExpect(content().string(containsString("""
+                        장소""".stripIndent().trim())));
     }
+
     //예약 생성 GET /reserve/create
+    @Test
+    @DisplayName("예약 생성 GET")
+    public void T3ShowCreateReservation() throws Exception{
+        ResultActions resultActions = mvc
+                .perform(get("/reserve/create"))
+                .andDo(print());
+
+        resultActions
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(handler().handlerType(ReservationController.class))
+                .andExpect(handler().methodName("createNewReservation"))
+                .andExpect(content().string(containsString("""
+                        판매자명""".stripIndent().trim())))
+                .andExpect(content().string(containsString("""
+                        type""".stripIndent().trim())));
+    }
+
     //예약 생성 POST /reserve/create
+    @Test
+    @DisplayName("예약 생성 POST")
+    public void T4ShowCreateReservation() throws Exception{
+        ResultActions resultActions = mvc
+                .perform(post("/reserve/create")
+                        .param("seller", "판매자명1")
+                        .param("place", "1")
+                        .param("type", "LEISURE"))
+                .andDo(print());
+
+        resultActions
+                .andExpect(status().is3xxRedirection()) // 성공시 redirect
+                .andExpect(handler().handlerType(ReservationController.class))
+                .andExpect(handler().methodName("createNewReservation"));
+
+
+        Reservation reservation = reservationService.findById(1L);
+
+        assertThat(reservation.getSellerName()).as("seller 불일치").isEqualTo("판매자명1");
+        assertThat(reservation.getPlace().getName()).as("place 불일치").isIn("장소1");
+        assertThat(reservation.getType()).as("type 불일치").isIn(ReservationType.LEISURE);
+    }
     //예약 옵션 생성 GET /reserve/create/1/detail
     //예약 옵션 생성 POST /reserve/create/1/detail
     //관리페이지 GET /reserve/manage/1
