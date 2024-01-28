@@ -36,7 +36,7 @@ public class ReservationService {
 
     public Reservation findById(Long id) {
         return reservationRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 입력입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다."));
     }
 
     @Transactional

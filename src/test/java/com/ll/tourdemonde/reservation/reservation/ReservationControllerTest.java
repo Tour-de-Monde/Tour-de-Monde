@@ -1,5 +1,9 @@
 package com.ll.tourdemonde.reservation.reservation;
 
+import com.ll.tourdemonde.place.dto.PlaceReqDto;
+import com.ll.tourdemonde.place.dto.PlaceReqDtoList;
+import com.ll.tourdemonde.place.service.PlaceService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -20,6 +28,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 public class ReservationControllerTest {
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private PlaceService placeService;
+
+    @BeforeEach
+    public void testInit(){
+        PlaceReqDtoList list = new PlaceReqDtoList(new ArrayList<>());
+        list.setPlaceReqDtoList(IntStream.range(1, 4).mapToObj(i -> {
+            return new PlaceReqDto("장소" + i, "서울시 강남구 " + i + "동", "23.1, 35." + i);
+        }).collect(Collectors.toList()));
+        placeService.save(list);
+    }
 
     @Test
     @DisplayName("테스트 실행 확인")
@@ -38,6 +57,14 @@ public class ReservationControllerTest {
     }
 
     //장소페이지 GET /reserve/1
+    @Test
+    @DisplayName("장소페이지(id=1) GET")
+    public void T2ShowplacePage() throws Exception{
+        long id = 1;
+        ResultActions resultActions = mvc
+                .perform(get("/reserve/1"))
+                .andDo(print());
+    }
     //예약 생성 GET /reserve/create
     //예약 생성 POST /reserve/create
     //예약 옵션 생성 GET /reserve/create/1/detail

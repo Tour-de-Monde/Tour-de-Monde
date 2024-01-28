@@ -15,7 +15,7 @@
             <button onclick="makeSearchParam()">검색</button>
         </div>
         <hr>
-        <section>
+        <section th:if="${reservation != null}">
             <div th:if="${!reservation.getOptions().isEmpty()}">
                 <div th:each="option : ${reservation.getOptions()}">
                     <div><span th:text="${reservation.getType()}"></span></div>
