@@ -18,6 +18,9 @@ public class ReservationOptionForm {
     private Long price;
 
     public boolean hasEndDate(){
+        if(endDate == null){
+            return false;
+        }
         return !endDate.isBlank();
     }
 
