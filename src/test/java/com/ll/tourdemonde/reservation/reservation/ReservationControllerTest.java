@@ -64,7 +64,7 @@ public class ReservationControllerTest {
 
     //GET /reserve
     @Test
-    @DisplayName("샘플페이지 출력")
+    @DisplayName("1. 샘플페이지 출력")
     public void T1ShowSample() throws Exception {
         ResultActions resultActions = mvc
                 .perform(get("/reserve"))
@@ -74,7 +74,7 @@ public class ReservationControllerTest {
 
     //장소페이지 GET /reserve/1
     @Test
-    @DisplayName("장소페이지(id=1) GET")
+    @DisplayName("2. 장소페이지(id=1) GET")
     public void T2ShowplacePage() throws Exception{
         ResultActions resultActions = mvc
                 .perform(get("/reserve/1")) //장소ID 임의지정
@@ -90,7 +90,7 @@ public class ReservationControllerTest {
 
     //예약 생성 GET /reserve/create
     @Test
-    @DisplayName("예약 생성 GET")
+    @DisplayName("3. 예약 생성 GET")
     public void T3ShowCreateReservation() throws Exception{
         ResultActions resultActions = mvc
                 .perform(get("/reserve/create"))
@@ -108,7 +108,7 @@ public class ReservationControllerTest {
 
     //예약 생성 POST /reserve/create
     @Test
-    @DisplayName("예약 생성 POST")
+    @DisplayName("4. 예약 생성 POST")
     @Rollback(value = false)
     public void T4ShowCreateReservation() throws Exception{
         ResultActions resultActions = mvc
@@ -133,7 +133,7 @@ public class ReservationControllerTest {
 
     //예약 옵션 생성 GET /reserve/create/1/detail
     @Test
-    @DisplayName("예약 옵션 생성 GET")
+    @DisplayName("5. 예약 옵션 생성 GET")
     public void T5createNewReservationOption() throws Exception {
         ResultActions resultActions = mvc
                 .perform(get("/reserve/create/1/detail"))
@@ -146,12 +146,14 @@ public class ReservationControllerTest {
                 .andExpect(handler().handlerType(ReservationController.class))
                 .andExpect(handler().methodName("createNewReservationOption"))
                 .andExpect(content().string(containsString("""
-                        <li>판매자명 : %s</li>""".formatted(reservation.getSellerName()))));
+                        <li>판매자명 : %s</li>""".formatted(reservation.getSellerName())
+                        .stripIndent().trim())));
     }
 
     //예약 옵션 생성 POST /reserve/create/1/detail
     @Test
-    @DisplayName("예약 옵션 생성 POST")
+    @DisplayName("6. 예약 옵션 생성 POST")
+    @Rollback(value = false)
     public void T6createNewReservationOption() throws Exception{
         ResultActions resultActions = mvc
                 .perform(post("/reserve/create/1/detail")
@@ -174,7 +176,40 @@ public class ReservationControllerTest {
     }
 
     //관리페이지 GET /reserve/manage/1
+    @Test
+    @DisplayName("7. 관리페이지 GET")
+    public void T7ManageReservation() throws Exception {
+        ResultActions resultActions = mvc
+                .perform(get("/reserve/manage/1"))
+                .andDo(print());
+
+        resultActions
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(handler().handlerType(ReservationController.class))
+                .andExpect(handler().methodName("manageReservation"))
+                .andExpect(content().string(containsString("""
+                        <h1>장소 관리페이지</h1>""".stripIndent().trim())));
+    }
+
     //예약 수정 GET /reserve/modify/1
+    @Test
+    @DisplayName("8. 예약수정 GET")
+    public void T8ModifyReservation() throws Exception {
+        ResultActions resultActions = mvc
+                .perform(get("/reserve/modify/1"))
+                .andDo(print());
+
+        Reservation reservation = reservationService.findById(1L);
+
+        resultActions
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(handler().handlerType(ReservationController.class))
+                .andExpect(handler().methodName("modifyReservation"))
+                .andExpect(content().string(containsString("""
+                        <input type="text" name="seller" value="%s">""".formatted(reservation.getSellerName())
+                        .stripIndent().trim())));
+
+    }
     //예약 수정 PUT /reserve/modify/1
     //예약 옵션 수정 GET /reserve/modify/1/detail/1
     //예약 옵션 수정 PUT /reserve/modify/1/detail/1
