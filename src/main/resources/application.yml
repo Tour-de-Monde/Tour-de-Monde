@@ -2,6 +2,10 @@ spring:
   profiles:
     active: dev
     include: secret # personal yml
+  autoconfigure:
+    exclude: # 레디스 디펜던시들이 로컬 환경에서 작동하지 않고 운영환경에서만 작동
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.session.SessionAutoConfiguration
   servlet:
     multipart:
       max-file-size: 50MB
