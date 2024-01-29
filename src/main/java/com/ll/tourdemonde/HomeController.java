@@ -20,5 +20,10 @@ public class HomeController {
     String showMap(){
         return "map";
     }
+    @GetMapping("/search")
+//    @ResponseBody
+    String showSearch(){
+        return "search";
+    }
 
 }
