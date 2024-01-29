@@ -67,3 +67,21 @@ jobs:
           tags: |
             ghcr.io/${{ env.OWNER_LC }}/tour_de_monde:${{ needs.makeTagAndRelease.outputs.tag_name }},
             ghcr.io/${{ env.OWNER_LC }}/tour_de_monde:latest
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_1_SSH_HOST }}
+          username: ${{ secrets.SERVER_1_SSH_USERNAME }}
+          password: ${{ secrets.SERVER_1_SSH_PASSWORD }}
+          port: ${{ secrets.SERVER_1_SSH_PORT }}
+          script: |
+            docker pull ghcr.io/tour-de-monde/tour_de_monde:latest
+            docker stop tour_de_monde
+            docker rm tour_de_monde
+            docker run \
+                -p 8081:8080 \
+                -d \
+                -v /docker_projects/tour_de_monde_1/volume/gen:/gen \
+                --name tour_de_monde_1 \
+                ghcr.io/tour-de-monde/tour_de_monde:latest
+            docker image prune
