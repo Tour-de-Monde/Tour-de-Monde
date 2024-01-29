@@ -76,8 +76,8 @@ jobs:
           port: ${{ secrets.SERVER_1_SSH_PORT }}
           script: |
             docker pull ghcr.io/tour-de-monde/tour_de_monde:latest
-            docker stop tour_de_monde
-            docker rm tour_de_monde
+            docker stop tour_de_monde_1
+            docker rm tour_de_monde_1
             docker run \
                 -p 8081:8080 \
                 -d \
