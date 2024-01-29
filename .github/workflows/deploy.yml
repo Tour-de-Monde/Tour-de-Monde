@@ -67,11 +67,3 @@ jobs:
           tags: |
             ghcr.io/${{ env.OWNER_LC }}/tour_de_monde:${{ needs.makeTagAndRelease.outputs.tag_name }},
             ghcr.io/${{ env.OWNER_LC }}/tour_de_monde:latest
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SERVER_1_SSH_HOST }}
-          username: ${{ secrets.SERVER_1_SSH_USERNAME }}
-          password: ${{ secrets.SERVER_1_SSH_PASSWORD }}
-          port: ${{ secrets.SERVER_1_SSH_PORT }}
-          script: whoami
