@@ -28,8 +28,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -48,7 +47,7 @@ public class ReservationControllerTest {
 
     @Test
     @Rollback(value = false)
-    public void T0testInit(){
+    public void T00testInit(){
         PlaceReqDtoList list = new PlaceReqDtoList(new ArrayList<>());
         list.setPlaceReqDtoList(IntStream.range(1, 4).mapToObj(i -> {
             return new PlaceReqDto("장소" + i, "서울시 강남구 " + i + "동", "23.1, 35." + i);
@@ -58,14 +57,14 @@ public class ReservationControllerTest {
 
     @Test
     @DisplayName("테스트 실행 확인")
-    public void T0(){
+    public void T00(){
         System.out.println("테스트 실행 확인");
     }
 
     //GET /reserve
     @Test
     @DisplayName("1. 샘플페이지 출력")
-    public void T1ShowSample() throws Exception {
+    public void T01ShowSample() throws Exception {
         ResultActions resultActions = mvc
                 .perform(get("/reserve"))
                 .andDo(print());
@@ -75,7 +74,7 @@ public class ReservationControllerTest {
     //장소페이지 GET /reserve/1
     @Test
     @DisplayName("2. 장소페이지(id=1) GET")
-    public void T2ShowplacePage() throws Exception{
+    public void T02ShowplacePage() throws Exception{
         ResultActions resultActions = mvc
                 .perform(get("/reserve/1")) //장소ID 임의지정
                 .andDo(print());
@@ -91,7 +90,7 @@ public class ReservationControllerTest {
     //예약 생성 GET /reserve/create
     @Test
     @DisplayName("3. 예약 생성 GET")
-    public void T3ShowCreateReservation() throws Exception{
+    public void T03ShowCreateReservation() throws Exception{
         ResultActions resultActions = mvc
                 .perform(get("/reserve/create"))
                 .andDo(print());
@@ -110,10 +109,10 @@ public class ReservationControllerTest {
     @Test
     @DisplayName("4. 예약 생성 POST")
     @Rollback(value = false)
-    public void T4ShowCreateReservation() throws Exception{
+    public void T04ShowCreateReservation() throws Exception{
         ResultActions resultActions = mvc
                 .perform(post("/reserve/create")
-                        .param("seller", "판매자명1")
+                        .param("seller", "판매자1")
                         .param("place", "1")
                         .param("type", "LEISURE"))
                 .andDo(print());
@@ -126,7 +125,7 @@ public class ReservationControllerTest {
 
         Reservation reservation = reservationService.findById(1L);
 
-        assertThat(reservation.getSellerName()).as("seller 불일치").isEqualTo("판매자명1");
+        assertThat(reservation.getSellerName()).as("seller 불일치").isEqualTo("판매자1");
         assertThat(reservation.getPlace().getName()).as("place 불일치").isIn("장소1");
         assertThat(reservation.getType()).as("type 불일치").isIn(ReservationType.LEISURE);
     }
@@ -134,7 +133,7 @@ public class ReservationControllerTest {
     //예약 옵션 생성 GET /reserve/create/1/detail
     @Test
     @DisplayName("5. 예약 옵션 생성 GET")
-    public void T5createNewReservationOption() throws Exception {
+    public void T05createNewReservationOption() throws Exception {
         ResultActions resultActions = mvc
                 .perform(get("/reserve/create/1/detail"))
                 .andDo(print());
@@ -154,7 +153,7 @@ public class ReservationControllerTest {
     @Test
     @DisplayName("6. 예약 옵션 생성 POST")
     @Rollback(value = false)
-    public void T6createNewReservationOption() throws Exception{
+    public void T06createNewReservationOption() throws Exception{
         ResultActions resultActions = mvc
                 .perform(post("/reserve/create/1/detail")
                         .param("reservationId", String.valueOf(1L))
@@ -178,7 +177,7 @@ public class ReservationControllerTest {
     //관리페이지 GET /reserve/manage/1
     @Test
     @DisplayName("7. 관리페이지 GET")
-    public void T7ManageReservation() throws Exception {
+    public void T07ManageReservation() throws Exception {
         ResultActions resultActions = mvc
                 .perform(get("/reserve/manage/1"))
                 .andDo(print());
@@ -194,7 +193,7 @@ public class ReservationControllerTest {
     //예약 수정 GET /reserve/modify/1
     @Test
     @DisplayName("8. 예약수정 GET")
-    public void T8ModifyReservation() throws Exception {
+    public void T08ModifyReservation() throws Exception {
         ResultActions resultActions = mvc
                 .perform(get("/reserve/modify/1"))
                 .andDo(print());
@@ -210,9 +209,72 @@ public class ReservationControllerTest {
                         .stripIndent().trim())));
 
     }
+
     //예약 수정 PUT /reserve/modify/1
+    @Test
+    @DisplayName("9. 예약 수정 PUT")
+    public void T09ModifyReservation() throws Exception{
+        ResultActions resultActions = mvc
+                .perform(put("/reserve/modify/1")
+                        .param("seller", "판매자1")
+                        .param("place", "1")
+                        .param("type", "ACCOMMODATE"))
+                .andDo(print());
+
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(handler().handlerType(ReservationController.class))
+                .andExpect(handler().methodName("modifyReservation"));
+
+        Reservation reservation = reservationService.findById(1L);
+
+        assertThat(reservation.getType())
+                .isEqualTo(ReservationType.ACCOMMODATE);
+    }
     //예약 옵션 수정 GET /reserve/modify/1/detail/1
+    @Test
+    @DisplayName("10. 예약 옵션 수정 GET")
+    public void T10ModifyOption()throws Exception{
+        ResultActions resultActions = mvc
+                .perform(get("/reserve/modify/1/detail/1"))
+                .andDo(print());
+
+        resultActions
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(handler().handlerType(ReservationController.class))
+                .andExpect(handler().methodName("modifyOption"))
+                .andExpect(content().string(containsString("""
+                        <li>판매자명 : 판매자1</li>""".stripIndent().trim())))
+                .andExpect(content().string(containsString("""
+                        <input type="text" name="time" placeholder="예약시간을 입력해주세요."
+                                               required
+                                        value="11:00">""".stripIndent().trim())));
+
+    }
+
     //예약 옵션 수정 PUT /reserve/modify/1/detail/1
+    @Test
+    @DisplayName("11. 예약 수정 PUT")
+    public void T11Modify() throws Exception{
+        ResultActions resultActions = mvc
+                .perform(put("/reserve/modify/1/detail/1")
+                        .param("reservationId", "1")
+                        .param("startDate", LocalDate.now().toString())
+                        .param("time", "12:00")
+                        .param("price", "10"))
+                .andDo(print());
+
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(handler().handlerType(ReservationController.class))
+                .andExpect(handler().methodName("modifyOption"));
+
+        ReservationOption reservationOption = reservationService.findById(1L)
+                .getOptions().get(0);
+
+        assertThat(reservationOption.getTime())
+                .isEqualTo("12:00");
+    }
     //예약 삭제 DELETE /reserve/1
     //예약 옵션 삭제 DELETE /reserve/1/detail/1
 }

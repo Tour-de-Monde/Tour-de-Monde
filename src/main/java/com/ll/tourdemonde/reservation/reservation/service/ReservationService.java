@@ -65,8 +65,8 @@ public class ReservationService {
     @Transactional
     public RsData<Reservation> modifyReservation(Reservation reservation, ReservationCreateForm form) {
         // 셀러와 수정한 사람이 동일인인지 확인
-        if (reservation.getSellerName().equals(form.getSeller())) {
-            throw new RuntimeException("권한이 없는 사용자입니다.");
+        if (!reservation.getSellerName().equals(form.getSeller())) {
+            return new RsData<>("f-modify", "권한이 없는 사용자입니다.", null);
         }
 
         reservation.setType(form.getType());
