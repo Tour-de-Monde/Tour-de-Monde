@@ -84,4 +84,4 @@ jobs:
                 -v /docker_projects/tour_de_monde_1/volume/gen:/gen \
                 --name tour_de_monde_1 \
                 ghcr.io/tour-de-monde/tour_de_monde:latest
-            docker image prune
+            docker image prune -f
