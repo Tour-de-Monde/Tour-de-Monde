@@ -1,7 +1,9 @@
 package com.ll.tourdemonde.reservation.reservation;
 
+import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.place.dto.PlaceReqDto;
 import com.ll.tourdemonde.place.dto.PlaceReqDtoList;
+import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
 import com.ll.tourdemonde.reservation.reservation.controller.ReservationController;
 import com.ll.tourdemonde.reservation.reservation.entity.Reservation;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -276,5 +279,39 @@ public class ReservationControllerTest {
                 .isEqualTo("12:00");
     }
     //예약 삭제 DELETE /reserve/1
+    @Test
+    @DisplayName("12. 예약 삭제 DELETE")
+    public void T12deleteReservation() throws Exception{
+        ResultActions resultActions = mvc
+                .perform(delete("/reserve/delete/1"))
+                .andDo(print());
+
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(handler().handlerType(ReservationController.class))
+                .andExpect(handler().methodName("deleteReservation"));
+
+        RsData<Place> placeRsData = placeService.findByPlace(1L);
+        RsData<List<Reservation>> list = reservationService.findAllByPlace(placeRsData.getData());
+
+        assertThat(list.getData()).isNull();
+    }
+
     //예약 옵션 삭제 DELETE /reserve/1/detail/1
+    @Test
+    @DisplayName("13. 예약옵션 삭제 DELETE")
+    public void T13DeleteOption() throws Exception{
+        ResultActions resultActions = mvc
+                .perform(delete("/reserve/delete/1/detail/1"))
+                .andDo(print());
+
+        resultActions
+                .andExpect(status().is3xxRedirection())
+                .andExpect(handler().handlerType(ReservationController.class))
+                .andExpect(handler().methodName("deleteReservationOption"));
+
+        List<ReservationOption> options = reservationService.findById(1L).getOptions();
+
+        assertThat(options.isEmpty()).as("비었는지 확인").isTrue();
+    }
 }

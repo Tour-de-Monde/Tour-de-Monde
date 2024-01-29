@@ -27,6 +27,9 @@
                 </div>
             </div>
         </section>
+        <section th:if="${reservation == null}">
+            <div>예약을 생성해주세요.</div>
+        </section>
     </section>
 </main>
 <script>
