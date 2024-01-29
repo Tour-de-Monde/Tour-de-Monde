@@ -4,9 +4,6 @@ spring:
       enabled: always
   datasource:
     url: jdbc:h2:mem:TdM_dev_test;MODE=MYSQL # DB : memory mode
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
   jpa:
     hibernate:
       ddl-auto: create
@@ -17,3 +14,9 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
+custom:
+  site:
+    baseUrl: "http://localhost:8080"
+  tempDirPath: c:/temp/TdM_test/temp
+  genFile:
+    dirPath: c:/temp/TdM_test
