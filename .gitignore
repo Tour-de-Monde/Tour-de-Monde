@@ -37,14 +37,6 @@ out/
 .vscode/
 
 ### CUSTOM ###
-<<<<<<< HEAD
-=======
-application-secret.yml
-TdM_dev.mv.db
-TdM_dev.trace.db
-
-### 비공개 ###
->>>>>>> d59159d (refactor : 코드 수정)
 application-secret.yml
 TdM_dev.mv.db
 TdM_dev.trace.db

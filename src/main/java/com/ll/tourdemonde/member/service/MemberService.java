@@ -18,14 +18,14 @@ public class MemberService {
     public Member createMember(String username, String password,
                                String email, String memberName,
                                LocalDate birthDate, String phoneNumber){
-        Member member = new Member();
-
-        member.setUsername(username);
-        member.setPassword(passwordEncoder.encode(password)); // 비밀번호를 암호화 하여 DB에 저장
-        member.setEmail(email);
-        member.setMemberName(memberName);
-        member.setBirthDate(birthDate);
-        member.setPhoneNumber(phoneNumber);
+        Member member = Member.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .email(email)
+                .memberName(memberName)
+                .birthDate(birthDate)
+                .phoneNumber(phoneNumber)
+                .build();
 
         this.memberRepository.save(member);
         return member;
