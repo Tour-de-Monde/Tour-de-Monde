@@ -1,0 +1,57 @@
+<main>
+    <section>
+        <div>장소</div>
+        <span>[[${place.getName()}]]</span><a th:href="|/reserve/manage/${place.id}|">관리페이지</a>
+
+        <div>
+            <label>
+                <span>시작일</span>
+                <input type="date" id="startDate">
+            </label>
+            <label>
+                <span>종료일</span>
+                <input type="date" id="endDate">
+            </label>
+            <button onclick="makeSearchParam()">검색</button>
+        </div>
+        <hr>
+        <section th:if="${reservation != null}">
+            <div th:if="${!reservation.getOptions().isEmpty()}">
+                <div th:each="option : ${reservation.getOptions()}">
+                    <div><span th:text="${reservation.getType()}"></span></div>
+                    <span>예약시간 : </span><span th:text="${option.time}"></span>
+                    <div>
+                        <span>가격 : </span><span th:text="${option.price}"></span><span>원</span>
+                    </div>
+                    <button>예약하기</button>
+                </div>
+            </div>
+        </section>
+        <section th:if="${reservation == null}">
+            <div>예약을 생성해주세요.</div>
+        </section>
+    </section>
+</main>
+<script>
+    function makeSearchParam() {
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+
+        console.log(startDate);
+        console.log(endDate);
+
+        const searchParams = new URLSearchParams({
+                startDate: startDate,
+                endDate: endDate
+            }
+        );
+
+        const queryString = searchParams.toString();
+
+        const currentURL = window.location.href.split("\?").at(0);
+
+        console.log(currentURL);
+
+        window.location.href = currentURL + "?" + queryString;
+    }
+</script>

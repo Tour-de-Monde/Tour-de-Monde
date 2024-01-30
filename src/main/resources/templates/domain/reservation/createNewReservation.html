@@ -1,0 +1,26 @@
+<main>
+    <h2>새로운 예약 생성</h2>
+    <div>
+        <form method="POST" th:action id="reservationForm">
+            <label>판매자명</label>
+            <input type="text" name="seller">
+            <hr>
+            <label for="select_place">장소 선택</label>
+            <select name="place" id="select_place">
+                <option value="1">장소1</option>
+                <option value="2">장소2</option>
+                <option value="3">장소3</option>
+            </select>
+            <hr>
+            <fieldset>
+                <legend>type</legend>
+                <label for="leisure">레저</label>
+                <input type="radio" id="leisure" value="LEISURE" name="type">
+                <label for="accommodate">숙박</label>
+                <input type="radio" id="accommodate" value="ACCOMMODATE" name="type">
+            </fieldset>
+            <button type="submit">옵션생성</button>
+        </form>
+    </div>
+
+</main>

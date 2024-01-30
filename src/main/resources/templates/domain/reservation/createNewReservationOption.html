@@ -1,0 +1,75 @@
+<main>
+    <h2>새로운 예약 옵션 생성</h2>
+    <div>
+        <ol>
+            <li>판매자명 : [[${reservation.sellerName}]]</li>
+            <li>장소명 : [[${reservation.place.getName()}]]</li>
+        </ol>
+        <hr>
+        <form method="POST" th:action>
+            <div>옵션 세부사항</div>
+            <input hidden type="text" th:value="${reservation.getId()}" name="reservationId">
+            <label for="startDate">시작 날짜선택</label>
+            <input type="date" id="startDate" name="startDate" required>
+            <label for="endDate">끝 날짜선택</label>
+            <input type="date" id="endDate" name="endDate">
+            <label>
+                <div>예약시간 추가</div>
+                <input type="text" name="time" placeholder="생성하실 예약시간을 입력해주세요." required>
+            </label>
+            <label>
+                <div>예약 금액 추가</div>
+                <input type="text" name="price" placeholder="생성하실 예약금액을 입력해주세요." required>
+            </label>
+
+            <button type="submit">옵션 추가</button>
+
+            <!--        <ol id="timeList"></ol>--><!-- 불필요 -->
+            <!--        <div>-->
+            <!--            <input type="text" id="addValue" placeholder="시간을 입력해주세요."><button onclick="addList()">추가</button>-->
+            <!--            <button onclick="removeItem()">삭제</button>-->
+            <!--            <button>저장(미구현)</button>-->
+            <!--        </div>-->
+        </form>
+    </div>
+</main>
+<!--<script>--> <!-- 시간이 1개 이므로 1개만 만들수 있도록 구현 <- 불필요 -->
+<!--    function addList()  {-->
+
+<!--        // 1. 추가할 값을 input창에서 읽어온다-->
+<!--        const addValue-->
+<!--            = document.getElementById('addValue').value;-->
+
+<!--        // 2. 추가할 li element 생성-->
+<!--        // 2-1. 추가할 li element 생성-->
+<!--        const li = document.createElement("li");-->
+
+<!--        // 2-2. li에 id 속성 추가-->
+<!--        li.setAttribute('id',addValue);-->
+
+<!--        // 2-3. li에 text node 추가-->
+<!--        const textNode = document.createTextNode(addValue);-->
+<!--        li.appendChild(textNode);-->
+
+<!--        // 3. 생성된 li를 ul에 추가-->
+<!--        document-->
+<!--            .getElementById('timeList')-->
+<!--            .appendChild(li);-->
+<!--    }-->
+
+<!--    function removeItem()  {-->
+
+<!--        // 1. <ul> element 선택-->
+<!--        const ul = document-->
+<!--            .getElementById('timeList');-->
+
+<!--        // 2. <li> 목록 선택-->
+<!--        const items = ul.getElementsByTagName('li');-->
+
+<!--        // 3. <li> 목록 중 첫번째 item 삭제-->
+<!--        if(items.length > 0)  {-->
+<!--            items[0].remove();-->
+<!--        }-->
+
+<!--    }-->
+<!--</script>-->
