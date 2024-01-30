@@ -18,65 +18,49 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
-@EnableJpaAuditing
 public class SecurityConfig {
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(a -> a
-                        .requestMatchers("/gen/**")
-                        .permitAll()
-                        .requestMatchers("/resource/**")
-                        .permitAll()
-                        .requestMatchers("/h2-console/**")
-                        .permitAll()
-                        .requestMatchers("/adm/**")
-                        .hasRole("ADMIN")
+                .authorizeRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/gen/**").permitAll()
+                        .requestMatchers("/resource/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/adm/**").hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll() // 로그인 하지 않은 경우에도 모든 페이지 접근 허용
                 )
-                .headers(
-                        headers ->
-                                headers.frameOptions(
-                                        frameOptions ->
-                                                frameOptions.sameOrigin()
-                                )
-                )
-                .csrf(
-                        csrf ->
-                                csrf.ignoringRequestMatchers(
-                                        "/h2-console/**"
-                                )
-                )
-                .formLogin(
-                        formLogin ->
-                                formLogin
-                                        .loginPage("/member/login")
-                                        .defaultSuccessUrl("/?msg=" + URLEncoder.encode("환영합니다.", StandardCharsets.UTF_8))
-                                        .failureUrl("/member/login?failMsg=" + URLEncoder.encode("아이디 또는 비밀번호가 틀렸습니다.", StandardCharsets.UTF_8))
-                )
-                .logout(
-                        logout ->
-                                logout
-                                        .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-                )
-                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()) // 로그인 하지 않은 경우에도 모든 페이지 접근 허용
-                .csrf((csrf) -> csrf
-                        .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))) // h2-console에 한해 csrf 검증 해제
                 .headers((headers) -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
-                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
-                .formLogin((formLogin) -> formLogin
-                        .loginPage("/member/signin")
-                        .defaultSuccessUrl("/")) // 스프링 시큐리티에 로그인 URL 등록
-                .logout((logout) -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-                        .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true)) // 스프링 시큐리티에 로그아웃 URL 등록
-                .oauth2Login(
-                        oauth2Login -> oauth2Login
-                                .loginPage("/member/login")
+                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)
+                        )
+                )
+                .csrf(csrf ->
+                        csrf.ignoringRequestMatchers(
+                                "/h2-console/**"
+                        )
+                )
+//                .formLogin(formLogin ->
+//                        formLogin
+//                                .loginPage("/member/signin")
+//                                .defaultSuccessUrl("/?msg=" + URLEncoder.encode("환영합니다.", StandardCharsets.UTF_8))
+//                                .failureUrl("/member/signin?error=" + URLEncoder.encode("아이디 또는 비밀번호가 틀렸습니다.", StandardCharsets.UTF_8))
+//                )
+                .logout(logout ->
+                        logout
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                                .logoutSuccessUrl("/")
+                                .invalidateHttpSession(true)
+                )
+                .formLogin(formLogin ->
+                        formLogin
+                                .loginPage("/member/signin")
+                                .defaultSuccessUrl("/")
+                )
+                .oauth2Login(oauth2Login ->
+                        oauth2Login
+                                .loginPage("/member/signin")
                 );
+
         return http.build();
     }
 

@@ -1,6 +1,5 @@
 package com.ll.tourdemonde.global.rq;
 
-
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.global.security.SecurityUser;

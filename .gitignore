@@ -36,15 +36,11 @@ out/
 ### VS Code ###
 .vscode/
 
-<<<<<<< HEAD
 ### CUSTOM ###
 application-secret.yml
 TdM_dev.mv.db
 TdM_dev.trace.db
 
-### Mac ###
-.DS_Store
-=======
 ### Mac ###
 .DS_Store
 c:/
