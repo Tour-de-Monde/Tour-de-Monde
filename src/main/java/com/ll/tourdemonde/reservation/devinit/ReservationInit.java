@@ -24,12 +24,7 @@ public class ReservationInit implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) {
-        IntStream.range(1, 4).mapToObj(i -> {
-            return new PlaceDto("장소" + i, "23.1, 35." + i);}
-                )
-                .map(placeDto -> {
-                    placeService.save(placeDto);
-                    return null;
-                });
+        IntStream.range(1, 4).mapToObj(i -> new PlaceDto("장소"+i, "33.1, 37.1" + i))
+                .forEach(placeService::save);
     }
 }
