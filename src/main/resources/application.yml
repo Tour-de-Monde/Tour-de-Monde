@@ -13,6 +13,17 @@ spring:
   threads:
     virtual:
       enabled: true
+  mail: # 이메일 발송
+    host: smtp.gmail.com
+    port: 587
+    username: tourdemonde2024@gmail.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
   datasource:
     url: jdbc:h2:./TdM_dev;MODE=MYSQL # DB : TdM_dev
     username: sa
