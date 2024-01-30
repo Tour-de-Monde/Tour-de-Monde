@@ -54,14 +54,11 @@ dependencies {
     implementation 'org.springframework.session:spring-session-jdbc'
     implementation 'org.springframework.session:spring-session-data-redis'
 
-<<<<<<< HEAD
     // assertJ core
     testImplementation 'org.assertj:assertj-core:3.25.2'
 
-=======
     // Mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
->>>>>>> d59159d (refactor : 코드 수정)
 }
 
 tasks.named('test') {
