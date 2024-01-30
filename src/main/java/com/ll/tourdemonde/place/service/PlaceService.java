@@ -20,6 +20,11 @@ public class PlaceService {
 
     @Transactional
     public void save(PlaceDto dto) {
-        placeRepository.save(dto.toEntity());
+        Place place = Place.builder()
+                .name(dto.getName())
+                .coordinate(dto.getCoordinate())
+                .build();
+
+        placeRepository.save(place);
     }
 }
