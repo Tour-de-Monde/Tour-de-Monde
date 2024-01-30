@@ -13,6 +13,7 @@ import java.util.Random;
 public class MailService {
     private final JavaMailSender javaMailSender;
 
+    //메일 발송
     public void sendMail(String email, String subject, String body) {
         MimeMessage message = javaMailSender.createMimeMessage();
 
@@ -28,6 +29,7 @@ public class MailService {
         javaMailSender.send(message);
     }
 
+    //아이디 찾기 메일 발송
     public void sendUsernameMail(String email, String username) {
         String subject = "아이디 찾기";
         String body = "<h3>아이디 찾기 결과는 다음과 같습니다.</h3>"
@@ -36,6 +38,7 @@ public class MailService {
         sendMail(email, subject, body);
     }
 
+    //비밀번호 재발급 메일 발송
     public String sendNewPassword(String email) {
         String newPassword;
 
