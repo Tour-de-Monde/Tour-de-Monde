@@ -1,0 +1,12 @@
+<form th:action="@{/checkVerificationCode}" th:object="${verificationForm}" method="post">
+    <div class="my-3">
+        <label for="email" class="form-label">이메일</label>
+        <a th:href="@{/sendVerificationCode}" class="btn btn-sm btn-outline-secondary"
+           th:text="인증번호 발송"></a>
+    </div>
+    <div class="mb-3">
+        <label for="userNumber" class="form-label">인증번호</label>
+        <input type="text" name="userNumber" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">인증번호 확인</button>
+</form>
