@@ -1,7 +1,7 @@
 package com.ll.tourdemonde.global.security;
 
-import com.ll.tourdemonde.domain.member.entity.Member;
-import com.ll.tourdemonde.domain.member.repository.MemberRepository;
+import com.ll.tourdemonde.member.entity.Member;
+import com.ll.tourdemonde.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -8,10 +8,16 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class RsData<T> { // Rs는 보고서라는 뜻
-    String resultCode;
-    int statusCode;
-    String msg;
-    T data;
+    private final String resultCode;
+    private final String msg;
+    private T data;
+
+
+    public static <T> RsData<T> of(String resultCode, String msg, T data) {
+        int statusCode = Integer.parseInt(resultCode.split("-", 2)[0]);
+
+        return new RsData<>(resultCode, msg, data);
+    }
 
     // 성공 메시지
     public boolean isSuccess() {
@@ -27,9 +33,8 @@ public class RsData<T> { // Rs는 보고서라는 뜻
         return of(resultCode, msg, null);
     }
 
-    public static <T> RsData<T> of(String resultCode, String msg, T data) {
-        int statusCode = Integer.parseInt(resultCode.split("-", 2)[0]);
-
-        return new RsData<>(resultCode, statusCode, msg, data);
+    public <T> RsData<T> of(T data) {
+        return RsData.of(resultCode, msg, data);
     }
+
 }
