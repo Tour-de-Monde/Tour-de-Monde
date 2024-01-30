@@ -16,8 +16,8 @@ RUN chmod +x ./gradlew
 # 종속성 설치
 RUN ./gradlew dependencies --no-daemon
 
-# 소스 코드 복사
-COPY src src
+# 소스 코드 복사 (테스트 폴더 제외)
+COPY src/main src/main
 
 # 애플리케이션 빌드
 RUN ./gradlew build --no-daemon
