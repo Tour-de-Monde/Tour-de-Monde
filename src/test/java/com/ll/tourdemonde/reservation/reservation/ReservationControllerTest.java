@@ -28,6 +28,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -111,7 +112,8 @@ public class ReservationControllerTest {
                 .perform(post("/reserve/create")
                         .param("seller", "판매자1")
                         .param("place", "1")
-                        .param("type", "LEISURE"))
+                        .param("type", "LEISURE")
+                        .with(csrf()))
                 .andDo(print());
 
         resultActions
@@ -156,7 +158,8 @@ public class ReservationControllerTest {
                         .param("reservationId", String.valueOf(1L))
                         .param("startDate", LocalDate.now().toString())
                         .param("time", "11:00")
-                        .param("price", "1000000"))
+                        .param("price", "1000000")
+                        .with(csrf()))
                 .andDo(print());
 
         resultActions
@@ -215,7 +218,8 @@ public class ReservationControllerTest {
                 .perform(put("/reserve/modify/1")
                         .param("seller", "판매자1")
                         .param("place", "1")
-                        .param("type", "ACCOMMODATE"))
+                        .param("type", "ACCOMMODATE")
+                        .with(csrf()))
                 .andDo(print());
 
         resultActions
@@ -258,7 +262,8 @@ public class ReservationControllerTest {
                         .param("reservationId", "1")
                         .param("startDate", LocalDate.now().toString())
                         .param("time", "12:00")
-                        .param("price", "10"))
+                        .param("price", "10")
+                        .with(csrf()))
                 .andDo(print());
 
         resultActions
@@ -277,7 +282,8 @@ public class ReservationControllerTest {
     @DisplayName("12. 예약 삭제 DELETE")
     public void T12deleteReservation() throws Exception{
         ResultActions resultActions = mvc
-                .perform(delete("/reserve/delete/1"))
+                .perform(delete("/reserve/delete/1")
+                        .with(csrf()))
                 .andDo(print());
 
         resultActions
@@ -296,7 +302,8 @@ public class ReservationControllerTest {
     @DisplayName("13. 예약옵션 삭제 DELETE")
     public void T13DeleteOption() throws Exception{
         ResultActions resultActions = mvc
-                .perform(delete("/reserve/delete/1/detail/1"))
+                .perform(delete("/reserve/delete/1/detail/1")
+                        .with(csrf()))
                 .andDo(print());
 
         resultActions
