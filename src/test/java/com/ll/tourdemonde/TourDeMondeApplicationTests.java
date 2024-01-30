@@ -10,11 +10,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 import java.util.Optional;
-
+@ActiveProfiles("test")
 @SpringBootTest
 @TestPropertySource(properties = "classpath:application-test.yml")
 class TourDeMondeApplicationTests {
@@ -90,6 +91,7 @@ class TourDeMondeApplicationTests {
 		List<Post> postList = postRepository.findAll();
 		Assertions.assertEquals(false, postList.isEmpty());
 	}
+
 
 	@Test
 	public void 게시물상세페이지테스트() {
