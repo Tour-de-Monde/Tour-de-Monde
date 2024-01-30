@@ -1,8 +1,8 @@
-package com.ll.tourdemonde.reservation.reservation.entity;
+package com.ll.tourdemonde.reservation.entity;
 
 import com.ll.tourdemonde.global.util.Ut;
 import com.ll.tourdemonde.place.entity.Place;
-import com.ll.tourdemonde.reservation.reservation.dto.ReservationOptionForm;
+import com.ll.tourdemonde.reservation.dto.ReservationOptionForm;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

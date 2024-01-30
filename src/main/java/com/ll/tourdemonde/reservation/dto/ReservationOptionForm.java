@@ -1,4 +1,4 @@
-package com.ll.tourdemonde.reservation.reservation.dto;
+package com.ll.tourdemonde.reservation.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

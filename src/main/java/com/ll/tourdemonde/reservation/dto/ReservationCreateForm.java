@@ -1,6 +1,6 @@
-package com.ll.tourdemonde.reservation.reservation.dto;
+package com.ll.tourdemonde.reservation.dto;
 
-import com.ll.tourdemonde.reservation.reservation.entity.ReservationType;
+import com.ll.tourdemonde.reservation.entity.ReservationType;
 import lombok.Data;
 
 @Data

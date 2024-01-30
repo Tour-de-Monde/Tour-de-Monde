@@ -1,7 +1,7 @@
-package com.ll.tourdemonde.reservation.reservation.repository;
+package com.ll.tourdemonde.reservation.repository;
 
 import com.ll.tourdemonde.place.entity.Place;
-import com.ll.tourdemonde.reservation.reservation.entity.Reservation;
+import com.ll.tourdemonde.reservation.entity.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

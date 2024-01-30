@@ -1,14 +1,14 @@
-package com.ll.tourdemonde.reservation.reservation.service;
+package com.ll.tourdemonde.reservation.service;
 
 import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.global.util.Ut;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
-import com.ll.tourdemonde.reservation.reservation.dto.ReservationCreateForm;
-import com.ll.tourdemonde.reservation.reservation.dto.ReservationOptionForm;
-import com.ll.tourdemonde.reservation.reservation.entity.Reservation;
-import com.ll.tourdemonde.reservation.reservation.entity.ReservationOption;
-import com.ll.tourdemonde.reservation.reservation.repository.ReservationRepository;
+import com.ll.tourdemonde.reservation.dto.ReservationCreateForm;
+import com.ll.tourdemonde.reservation.dto.ReservationOptionForm;
+import com.ll.tourdemonde.reservation.entity.Reservation;
+import com.ll.tourdemonde.reservation.entity.ReservationOption;
+import com.ll.tourdemonde.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

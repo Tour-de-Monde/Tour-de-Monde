@@ -1,9 +1,9 @@
-package com.ll.tourdemonde.reservation.reservation.devinit;
+package com.ll.tourdemonde.reservation.devinit;
 
 import com.ll.tourdemonde.place.dto.PlaceReqDto;
 import com.ll.tourdemonde.place.dto.PlaceReqDtoList;
 import com.ll.tourdemonde.place.service.PlaceService;
-import com.ll.tourdemonde.reservation.reservation.service.ReservationService;
+import com.ll.tourdemonde.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

@@ -1,4 +1,4 @@
-package com.ll.tourdemonde.reservation.reservation.entity;
+package com.ll.tourdemonde.reservation.entity;
 
 import lombok.Getter;
 

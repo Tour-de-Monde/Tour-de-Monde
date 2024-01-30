@@ -1,13 +1,13 @@
-package com.ll.tourdemonde.reservation.reservation.controller;
+package com.ll.tourdemonde.reservation.controller;
 
 import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
-import com.ll.tourdemonde.reservation.reservation.dto.ReservationCreateForm;
-import com.ll.tourdemonde.reservation.reservation.dto.ReservationOptionForm;
-import com.ll.tourdemonde.reservation.reservation.entity.Reservation;
-import com.ll.tourdemonde.reservation.reservation.entity.ReservationOption;
-import com.ll.tourdemonde.reservation.reservation.service.ReservationService;
+import com.ll.tourdemonde.reservation.dto.ReservationCreateForm;
+import com.ll.tourdemonde.reservation.dto.ReservationOptionForm;
+import com.ll.tourdemonde.reservation.entity.Reservation;
+import com.ll.tourdemonde.reservation.entity.ReservationOption;
+import com.ll.tourdemonde.reservation.service.ReservationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
