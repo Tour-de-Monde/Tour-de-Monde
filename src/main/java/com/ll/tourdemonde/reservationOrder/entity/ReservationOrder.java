@@ -1,7 +1,8 @@
 package com.ll.tourdemonde.reservationOrder.entity;
 
-import com.ll.tourdemonde.reservation.entity.Reservation;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -15,9 +16,6 @@ public class ReservationOrder {
     private Long id;
 
     private String buyerName;
-
-
-    private Reservation reservation;
 
     @CreationTimestamp
     private LocalDateTime createDate;

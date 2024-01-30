@@ -1,8 +1,7 @@
 package com.ll.tourdemonde.reservation.reservation;
 
 import com.ll.tourdemonde.global.rsData.RsData;
-import com.ll.tourdemonde.place.dto.PlaceReqDto;
-import com.ll.tourdemonde.place.dto.PlaceReqDtoList;
+import com.ll.tourdemonde.place.dto.PlaceDto;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
 import com.ll.tourdemonde.reservation.controller.ReservationController;
@@ -24,9 +23,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,11 +48,13 @@ public class ReservationControllerTest {
     @Test
     @Rollback(value = false)
     public void T00testInit(){
-        PlaceReqDtoList list = new PlaceReqDtoList(new ArrayList<>());
-        list.setPlaceReqDtoList(IntStream.range(1, 4).mapToObj(i -> {
-            return new PlaceReqDto("장소" + i, "서울시 강남구 " + i + "동", "23.1, 35." + i);
-        }).collect(Collectors.toList()));
-        placeService.save(list);
+        IntStream.range(1, 4).mapToObj(i -> {
+                    return new PlaceDto("장소" + i, "23.1, 35." + i);}
+                )
+                .map(placeDto -> {
+                    placeService.save(placeDto);
+                    return null;
+                });
     }
 
     @Test
@@ -291,8 +290,8 @@ public class ReservationControllerTest {
                 .andExpect(handler().handlerType(ReservationController.class))
                 .andExpect(handler().methodName("deleteReservation"));
 
-        RsData<Place> placeRsData = placeService.findByPlace(1L);
-        RsData<List<Reservation>> list = reservationService.findAllByPlace(placeRsData.getData());
+        Place place = placeService.findById(1L);
+        RsData<List<Reservation>> list = reservationService.findAllByPlace(place);
 
         assertThat(list.getData()).isNull();
     }

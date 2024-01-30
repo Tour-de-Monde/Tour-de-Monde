@@ -97,10 +97,10 @@ public class ReservationController {
     public String manageReservation(@PathVariable("placeId") long placeId,
                                     Model model) {
         // ToDo 차후 place id로 검색을 하여 place에 있는 예약, 예약 옵션 다 보여주기
-        RsData<Place> placeRsData = placeService.findByPlace(placeId);
-        RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(placeRsData.getData());
+        Place place = placeService.findById(placeId);
+        RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
 
-        model.addAttribute("place", placeRsData.getData());
+        model.addAttribute("place", place);
         model.addAttribute("reservationList", listRsData.getData());
 
         if (listRsData.isFail()) {
