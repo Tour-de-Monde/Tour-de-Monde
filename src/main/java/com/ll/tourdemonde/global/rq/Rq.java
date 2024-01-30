@@ -1,6 +1,11 @@
 package com.ll.tourdemonde.global.rq;
 
+<<<<<<< HEAD
 import com.ll.tourdemonde.member.entity.Member;
+=======
+
+import com.ll.tourdemonde.domain.member.entity.Member;
+>>>>>>> 77485a8 (fix : 충돌 수정)
 import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.global.security.SecurityUser;
 import com.ll.tourdemonde.standard.util.Ut;
