@@ -1,6 +1,5 @@
 package com.ll.tourdemonde.place.entity;
 
-
 import com.ll.tourdemonde.post.entity.BaseTime;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +16,3 @@ public class Place extends BaseTime {
     private String name;
     private String coordinate;
 }
-
-
-
-
