@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>게시글 작성</title>
     <!-- 필요한 CSS 파일 추가 -->
+
 </head>
 <body>
 <div class="container">
@@ -27,18 +28,18 @@
                 <option value="제주">제주</option>
             </select>
         </div>
-
-        <div id="placeList">
+        <!-------------------------------------------------------------지도 장소 데이터 확인 및 리뷰작성-------------------------------------------------------------------------------------------------------------------------------->
+<!--        <div id="placeList">
             <div th:each="placeName, iterStat : *{placeNames}">
-<!--                <div class="form-group">-->
-<!--                    <label th:for="${'placeName' + iterStat.index}">장소 이름</label>-->
-<!--                    <input type="text" th:id="${'placeName' + iterStat.index}" th:field="*{placeNames[__${iterStat.index}__]}" placeholder="장소 이름을 입력하세요" />-->
-<!--                </div>-->
+                &lt;!&ndash;<div class="form-group">
+                    <label th:for="${'placeName' + iterStat.index}">장소 이름</label>
+                    <input type="text" th:id="${'placeName' + iterStat.index}" th:field="*{placeNames[__${iterStat.index}__]}" placeholder="장소 이름을 입력하세요" />
+                </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label th:for="${'coordinate' + iterStat.index}">좌표</label>-->
-<!--                    <input type="text" th:id="${'coordinate' + iterStat.index}" th:field="*{coordinates[__${iterStat.index}__]}" placeholder="좌표를 입력하세요" />-->
-<!--                </div>-->
+                <div class="form-group">
+                    <label th:for="${'coordinate' + iterStat.index}">좌표</label>
+                    <input type="text" th:id="${'coordinate' + iterStat.index}" th:field="*{coordinates[__${iterStat.index}__]}" placeholder="좌표를 입력하세요" />
+                </div>&ndash;&gt;
 
                 <div class="form-group">
                     <label th:for="${'rating' + iterStat.index}">평점</label>
@@ -51,33 +52,64 @@
                 </div>
             </div>
         </div>
-        <button type="button" onclick="addPlaceInput()">장소 추가</button>
-        <div class="map_wrap">
-            <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
 
-            <div id="menu_wrap" class="bg_white">
-                <div class="option">
-                    <div>
-                        <form onsubmit="searchPlaces(); return false;">
-                            키워드 : <input type="text" value="이태원 맛집" id="keyword" size="15">
-                            <button type="submit">검색하기</button>
-                        </form>
-                    </div>
-                </div>
-                <hr>
-                <ul id="placesList"></ul>
-                <div id="pagination"></div>
-            </div>
+        <script>
+            function addPlaceInput() {
+
+                var placeList = document.getElementById("placeList");
+                var index = placeList.children.length / 2;
+                var newPlaceInput = document.createElement("div");
+
+                newPlaceInput.innerHTML = `
+        <div class="form-group">
+            <label>장소 이름</label>
+            <input type="text" name="placeNames[${index}]" placeholder="장소 이름을 입력하세요" />
         </div>
+        <div class="form-group">
+            <label>좌표</label>
+            <input type="text" name="coordinates[${index}]" placeholder="좌표를 입력하세요" />
+        </div>
+        <div class="form-group">
+            <label>평점</label>
+            <input type="number" name="ratings[${index}]" min="1" max="5" placeholder="평점을 입력하세요 " />
+        </div>
+        <div class="form-group">
+            <label>리뷰</label>
+            <textarea name="reviews[${index}]" placeholder="리뷰를 작성하세요"></textarea>
+        </div>`;
+                placeList.appendChild(newPlaceInput);
+            }
+        </script>-->
 
-        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1110141fa1f2c03d5f7f689ec5fb2e71&libraries=services"></script>
 
+        <button type="button" onclick="addPlaceInput()">장소 추가</button>
         <button type="submit">저장하기</button>
     </form>
 </div>
 </body>
 <!---------------------------------------지도 검색--------------------------------------------------------------------------------------------------------------->
+<link rel="stylesheet" href="/style/mapMarker.css" />
+<div class="map_wrap">
+    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+
+    <div id="menu_wrap" class="bg_white">
+        <div class="option">
+            <div>
+                <form onsubmit="searchPlaces(); return false;">
+                    키워드 : <input type="text" value="이태원 맛집" id="keyword" size="15">
+                    <button type="submit">검색하기</button>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <ul id="placesList"></ul>
+        <div id="pagination"></div>
+    </div>
+</div>
+<!--<button onclick="relayout()">relayout 호출하기</button>-->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1110141fa1f2c03d5f7f689ec5fb2e71&libraries=services"></script>
 <script>
+
     // 마커를 담을 배열입니다
     var markers = [];
 
@@ -90,6 +122,15 @@
     // 지도를 생성합니다
     var map = new kakao.maps.Map(mapContainer, mapOption);
 
+    function relayout() {
+
+        // 지도를 표시하는 div 크기를 변경한 이후 지도가 정상적으로 표출되지 않을 수도 있습니다
+        // 크기를 변경한 이후에는 반드시  map.relayout 함수를 호출해야 합니다
+        // window의 resize 이벤트에 의한 크기변경은 map.relayout 함수가 자동으로 호출됩니다
+        map.relayout();
+
+    }
+    setTimeout(relayout, 1000);
     // 장소 검색 객체를 생성합니다
     var ps = new kakao.maps.services.Places();
 
@@ -295,71 +336,5 @@
         }
     }
 </script>
-<!-------------------------------------------------------------지도 장소 데이터 확인 및 리뷰작성-------------------------------------------------------------------------------------------------------------------------------->
-<script>
-    function addPlaceInput() {
 
-        var placeList = document.getElementById("placeList");
-        var index = placeList.children.length / 2;
-        var newPlaceInput = document.createElement("div");
-
-        newPlaceInput.innerHTML = `
-        <div class="form-group">
-            <label>장소 이름</label>
-            <input type="text" name="placeNames[${index}]" placeholder="장소 이름을 입력하세요" />
-        </div>
-        <div class="form-group">
-            <label>좌표</label>
-            <input type="text" name="coordinates[${index}]" placeholder="좌표를 입력하세요" />
-        </div>
-        <div class="form-group">
-            <label>평점</label>
-            <input type="number" name="ratings[${index}]" min="1" max="5" placeholder="평점을 입력하세요 " />
-        </div>
-        <div class="form-group">
-            <label>리뷰</label>
-            <textarea name="reviews[${index}]" placeholder="리뷰를 작성하세요"></textarea>
-        </div>`;
-        placeList.appendChild(newPlaceInput);
-    }
-</script>
-<!----------------------------------------지도 마커 style--------------------------------------------------------------------------------------------------------------------------------->
-<style>
-    .map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
-    .map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
-    .map_wrap {position:relative;width:100%;height:500px;}
-    #menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
-    .bg_white {background:#fff;}
-    #menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
-    #menu_wrap .option{text-align: center;}
-    #menu_wrap .option p {margin:10px 0;}
-    #menu_wrap .option button {margin-left:5px;}
-    #placesList li {list-style: none;}
-    #placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
-    #placesList .item span {display: block;margin-top:4px;}
-    #placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
-    #placesList .item .info{padding:10px 0 10px 55px;}
-    #placesList .info .gray {color:#8a8a8a;}
-    #placesList .info .jibun {padding-left:26px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
-    #placesList .info .tel {color:#009900;}
-    #placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
-    #placesList .item .marker_1 {background-position: 0 -10px;}
-    #placesList .item .marker_2 {background-position: 0 -56px;}
-    #placesList .item .marker_3 {background-position: 0 -102px}
-    #placesList .item .marker_4 {background-position: 0 -148px;}
-    #placesList .item .marker_5 {background-position: 0 -194px;}
-    #placesList .item .marker_6 {background-position: 0 -240px;}
-    #placesList .item .marker_7 {background-position: 0 -286px;}
-    #placesList .item .marker_8 {background-position: 0 -332px;}
-    #placesList .item .marker_9 {background-position: 0 -378px;}
-    #placesList .item .marker_10 {background-position: 0 -423px;}
-    #placesList .item .marker_11 {background-position: 0 -470px;}
-    #placesList .item .marker_12 {background-position: 0 -516px;}
-    #placesList .item .marker_13 {background-position: 0 -562px;}
-    #placesList .item .marker_14 {background-position: 0 -608px;}
-    #placesList .item .marker_15 {background-position: 0 -654px;}
-    #pagination {margin:10px auto;text-align: center;}
-    #pagination a {display:inline-block;margin-right:10px;}
-    #pagination .on {font-weight: bold; cursor: default;color:#777;}
-</style>
 </html>
