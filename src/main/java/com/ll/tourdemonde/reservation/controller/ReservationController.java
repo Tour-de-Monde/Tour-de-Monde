@@ -8,6 +8,7 @@ import com.ll.tourdemonde.reservation.dto.ReservationCreateForm;
 import com.ll.tourdemonde.reservation.dto.ReservationOptionForm;
 import com.ll.tourdemonde.reservation.entity.Reservation;
 import com.ll.tourdemonde.reservation.entity.ReservationOption;
+import com.ll.tourdemonde.reservation.entity.ReservationType;
 import com.ll.tourdemonde.reservation.service.ReservationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -20,7 +21,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -73,7 +77,16 @@ public class ReservationController {
             //Todo 현재 유저 가져오기, 유저 정보 입력한 상태로 reservation 생성 240131
             String username = userDetails.getUsername();
 
+            // ReservationType의 enum과 value를 Map으로 변환
+            Map<String, String> reservationTypes = Arrays
+                    .stream(ReservationType.values())
+                    .collect(Collectors.toMap(
+                            Enum::toString,
+                            ReservationType::getType));
+
             model.addAttribute("place", place);
+            // 타입선택을 위해 모델에 추가
+            model.addAttribute("reservationTypes", reservationTypes);
             return "/domain/reservation/createNewReservation";
         } catch (Exception e) {
             return "redirect:/";
@@ -139,8 +152,6 @@ public class ReservationController {
         } catch (Exception e){
             return "redirect:" + preUrl;
         }
-
-
 
         return "/domain/reservation/manageReservation";
     }

@@ -90,7 +90,7 @@ public class ReservationControllerTest {
     @DisplayName("3. 예약 생성 GET")
     public void T03ShowCreateReservation() throws Exception{
         ResultActions resultActions = mvc
-                .perform(get("/reserve/create"))
+                .perform(get("/reserve/1/create"))
                 .andDo(print());
 
         resultActions

@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ReservationType {
-    LEISURE("leisure"), ACCOMMODATE("accommodate");
+    LEISURE("레져"), ACCOMMODATE("숙박");
 
     private final String type;
 
