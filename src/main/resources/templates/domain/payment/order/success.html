@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <link
+            rel="icon"
+            href="https://static.toss.im/icons/png/4x/icon-toss-logo.png"
+    />
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Tour_de_Monde 결제 성공</title>
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<div class="result wrapper">
+    <div class="box_section">
+        <h2 style="padding: 20px 0px 10px 0px">
+            <img
+                    width="35px"
+                    src="https://static.toss.im/3d-emojis/u1F389_apng.png"
+            />
+            결제 성공
+        </h2>
+
+        <p id="paymentKey"></p>
+        <p id="orderId"></p>
+        <p id="amount"></p>
+    </div>
+</div>
+<script>
+    // 쿼리 파라미터 값이 결제 요청할 때 보낸 데이터와 동일한지 반드시 확인하세요.
+    // 클라이언트에서 결제 금액을 조작하는 행위를 방지할 수 있습니다.
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // 서버로 결제 승인에 필요한 결제 정보를 보내세요.
+    async function confirm() {
+        var requestData = {
+            paymentKey: urlParams.get("paymentKey"),
+            orderId: urlParams.get("orderId"),
+            amount: urlParams.get("amount"),
+        };
+
+        /*// $ 는 제이쿼리 문법인데 제이쿼리가 없어서 에러가 난다.
+        const csrfTokenHeaderName = $("meta[name='_csrf_header']").attr("content");
+        const csrfTokenValue = $("meta[name='_csrf']").attr("content");*/
+        // 제이쿼리 없는 문법으로
+        const csrfTokenHeaderName = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+        const csrfTokenValue = document.querySelector("meta[name='_csrf']").getAttribute("content");
+
+        const response = await fetch("/order/confirm", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                // 스프링 시큐리티 - 기본적으로 모든 POST 요청에 CSRF 토큰 요구
+                [csrfTokenHeaderName]: csrfTokenValue
+                // "X-CSRF-TOKEN" : csrfTokenValue
+                // 키값에 [] 괄호를 하는 이유는 그냥 변수가 아닌 치환되는 값이 들어가야해서 쓴거다.
+                // csrfTokenHeaderName: csrfTokenValue -> "csrfTokenHeaderName": csrfTokenValue
+            },
+            body: JSON.stringify(requestData),
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            // TODO: 결제 실패 비즈니스 로직을 구현하세요.
+            console.log(json);
+            // location.replace : 다른 페이지에서 뒤로가기를 눌렀을 때 해당 페이지로 다시 접근이 안된다.
+            location.replace(`/order/fail?message=${json.message}&code=${json.code}`);
+            return;
+        }
+
+        // TODO: 결제 성공 비즈니스 로직을 구현하세요.
+        const id = urlParams.get("orderId").split("__")[1];
+        location.replace(`/order/${id}?msg=결제가 완료되었습니다.`);
+    }
+
+    confirm();
+
+    const paymentKeyElement = document.getElementById("paymentKey");
+    const orderIdElement = document.getElementById("orderId");
+    const amountElement = document.getElementById("amount");
+
+    orderIdElement.textContent = "주문번호: " + urlParams.get("orderId");
+    amountElement.textContent = "결제 금액: " + urlParams.get("amount");
+    paymentKeyElement.textContent =
+        "paymentKey: " + urlParams.get("paymentKey");
+</script>
+</body>
+</html>
