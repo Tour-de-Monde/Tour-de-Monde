@@ -25,15 +25,15 @@ public class ReservationOption {
     private Reservation reservation;
 
     @NotNull(message = "시작날짜는 빈칸일 수 없습니다.")
-    private LocalDateTime startDate;
+    private LocalDateTime startDate; // 예약 날짜
 
     private LocalDateTime endDate;
 
     @NotNull
-    private String time;
+    private String time; // 예약 시간
 
     @NotNull
-    private Long price;
+    private Long price; // 가격
 
     public ReservationOption modifyValues(LocalDateTime startDate, LocalDateTime endDate, String time, Long price) {
         if(!this.startDate.equals(startDate)){
