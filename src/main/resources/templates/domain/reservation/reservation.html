@@ -21,8 +21,12 @@
             <div th:each="reservation : ${reservationList}">
                 <div th:if="${!reservation.getOptions().isEmpty()}">
                     <div th:each="option : ${reservation.getOptions()}">
-                        <div><span th:text="${reservation.getType()}"></span></div>
-                        <span>예약시간 : </span><span th:text="${option.time}"></span>
+                        <div>
+                            <span th:text="${reservation.getType()}"></span>
+                        </div>
+                        <div>
+                            <span>예약시간 : </span><span th:text="${option.time}"></span><span th:if="${option.occupied}">예약됨</span>
+                        </div>
                         <div>
                             <span>가격 : </span><span th:text="${option.price}"></span><span>원</span>
                         </div>

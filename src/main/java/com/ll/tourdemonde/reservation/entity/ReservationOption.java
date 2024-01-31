@@ -30,10 +30,13 @@ public class ReservationOption {
     private LocalDateTime endDate;
 
     @NotNull
-    private String time;
+    private String time; // 예약옵션
 
     @NotNull
-    private Long price;
+    private Long price; //옵션의 가격
+
+    @Builder.Default
+    private boolean occupied = false; //예약여부 확인
 
     public ReservationOption modifyValues(LocalDateTime startDate, LocalDateTime endDate, String time, Long price) {
         if(!this.startDate.equals(startDate)){

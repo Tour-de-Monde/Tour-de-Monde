@@ -24,7 +24,7 @@ public class Reservation {
     @GeneratedValue
     private Long id;
 
-    //    @OneToMany // 추후 변경 필요
+    //    @OneToMany //Todo 추후 변경 필요
     private String sellerName;
 
     @NotNull

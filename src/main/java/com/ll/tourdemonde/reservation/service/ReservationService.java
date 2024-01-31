@@ -55,7 +55,7 @@ public class ReservationService {
 
         // 생성된 예약이 전혀 없을 때
         if (reservationList.isEmpty()) {
-            return new RsData<>("F", "예약을 찾을 수 없습니다.", null);
+            return new RsData<>("S-NoSearch", "예약을 찾을 수 없습니다.", null);
         }
 
         return new RsData<>("S-searchList", "성공", reservationList);

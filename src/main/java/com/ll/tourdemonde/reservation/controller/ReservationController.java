@@ -52,7 +52,7 @@ public class ReservationController {
 
             // 모델에 추가
             model.addAttribute("place", place);
-            model.addAttribute("reservation", reservationList);
+            model.addAttribute("reservationList", reservationList);
             return "/domain/reservation/reservation";
         } catch (Exception e) {
             String preUrl = request.getHeader("Referer");
@@ -118,14 +118,14 @@ public class ReservationController {
         if (bindingResult.hasErrors()) {
             return "redirect:/reserve";
         }
-        reservationService.createNewReservationOption(form);
-        return "redirect:/reserve";
+        Reservation reservation = reservationService.createNewReservationOption(form);
+        return "redirect:/reserve/manage/%d".formatted(reservation.getPlace().getId());
     }
 
     //관리자 페이지
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/manage/{placeId}")
-    public String manageReservation(@PathVariable("placeId") long placeId,
+    public String manageReservation(@PathVariable("placeId") Long placeId,
                                     Model model,
                                     HttpServletRequest request) {
         // ToDo 차후 place id로 검색을 하여 place에 있는 예약, 예약 옵션 다 보여주기
@@ -133,11 +133,6 @@ public class ReservationController {
         try{
             Place place = placeService.findById(placeId);
             RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
-
-            if (listRsData.isFail()) {
-                // ToDo 차후 메세지와 함께 페이지 이동하도록 수정
-                return "redirect:" + preUrl;
-            }
 
             model.addAttribute("place", place);
             model.addAttribute("reservationList", listRsData.getData());
