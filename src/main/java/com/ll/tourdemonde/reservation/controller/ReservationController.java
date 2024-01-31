@@ -1,6 +1,7 @@
 package com.ll.tourdemonde.reservation.controller;
 
 import com.ll.tourdemonde.global.rsData.RsData;
+import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
 import com.ll.tourdemonde.reservation.dto.ReservationCreateForm;
@@ -11,6 +12,9 @@ import com.ll.tourdemonde.reservation.service.ReservationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +29,7 @@ public class ReservationController {
 
     private final ReservationService reservationService;
     private final PlaceService placeService;
+    private final MemberService memberService;
 
     @GetMapping("")
     public String reservateItem() {
@@ -40,13 +45,10 @@ public class ReservationController {
                                            HttpServletRequest request
     ) {
         //ToDo 순환참조의 위험이 있으니 차후 가져오는 데이터를 개선하도록 한다.
-
-        List<Reservation> reservationList;
-        Place place;
         try {
-            place = placeService.findById(placeId);
+            Place place = placeService.findById(placeId);
             RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
-            reservationList = listRsData.getData();
+            List<Reservation> reservationList = listRsData.getData();
 
             // 모델에 추가
             model.addAttribute("place", place);
@@ -59,12 +61,17 @@ public class ReservationController {
 
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{placeId}/create")
     public String createNewReservation(@PathVariable("placeId") Long placeId,
+                                       @AuthenticationPrincipal UserDetails userDetails,
                                        Model model) {
 
         try{
+            // 장소 가져오기
             Place place = placeService.findById(placeId);
+            //Todo 현재 유저 가져오기, 유저 정보 입력한 상태로 reservation 생성 240131
+            String username = userDetails.getUsername();
 
             model.addAttribute("place", place);
             return "/domain/reservation/createNewReservation";
@@ -73,6 +80,7 @@ public class ReservationController {
         }
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{placeId}/create")
     public String createNewReservation(
             @PathVariable("placeId")Long placeId,
@@ -90,15 +98,18 @@ public class ReservationController {
         }
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create/{reservationId}/detail")
     public String createNewReservationOption(
             @PathVariable("reservationId") Long reservationId,
             Model model) {
+        // Todo 유저 정보가져오기
         Reservation reservation = reservationService.findById(reservationId);
         model.addAttribute("reservation", reservation);
         return "/domain/reservation/createNewReservationOption";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{reservationId}/detail")
     public String createNewReservationOption(
             @PathVariable("reservationId") Long id,
@@ -112,6 +123,7 @@ public class ReservationController {
     }
 
     //관리자 페이지
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/manage/{placeId}")
     public String manageReservation(@PathVariable("placeId") long placeId,
                                     Model model,
@@ -138,6 +150,7 @@ public class ReservationController {
         return "/domain/reservation/manageReservation";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{reservationId}")
     public String modifyReservation(@PathVariable("reservationId") Long id,
                                     Model model) {
@@ -147,6 +160,7 @@ public class ReservationController {
         return "/domain/reservation/modifyReservation";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/modify/{reservationId}")
     public String modifyReservation(@PathVariable("reservationId") Long reservationId,
                                     @Valid ReservationCreateForm form,
@@ -171,6 +185,7 @@ public class ReservationController {
         return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{reservationId}/detail/{optionId}")
     public String modifyOption(Model model,
                                @PathVariable("reservationId") Long reservationId,
@@ -184,6 +199,7 @@ public class ReservationController {
         return "/domain/reservation/modifyReservationOption";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/modify/{reservationId}/detail/{optionId}")
     public String modifyOption(
             @PathVariable("reservationId") Long reservationId,
@@ -206,6 +222,7 @@ public class ReservationController {
         return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{reservationId}")
     public String deleteReservation(@PathVariable("reservationId") Long reservationId,
                                     Model model) {
@@ -220,6 +237,7 @@ public class ReservationController {
         return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{reservationId}/detail/{optionId}")
     public String deleteReservationOption(@PathVariable("reservationId") Long reservationId,
                                           @PathVariable("optionId") Long optionId,
