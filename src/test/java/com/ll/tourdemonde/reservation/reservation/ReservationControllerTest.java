@@ -315,4 +315,10 @@ public class ReservationControllerTest {
 
         assertThat(options.isEmpty()).as("비었는지 확인").isTrue();
     }
+
+    @Test
+    @DisplayName("14. 예약하기")
+    public void T14Reserve(){
+        System.out.println("아직 미구현");
+    }
 }
