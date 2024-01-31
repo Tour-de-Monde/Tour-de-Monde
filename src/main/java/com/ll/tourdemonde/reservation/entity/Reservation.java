@@ -37,7 +37,7 @@ public class Reservation {
             orphanRemoval = true)
     private List<ReservationOption> options = new ArrayList<>();
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Place place;
 
     public void addOption(ReservationOptionForm form) {

@@ -36,22 +36,27 @@ public class ReservationController {
     public String showReservationFromPlace(@PathVariable("placeId") Long placeId,
                                            @RequestParam(name = "startDate", required = false) String startDate,
                                            @RequestParam(name = "endDate", required = false) String endDate,
-                                           Model model
+                                           Model model,
+                                           HttpServletRequest request
     ) {
         //ToDo 순환참조의 위험이 있으니 차후 가져오는 데이터를 개선하도록 한다.
-        // ToDo 차후 place id로 검색을 하여 place에 있는 예약, 예약 옵션 다 보여주기
-        Place place = placeService.findById(placeId);
-        long reservationId = 1; // 우선 예약ID를 임의로 설정
-        Reservation reservation;
+
+        List<Reservation> reservationList;
+        Place place;
         try {
-            reservation = reservationService.findById(reservationId);
+            place = placeService.findById(placeId);
+            RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
+            reservationList = listRsData.getData();
+
+            // 모델에 추가
+            model.addAttribute("place", place);
+            model.addAttribute("reservation", reservationList);
+            return "/domain/reservation/reservation";
         } catch (Exception e) {
-            // reservation을 찾지 못하는 에러 발생 시 null 반환
-            reservation = null;
+            String preUrl = request.getHeader("Referer");
+            return "redirect:" + preUrl;
         }
-        model.addAttribute("place", place);
-        model.addAttribute("reservation", reservation);
-        return "/domain/reservation/reservation";
+
     }
 
     //TODO 차후 특정장소에 대응하도록 변경 필요
