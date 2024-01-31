@@ -22,7 +22,7 @@ public class MemberService {
 
     public Member createMember(String username, String password,
                                String email, String memberName,
-                               LocalDate birthDate, String phoneNumber) {
+                               LocalDate birthDate, String phoneNumber, String nickname) {
         Member member = Member.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
@@ -30,6 +30,7 @@ public class MemberService {
                 .memberName(memberName)
                 .birthDate(birthDate)
                 .phoneNumber(phoneNumber)
+                .nickname(nickname)
                 .build();
 
         this.memberRepository.save(member);
@@ -56,18 +57,25 @@ public class MemberService {
     }
 
     @Transactional
-    public RsData<Member> join(String username, String password, String nickname) {
+    public RsData<Member> join(String username, String password,
+                               String email, String memberName,
+                               LocalDate birthDate, String phoneNumber, String nickname) {
         if (findByUsername(username).isPresent()) {
             return RsData.of("400-2", "이미 존재하는 회원입니다.");
         }
         Member member = Member.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
+                .email(email)
+                .memberName(memberName)
+                .birthDate(birthDate)
+                .phoneNumber(phoneNumber)
                 .nickname(nickname)
                 .build();
         memberRepository.save(member);
         return RsData.of("200", "%s님 환영합니다. 회원가입이 완료되었습니다. 로그인 후 이용해주세요.".formatted(member.getUsername()), member);
     }
+
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
@@ -80,6 +88,6 @@ public class MemberService {
 
         String filePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
 
-        return join(username, "", nickname);
+        return join(username, "", "", "", null, "", nickname);
     }
 }

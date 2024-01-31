@@ -1,6 +1,5 @@
 package com.ll.tourdemonde.global.initData;
 
-import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,9 +30,9 @@ public class NotProd {
     public void work1() {
         if (memberService.findByUsername("admin").isPresent()) return;
 
-        Member memberAdmin = memberService.join("admin", "1234", "관리자").getData();
-        Member memberUser1 = memberService.join("user1", "1234", "유저1").getData();
-        Member memberUser2 = memberService.join("user2", "1234", "유저2").getData();
-        Member memberUser3 = memberService.join("user3", "1234", "유저3").getData();
+//        Member memberAdmin = memberService.join("admin", "1234", "유저1@gmail.com", "", null, "", "").getData();
+//        Member memberUser1 = memberService.join("user1", "1234", "유저2@gmail.com", "", null, "", "").getData();
+//        Member memberUser2 = memberService.join("user2", "1234", "유저3@gmail.com", "", null, "", "").getData();
+//        Member memberUser3 = memberService.join("user3", "1234", "유저3@gmail.com", "", null, "", "").getData();
     }
 }
