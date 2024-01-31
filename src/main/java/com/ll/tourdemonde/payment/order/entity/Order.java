@@ -29,4 +29,11 @@ public class Order extends BaseTime {
     private LocalDateTime payDate; // 결제일
     private LocalDateTime cancelDate; // 취소일
     private LocalDateTime refundDate; // 환불일
+
+    public boolean isPayable() {
+        if (payDate != null) return false;
+        if (cancelDate != null) return false;
+
+        return true;
+    }
 }
