@@ -5,12 +5,14 @@
             <label>판매자명</label>
             <input type="text" name="seller">
             <hr>
-            <label for="select_place">장소 선택</label>
-            <select name="place" id="select_place">
-                <option value="1">장소1</option>
-                <option value="2">장소2</option>
-                <option value="3">장소3</option>
-            </select>
+            <section>
+                <span>장소명 : </span><span th:text="${place.getName()}"></span>
+            </section>
+            <!--            <select name="place" id="select_place">-->
+            <!--                <option value="1">장소1</option>-->
+            <!--                <option value="2">장소2</option>-->
+            <!--                <option value="3">장소3</option>-->
+            <!--            </select>-->
             <hr>
             <fieldset>
                 <legend>type</legend>

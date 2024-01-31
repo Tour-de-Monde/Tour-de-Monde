@@ -24,8 +24,7 @@ public class ReservationService {
     private final PlaceService placeService;
 
     @Transactional
-    public Reservation createNewReservation(ReservationCreateForm form) {
-        Place place = placeService.findById(form.getPlace());
+    public Reservation createNewReservation(Place place, ReservationCreateForm form) {
         Reservation reservation = Reservation.builder()
                 .place(place)
                 .sellerName(form.getSeller())

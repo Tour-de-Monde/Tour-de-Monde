@@ -59,28 +59,42 @@ public class ReservationController {
 
     }
 
-    //TODO 차후 특정장소에 대응하도록 변경 필요
-    @GetMapping("/create")
-    public String createNewReservation() {
-        return "/domain/reservation/createNewReservation";
+    @GetMapping("/{placeId}/create")
+    public String createNewReservation(@PathVariable("placeId") Long placeId,
+                                       Model model) {
+
+        try{
+            Place place = placeService.findById(placeId);
+
+            model.addAttribute("place", place);
+            return "/domain/reservation/createNewReservation";
+        } catch (Exception e) {
+            return "redirect:/";
+        }
     }
 
-    @PostMapping("/create")
+    @PostMapping("/{placeId}/create")
     public String createNewReservation(
+            @PathVariable("placeId")Long placeId,
             @Valid ReservationCreateForm form,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/domain/reservation/createNewReservation";
         }
-        Reservation reservation = reservationService.createNewReservation(form);
-        return "redirect:/reserve/create/%d/detail".formatted(reservation.getId());
+        try {
+            Place place = placeService.findById(placeId);
+            Reservation reservation = reservationService.createNewReservation(place, form);
+            return "redirect:/reserve/create/%d/detail".formatted(reservation.getId());
+        } catch (Exception e){
+            return "redirect:/";
+        }
     }
 
     @GetMapping("/create/{reservationId}/detail")
     public String createNewReservationOption(
-            @PathVariable("reservationId") Long id,
+            @PathVariable("reservationId") Long reservationId,
             Model model) {
-        Reservation reservation = reservationService.findById(id);
+        Reservation reservation = reservationService.findById(reservationId);
         model.addAttribute("reservation", reservation);
         return "/domain/reservation/createNewReservationOption";
     }
@@ -100,18 +114,26 @@ public class ReservationController {
     //관리자 페이지
     @GetMapping("/manage/{placeId}")
     public String manageReservation(@PathVariable("placeId") long placeId,
-                                    Model model) {
+                                    Model model,
+                                    HttpServletRequest request) {
         // ToDo 차후 place id로 검색을 하여 place에 있는 예약, 예약 옵션 다 보여주기
-        Place place = placeService.findById(placeId);
-        RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
+        String preUrl = request.getHeader("Referer");
+        try{
+            Place place = placeService.findById(placeId);
+            RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
 
-        model.addAttribute("place", place);
-        model.addAttribute("reservationList", listRsData.getData());
+            if (listRsData.isFail()) {
+                // ToDo 차후 메세지와 함께 페이지 이동하도록 수정
+                return "redirect:" + preUrl;
+            }
 
-        if (listRsData.isFail()) {
-            // ToDo 차후 메세지와 함께 페이지 이동하도록 수정
-            return "/domain/reservation/manageReservation";
+            model.addAttribute("place", place);
+            model.addAttribute("reservationList", listRsData.getData());
+        } catch (Exception e){
+            return "redirect:" + preUrl;
         }
+
+
 
         return "/domain/reservation/manageReservation";
     }

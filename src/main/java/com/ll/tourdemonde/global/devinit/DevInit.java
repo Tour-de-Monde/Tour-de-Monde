@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.stream.IntStream;
 
 @Profile("dev")
@@ -31,12 +30,10 @@ public class DevInit implements ApplicationRunner {
         IntStream.range(1, 4).mapToObj(i -> new PlaceDto("장소"+i, "33.1, 37.1" + i))
                 .forEach(placeService::save);
 
-        // 멤버생성
-        IntStream.range(1,4)
-                .forEach(i -> memberService.createMember("user"+i, "1234",
-                        "user"+i+"@user.com","user"+i,
-                        LocalDate.of(2020,1,1),"010-0000-000"+i));
-
-
+//        // 멤버생성 - unique 값들로 인해 에러를 계속 뱉음. 사용 중단
+//        IntStream.range(1,4)
+//                .forEach(i -> memberService.createMember("user"+i, "1234",
+//                        "user"+i+"@user.com","user"+i,
+//                        LocalDate.of(2020,1,1),"010-0000-000"+i));
     }
 }
