@@ -19,7 +19,7 @@ public class CashLog extends BaseTime {
     @Enumerated(EnumType.STRING)
     private EventType eventType;
     private String relTypeCode;
-    private Long relId;
+    private Long relId; // 주문 번호
     @ManyToOne
     private Member member;
     private long price;
