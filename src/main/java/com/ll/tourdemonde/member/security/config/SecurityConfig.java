@@ -11,6 +11,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
@@ -35,22 +38,17 @@ public class SecurityConfig {
                                 "/h2-console/**"
                         )
                 )
-//                .formLogin(formLogin ->
-//                        formLogin
-//                                .loginPage("/member/signin")
-//                                .defaultSuccessUrl("/?msg=" + URLEncoder.encode("환영합니다.", StandardCharsets.UTF_8))
-//                                .failureUrl("/member/signin?error=" + URLEncoder.encode("아이디 또는 비밀번호가 틀렸습니다.", StandardCharsets.UTF_8))
-//                )
+                .formLogin(formLogin ->
+                        formLogin
+                                .loginPage("/member/signin")
+                                .defaultSuccessUrl("/?msg=" + URLEncoder.encode("환영합니다.", StandardCharsets.UTF_8))
+                                .failureUrl("/member/signin?error=" + URLEncoder.encode("아이디 또는 비밀번호가 틀렸습니다.", StandardCharsets.UTF_8))
+                )
                 .logout(logout ->
                         logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                                 .logoutSuccessUrl("/")
                                 .invalidateHttpSession(true)
-                )
-                .formLogin(formLogin ->
-                        formLogin
-                                .loginPage("/member/signin")
-                                .defaultSuccessUrl("/")
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login

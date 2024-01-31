@@ -2,9 +2,9 @@ package com.ll.tourdemonde.member.service;
 
 import com.ll.tourdemonde.global.app.AppConfig;
 import com.ll.tourdemonde.global.rsData.RsData;
+import com.ll.tourdemonde.global.util.Ut;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.repository.MemberRepository;
-import com.ll.tourdemonde.standard.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

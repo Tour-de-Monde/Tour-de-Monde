@@ -1,6 +1,6 @@
 package com.ll.tourdemonde.global.jpa;
 
-import com.ll.tourdemonde.standard.util.Ut;
+import com.ll.tourdemonde.global.util.Ut;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;

@@ -1,5 +1,3 @@
-server:
-  port: 8080
 spring:
   profiles:
     active: dev
@@ -73,7 +71,6 @@ custom:
   site:
     name: Tour-de-Monde
     baseUrl: "http://localhost:${server.port}"
-  tempDirPath: c:/temp/TdM_dev/temp
   temp:
     dirPath: c:/temp/TdM_dev/temp
   genFile:
