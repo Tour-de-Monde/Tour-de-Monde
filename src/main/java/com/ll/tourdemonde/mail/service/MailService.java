@@ -3,6 +3,7 @@ package com.ll.tourdemonde.mail.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 @Service
 public class MailService {
+
     private final JavaMailSender javaMailSender;
 
     //메일 전송

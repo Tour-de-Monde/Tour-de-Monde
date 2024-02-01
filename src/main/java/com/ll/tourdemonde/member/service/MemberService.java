@@ -20,6 +20,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public Member createMember(String username, String password,
                                String email, String memberName,
                                LocalDate birthDate, String phoneNumber, String nickname) {
@@ -49,6 +50,7 @@ public class MemberService {
         return username;
     }
 
+    @Transactional
     public Member renewPassword(Member member, String newPassword) {
         member.setPassword(passwordEncoder.encode(newPassword)); // 새로 발급받은 비밀번호를 암호화 하여 DB에 저장
 
