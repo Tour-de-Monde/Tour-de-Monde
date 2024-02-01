@@ -42,8 +42,9 @@ logging:
     org.hibernate.orm.jdbc.extract: INFO
     org.springframework.transaction.interceptor: INFO
 custom:
-  tempDirPath: /tmp
   site:
     baseUrl: "https://www.travel.lv.gy"
+  temp:
+    dirPath: c:/temp/TdM_dev/temp
   genFile:
-    dirPath: /gen
+    dirPath: c:/temp/TdM_dev
