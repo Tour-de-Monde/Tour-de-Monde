@@ -1,6 +1,5 @@
 package com.ll.tourdemonde.member.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class MemberCreateForm {
+public class  MemberCreateForm {
     @NotBlank(message = "아이디를 입력하세요")
     @Pattern(regexp = "^[a-zA-z0-9]{5,10}+$", message = "아이디는 특수문자를 제외한 5~10자여야 합니다.")
     private String username;
@@ -34,4 +33,6 @@ public class MemberCreateForm {
     private LocalDate birthDate;
 
     private String phoneNumber;
+
+    private String nickname;
 }
