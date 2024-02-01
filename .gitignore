@@ -43,3 +43,4 @@ c:/
 ### 비공개 ###
 TdM_dev.mv.db
 TdM_dev.trace.db
+application-secret.yml
