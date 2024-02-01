@@ -5,6 +5,7 @@ import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.payment.cash.service.CashService;
 import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.payment.order.repository.OrderRepository;
+import com.ll.tourdemonde.reservation.checkReservation.entity.CheckReservation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,11 @@ public class OrderService {
         return order.getBuyer().equals(member);
     }
 
+    // 주문 상세페이지는 구매자만 볼 수 있습니다.
+    public boolean memberCheckReservation(Member member, CheckReservation checkReservation) {
+        return checkReservation.getBuyer().equals(member);
+    }
+
     // 주문자의 결제캐시랑 클라이언트측에서 준 결제캐시랑 같은지 확인
     public void checkCanPay(String orderCode, long pgPayPrice) {
         // 주문 찾기
@@ -36,8 +42,14 @@ public class OrderService {
             throw new GlobalException("400-1", "존재하지 않는 주문입니다.");
         }
 
+        // 결제일, 취소일이 null이 아닌 경우 이미 주문 완료했다.
+        if (!order.isPayable()) {
+            throw new GlobalException("400-3", "이미 결제한 주문입니다.");
+        }
+
         // 생각해보기 TODO 예약에 적힌 가격이랑 pgPayPrice 가격이랑 같은지 확인
-//        order.getReservation().getOptions()
+        if (order.getCheckReservation().getPrice() != pgPayPrice)
+            throw new GlobalException("400-2", "예약하신 금액과 등록된 결제 금액이 일치하지 않습니다.");
     }
 
     public Optional<Order> findByCode(String code) { // code : 2024-01-29__4
@@ -52,5 +64,7 @@ public class OrderService {
         long price = order.getCheckReservation().getPrice();
 
         // TODO payByTossPayments() 이어서 작업하기
+        // 결제 완료
+        order.setPaymentDone();
     }
 }

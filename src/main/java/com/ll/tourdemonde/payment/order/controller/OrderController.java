@@ -4,8 +4,9 @@ import com.ll.tourdemonde.global.app.AppConfig;
 import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.member.entity.Member;
-import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.payment.order.service.OrderService;
+import com.ll.tourdemonde.reservation.checkReservation.entity.CheckReservation;
+import com.ll.tourdemonde.reservation.checkReservation.service.CheckReservationService;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -31,11 +32,34 @@ import java.util.Base64;
 public class OrderController {
     private final Rq rq;
     private final OrderService orderService;
+    private final CheckReservationService checkReservationService;
 
     // 주문 현황 페이지
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public String showDetail(@PathVariable long id, Model model) {
+        // TODO id로 Order를 찾으면 안되고 CheckReservation을 찾아야 하네
+        CheckReservation checkReservation = checkReservationService.findById(id).orElse(null);
+
+        if (checkReservation == null) {
+            throw new GlobalException("400-1", "존재하지 않는 예약입니다.");
+        }
+
+        Member member = rq.getMember();
+
+        if (!orderService.memberCheckReservation(member, checkReservation)) {
+            throw new GlobalException("403", "권한이 없습니다.");
+        }
+
+        model.addAttribute("checkReservation", checkReservation);
+
+        return "domain/payment/order/detail";
+    }
+/*
+    @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String showDetail(@PathVariable long id, Model model) {
+        // TODO id로 Order를 찾으면 안되고 CheckReservation을 찾아야 하네
         Order order = orderService.findById(id).orElse(null);
 
         if (order == null) {
@@ -52,6 +76,7 @@ public class OrderController {
 
         return "domain/payment/order/detail";
     }
+*/
 
     // 성공, 실패 코드 토스페이먼츠에서 제공한 코드를 따라가자.
     @GetMapping("/success")
