@@ -7,23 +7,19 @@
 <body>
 <div class="container">
   <h1 th:text="${post.title}">게시물 제목</h1>
-<!--  <p th:text="${'작성자: ' + post.author.username}">작성자</p>-->
   <p th:text="${'카테고리: ' + post.category}">카테고리</p>
 
   <div th:if="${!post.postPlaces.empty}">
     <h2>장소 목록</h2>
     <ul>
-        <div th:if="${!postPlaceReviewList.empty}">
-          <h2>리뷰</h2>
-          <ul>
-            <li th:each="review : ${postPlaceReviewList}">
-              <p th:text="${'장소 이름: ' + review.place.name}">장소 이름</p>
-              <p th:text="${'좌표: ' + review.place.coordinate}">좌표</p>
-              <p th:text="${'평점: ' + review.rating}">평점</p>
-              <p th:text="${'리뷰 내용: ' + review.review}">리뷰 내용</p>
-            </li>
-          </ul>
+      <div th:each="placeReview : ${postPlaceReviewList}">
+        <div>
+          <h3 th:text="${'장소 이름: ' + placeReview.place.name}">장소 이름</h3>
+          <p th:text="${'좌표: ' + placeReview.place.coordinate}">좌표</p>
+          <p th:text="${'평점: ' + placeReview.rating}">평점</p>
+          <p th:text="${'리뷰 내용: ' + placeReview.review}">리뷰 내용</p>
         </div>
+      </div>
     </ul>
   </div>
 

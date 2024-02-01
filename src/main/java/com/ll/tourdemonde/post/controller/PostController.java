@@ -56,7 +56,7 @@ public class PostController {
         Post post = postService.getPost(id);
         List<PostPlaceReview> postPlaceReviewList = postService.getPostPlaceReview(id);
         model.addAttribute("post", post);
-        model.addAttribute("postPlaceReviewList", postPlaceReviewList); // 속성 이름을 정확히 맞춥니다
+        model.addAttribute("postPlaceReviewList", postPlaceReviewList);
         return "post/post_detail";
     }
 }
