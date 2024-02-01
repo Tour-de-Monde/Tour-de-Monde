@@ -1,4 +1,3 @@
-
 $(function () {
     $('select[value]').each(function (index, el) {
         const value = $(el).attr('value');

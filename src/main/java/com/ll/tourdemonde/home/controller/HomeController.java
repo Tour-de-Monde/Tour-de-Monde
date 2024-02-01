@@ -17,12 +17,13 @@ public class HomeController {
 
     @GetMapping("/map")
 //    @ResponseBody
-    String showMap(){
+    String showMap() {
         return "map";
     }
+
     @GetMapping("/search")
 //    @ResponseBody
-    String showSearch(){
+    String showSearch() {
         return "search";
     }
 

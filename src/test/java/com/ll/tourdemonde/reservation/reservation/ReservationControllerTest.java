@@ -48,14 +48,14 @@ public class ReservationControllerTest {
 
     @Test
     @Rollback(value = false)
-    public void T00testInit(){
-        IntStream.range(1, 4).mapToObj(i -> new PlaceDto("장소"+i, "33.1, 37.1" + i))
+    public void T00testInit() {
+        IntStream.range(1, 4).mapToObj(i -> new PlaceDto("장소" + i, "33.1, 37.1" + i))
                 .forEach(placeService::save);
     }
 
     @Test
     @DisplayName("테스트 실행 확인")
-    public void T00(){
+    public void T00() {
         System.out.println("테스트 실행 확인");
     }
 
@@ -72,7 +72,7 @@ public class ReservationControllerTest {
     //장소페이지 GET /reserve/1
     @Test
     @DisplayName("2. 장소페이지(id=1) GET")
-    public void T02ShowplacePage() throws Exception{
+    public void T02ShowplacePage() throws Exception {
         ResultActions resultActions = mvc
                 .perform(get("/reserve/1")) //장소ID 임의지정
                 .andDo(print());
@@ -88,7 +88,7 @@ public class ReservationControllerTest {
     //예약 생성 GET /reserve/create
     @Test
     @DisplayName("3. 예약 생성 GET")
-    public void T03ShowCreateReservation() throws Exception{
+    public void T03ShowCreateReservation() throws Exception {
         ResultActions resultActions = mvc
                 .perform(get("/reserve/create"))
                 .andDo(print());
@@ -107,7 +107,7 @@ public class ReservationControllerTest {
     @Test
     @DisplayName("4. 예약 생성 POST")
     @Rollback(value = false)
-    public void T04ShowCreateReservation() throws Exception{
+    public void T04ShowCreateReservation() throws Exception {
         ResultActions resultActions = mvc
                 .perform(post("/reserve/create")
                         .param("seller", "판매자1")
@@ -152,7 +152,7 @@ public class ReservationControllerTest {
     @Test
     @DisplayName("6. 예약 옵션 생성 POST")
     @Rollback(value = false)
-    public void T06createNewReservationOption() throws Exception{
+    public void T06createNewReservationOption() throws Exception {
         ResultActions resultActions = mvc
                 .perform(post("/reserve/create/1/detail")
                         .param("reservationId", String.valueOf(1L))
@@ -213,7 +213,7 @@ public class ReservationControllerTest {
     //예약 수정 PUT /reserve/modify/1
     @Test
     @DisplayName("9. 예약 수정 PUT")
-    public void T09ModifyReservation() throws Exception{
+    public void T09ModifyReservation() throws Exception {
         ResultActions resultActions = mvc
                 .perform(put("/reserve/modify/1")
                         .param("seller", "판매자1")
@@ -232,10 +232,11 @@ public class ReservationControllerTest {
         assertThat(reservation.getType())
                 .isEqualTo(ReservationType.ACCOMMODATE);
     }
+
     //예약 옵션 수정 GET /reserve/modify/1/detail/1
     @Test
     @DisplayName("10. 예약 옵션 수정 GET")
-    public void T10ModifyOption()throws Exception{
+    public void T10ModifyOption() throws Exception {
         ResultActions resultActions = mvc
                 .perform(get("/reserve/modify/1/detail/1"))
                 .andDo(print());
@@ -256,7 +257,7 @@ public class ReservationControllerTest {
     //예약 옵션 수정 PUT /reserve/modify/1/detail/1
     @Test
     @DisplayName("11. 예약 수정 PUT")
-    public void T11Modify() throws Exception{
+    public void T11Modify() throws Exception {
         ResultActions resultActions = mvc
                 .perform(put("/reserve/modify/1/detail/1")
                         .param("reservationId", "1")
@@ -277,10 +278,11 @@ public class ReservationControllerTest {
         assertThat(reservationOption.getTime())
                 .isEqualTo("12:00");
     }
+
     //예약 삭제 DELETE /reserve/1
     @Test
     @DisplayName("12. 예약 삭제 DELETE")
-    public void T12deleteReservation() throws Exception{
+    public void T12deleteReservation() throws Exception {
         ResultActions resultActions = mvc
                 .perform(delete("/reserve/delete/1")
                         .with(csrf()))
@@ -300,7 +302,7 @@ public class ReservationControllerTest {
     //예약 옵션 삭제 DELETE /reserve/1/detail/1
     @Test
     @DisplayName("13. 예약옵션 삭제 DELETE")
-    public void T13DeleteOption() throws Exception{
+    public void T13DeleteOption() throws Exception {
         ResultActions resultActions = mvc
                 .perform(delete("/reserve/delete/1/detail/1")
                         .with(csrf()))

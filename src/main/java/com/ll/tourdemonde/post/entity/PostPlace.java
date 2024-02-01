@@ -3,7 +3,10 @@ package com.ll.tourdemonde.post.entity;
 
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.place.entity.Place;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -13,7 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Builder
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-public class PostPlace extends BaseTime{
+public class PostPlace extends BaseTime {
 
     @ManyToOne
     private Member author;

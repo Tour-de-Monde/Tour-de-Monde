@@ -107,7 +107,7 @@ public class PostService {
 
     public Post getPost(Long id) {
         Optional<Post> post = postRepository.findById(id);
-        if (post.isPresent()){
+        if (post.isPresent()) {
             return post.get();
         } else {
             throw new EntityNotFoundException("해당 게시물이 존재하지 않습니다.");

@@ -17,14 +17,14 @@ public class ReservationOptionForm {
     @NotNull
     private Long price;
 
-    public boolean hasEndDate(){
-        if(endDate == null){
+    public boolean hasEndDate() {
+        if (endDate == null) {
             return false;
         }
         return !endDate.isBlank();
     }
 
-    public ReservationOptionForm initEndDateIfNotExists(){
+    public ReservationOptionForm initEndDateIfNotExists() {
         if (!hasEndDate()) {
             this.endDate = startDate;
         }

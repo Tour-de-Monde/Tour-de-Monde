@@ -8,19 +8,21 @@
             <div>장소 : [[${reservation.getPlace().name}]]</div>
             <input hidden name="place" type="text" th:value="${reservation.getPlace().id}">
             <!--장소 선택이 안되도록-->
-<!--            <label for="select_place">장소 선택</label>-->
-<!--            <select name="place" id="select_place">-->
-<!--                <option value="1" th:selected="${reservation.getPlace().id == 1}">장소1</option>-->
-<!--                <option value="2" th:selected="${reservation.getPlace().id == 2}">장소2</option>-->
-<!--                <option value="3" th:selected="${reservation.getPlace().id == 3}">장소3</option>-->
-<!--            </select>-->
+            <!--            <label for="select_place">장소 선택</label>-->
+            <!--            <select name="place" id="select_place">-->
+            <!--                <option value="1" th:selected="${reservation.getPlace().id == 1}">장소1</option>-->
+            <!--                <option value="2" th:selected="${reservation.getPlace().id == 2}">장소2</option>-->
+            <!--                <option value="3" th:selected="${reservation.getPlace().id == 3}">장소3</option>-->
+            <!--            </select>-->
             <hr>
             <fieldset>
                 <legend>type</legend>
                 <label for="leisure">레저</label>
-                <input type="radio" id="leisure" value="LEISURE" name="type" th:checked="${reservation.getType() == 'LEISURE'}">
+                <input type="radio" id="leisure" value="LEISURE" name="type"
+                       th:checked="${reservation.getType() == 'LEISURE'}">
                 <label for="accommodate">숙박</label>
-                <input type="radio" id="accommodate" value="ACCOMMODATE" name="type" th:checked="${reservation.getType() == 'ACCOMMODATE'}">
+                <input type="radio" id="accommodate" value="ACCOMMODATE" name="type"
+                       th:checked="${reservation.getType() == 'ACCOMMODATE'}">
             </fieldset>
             <button type="submit">수정완료</button>
         </form>

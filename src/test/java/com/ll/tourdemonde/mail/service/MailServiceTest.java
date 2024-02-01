@@ -33,7 +33,8 @@ class MailServiceTest {
     @Test
     @DisplayName("3. 비밀번호 재발급 메일 전송 테스트")
     void sendNewPasswordTest() {
-        String email = "tourdemonde2024@gmail.com";;
+        String email = "tourdemonde2024@gmail.com";
+        ;
         mailService.sendNewPassword(email);
     }
 }
