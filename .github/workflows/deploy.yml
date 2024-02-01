@@ -56,8 +56,11 @@ jobs:
       - name: application-secret.yml 생성
         env:
           ACTIONS_STEP_DEBUG: true
-          APPLICATION_SECRET: ${{ secrets.APPLICATION_SECRET_YML }}
-        run: echo "$APPLICATION_SECRET" > src/main/resources/application-secret.yml
+          APPLICATION_SECRET_YML: ${{ secrets.APPLICATION_SECRET_YML }}
+        run: echo "$APPLICATION_SECRET_YML" > src/main/resources/application-secret.yml
+      - name: 디버그 출력
+        run:
+          echo "APPLICATION_SECRET_YML: $APPLICATION_SECRET_YML"
       - name: 빌드 앤 푸시
         uses: docker/build-push-action@v3
         with:
