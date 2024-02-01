@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ReservationType {
-    LEISURE("레져"), ACCOMMODATE("숙박");
+    LEISURE("레져"), ACCOMMODATE("숙박"), RESTAURANT("식당");
 
     private final String type;
 
@@ -18,5 +18,9 @@ public enum ReservationType {
 
     public boolean isAccommodate() {
         return this == ACCOMMODATE;
+    }
+
+    public boolean isRestaurant() {
+        return this == RESTAURANT;
     }
 }
