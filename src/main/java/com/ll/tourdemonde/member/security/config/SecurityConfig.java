@@ -16,8 +16,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
-@EnableMethodSecurity
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     @Bean
