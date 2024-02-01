@@ -28,6 +28,7 @@
         <a th:href="@{/post/detail/{id}(id=${post.id})}" class="grid-item">
             <img th:src="@{/images/card-image.png}" alt="Card Image">
             <h5 th:text="${post.title}">게시물 제목</h5>
+            <h5 th:text="${post.author.getUsername()}">작성자</h5>
         </a>
     </th:block>
 

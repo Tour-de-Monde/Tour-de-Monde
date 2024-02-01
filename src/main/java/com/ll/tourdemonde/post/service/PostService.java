@@ -27,24 +27,12 @@ public class PostService {
     private final MemberRepository memberRepository;
     private final PostPlaceReviewRepository postPlaceReviewRepository;
 
-    public void writePost(PostCreateForm postCreateForm) {
-        // 멤버(저자) 찾기
-//        Optional<Member> findAuthor = memberRepository.findById(postCreateForm.getAuthorId());
-//        Member author = findAuthor.get();
-
-
-        Member member1 = memberRepository.save(
-                Member.builder()
-                        .username("user1")
-                        .password("1234")
-                        .build()
-        );
-
+    public void writePost(PostCreateForm postCreateForm, Member author) {
         // 게시글 생성
         Post post = Post.builder()
                 .title(postCreateForm.getTitle())
                 .category(postCreateForm.getCategory())
-                .author(member1)
+                .author(author)
                 .build();
 
         List<Place> places = createPlacesIfNotExist(postCreateForm.getPlaceNames(), postCreateForm.getCoordinates());

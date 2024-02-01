@@ -1,6 +1,8 @@
 package com.ll.tourdemonde.post.controller;
 
 
+import com.ll.tourdemonde.member.entity.Member;
+import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.post.dto.PostCreateForm;
 import com.ll.tourdemonde.post.entity.Post;
 import com.ll.tourdemonde.post.entity.PostPlaceReview;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -23,6 +26,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final MemberService memberService;
 
     @GetMapping("/create")
     public String createPost(PostCreateForm postCreateForm) {
@@ -31,11 +35,12 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String createPost(@Valid PostCreateForm postCreateForm, BindingResult bindingResult) {
+    public String createPost(@Valid PostCreateForm postCreateForm, BindingResult bindingResult, Principal principal) {
+        Member member = memberService.getMember(principal.getName());
         if (bindingResult.hasErrors()) {
             return "post/post_create";
         }
-        postService.writePost(postCreateForm);
+        postService.writePost(postCreateForm, member);
         return "redirect:/post/list";
     }
 
