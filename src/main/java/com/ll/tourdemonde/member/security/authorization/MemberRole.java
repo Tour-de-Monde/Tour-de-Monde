@@ -1,4 +1,4 @@
-package com.ll.tourdemonde.memberSecurity.authorization;
+package com.ll.tourdemonde.member.security.authorization;
 
 import lombok.Getter;
 
