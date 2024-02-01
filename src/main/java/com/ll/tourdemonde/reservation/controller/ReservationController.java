@@ -38,7 +38,7 @@ public class ReservationController {
     @GetMapping("")
     public String reservateItem() {
 //        reservationService.createNewReservation(place, reservationDto);
-        return "/domain/reservation/reservationExample";
+        return "domain/reservation/reservationExample";
     }
 
     @GetMapping("/{placeId}")
@@ -57,7 +57,7 @@ public class ReservationController {
             // 모델에 추가
             model.addAttribute("place", place);
             model.addAttribute("reservationList", reservationList);
-            return "/domain/reservation/reservation";
+            return "domain/reservation/reservation";
         } catch (Exception e) {
             String preUrl = request.getHeader("Referer");
             return "redirect:" + preUrl;
@@ -87,7 +87,7 @@ public class ReservationController {
             model.addAttribute("place", place);
             // 타입선택을 위해 모델에 추가
             model.addAttribute("reservationTypes", reservationTypes);
-            return "/domain/reservation/createNewReservation";
+            return "domain/reservation/createNewReservation";
         } catch (Exception e) {
             return "redirect:/";
         }
@@ -100,7 +100,7 @@ public class ReservationController {
             @Valid ReservationCreateForm form,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "/domain/reservation/createNewReservation";
+            return "domain/reservation/createNewReservation";
         }
         try {
             Place place = placeService.findById(placeId);
@@ -119,7 +119,7 @@ public class ReservationController {
         // Todo 유저 정보가져오기
         Reservation reservation = reservationService.findById(reservationId);
         model.addAttribute("reservation", reservation);
-        return "/domain/reservation/createNewReservationOption";
+        return "domain/reservation/createNewReservationOption";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -153,7 +153,7 @@ public class ReservationController {
             return "redirect:" + preUrl;
         }
 
-        return "/domain/reservation/manageReservation";
+        return "domain/reservation/manageReservation";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -163,7 +163,7 @@ public class ReservationController {
         Reservation reservation = reservationService.findById(id);
 
         model.addAttribute("reservation", reservation);
-        return "/domain/reservation/modifyReservation";
+        return "domain/reservation/modifyReservation";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -202,7 +202,7 @@ public class ReservationController {
 
         model.addAttribute("reservation", reservation);
         model.addAttribute("option", option);
-        return "/domain/reservation/modifyReservationOption";
+        return "domain/reservation/modifyReservationOption";
     }
 
     @PreAuthorize("isAuthenticated()")
