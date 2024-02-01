@@ -19,12 +19,15 @@ public class PlaceService {
     }
 
     @Transactional
-    public void save(PlaceDto dto) {
+    public Place save(PlaceDto dto) {
         Place place = Place.builder()
                 .name(dto.getName())
                 .coordinate(dto.getCoordinate())
                 .build();
 
         placeRepository.save(place);
+
+        // TODO 반환값 지우기 반환타입도 void로 바꾸기
+        return place;
     }
 }
