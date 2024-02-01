@@ -55,8 +55,9 @@ jobs:
           OWNER: "${{ github.repository_owner }}"
       - name: application-secret.yml 생성
         env:
-          APPLICATION_SECRET: ${{ secrets.APPLICATION_SECRET_YML }}
-        run: echo "$APPLICATION_SECRET" > src/main/resources/application-secret.yml
+          ACTIONS_STEP_DEBUG: true
+          APPLICATION_SECRET_YML: ${{ secrets.APPLICATION_SECRET_YML }}
+        run: echo "APPLICATION_SECRET_YML" > src/main/resources/application-secret.yml
       - name: 빌드 앤 푸시
         uses: docker/build-push-action@v3
         with:
