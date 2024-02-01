@@ -68,6 +68,7 @@ public class ReservationController {
                                     Model model,
                                     HttpServletRequest request) {
         String preUrl = request.getHeader("Referer");
+        // Todo 장소에 대한 소유주인지 확인하는 기능 추가 필요 240201, 장소에 member추가 및 등록 기능 필요
 
         try{
             Place place = placeService.findById(placeId);
@@ -86,7 +87,6 @@ public class ReservationController {
     @GetMapping("/{placeId}/create")
     public String createNewReservation(@PathVariable("placeId") Long placeId,
                                        Model model) {
-
         try{
             // 장소 가져오기
             Place place = placeService.findById(placeId);
