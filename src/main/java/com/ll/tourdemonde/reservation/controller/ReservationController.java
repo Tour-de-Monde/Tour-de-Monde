@@ -14,8 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -63,17 +61,35 @@ public class ReservationController {
 
     }
 
+    //관리자 페이지
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/manage/{placeId}")
+    public String manageReservation(@PathVariable("placeId") Long placeId,
+                                    Model model,
+                                    HttpServletRequest request) {
+        String preUrl = request.getHeader("Referer");
+
+        try{
+            Place place = placeService.findById(placeId);
+            RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
+
+            model.addAttribute("place", place);
+            model.addAttribute("reservationList", listRsData.getData());
+        } catch (Exception e){
+            return "redirect:" + preUrl;
+        }
+
+        return "domain/reservation/manageReservation";
+    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{placeId}/create")
     public String createNewReservation(@PathVariable("placeId") Long placeId,
-                                       @AuthenticationPrincipal UserDetails userDetails,
                                        Model model) {
 
         try{
             // 장소 가져오기
             Place place = placeService.findById(placeId);
-            //Todo 현재 유저 가져오기, 유저 정보 입력한 상태로 reservation 생성 240131
-            String username = userDetails.getUsername();
 
             // ReservationType의 enum과 value를 Map으로 변환
             Map<String, String> reservationTypes = ReservationType.getMapValues();
@@ -110,7 +126,6 @@ public class ReservationController {
     public String createNewReservationOption(
             @PathVariable("reservationId") Long reservationId,
             Model model) {
-        // Todo 유저 정보가져오기
         Reservation reservation = reservationService.findById(reservationId);
         model.addAttribute("reservation", reservation);
         return "domain/reservation/createNewReservationOption";
@@ -127,27 +142,6 @@ public class ReservationController {
         }
         Reservation reservation = reservationService.createNewReservationOption(form);
         return "redirect:/reserve/manage/%d".formatted(reservation.getPlace().getId());
-    }
-
-    //관리자 페이지
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/manage/{placeId}")
-    public String manageReservation(@PathVariable("placeId") Long placeId,
-                                    Model model,
-                                    HttpServletRequest request) {
-        // ToDo 차후 place id로 검색을 하여 place에 있는 예약, 예약 옵션 다 보여주기
-        String preUrl = request.getHeader("Referer");
-        try{
-            Place place = placeService.findById(placeId);
-            RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
-
-            model.addAttribute("place", place);
-            model.addAttribute("reservationList", listRsData.getData());
-        } catch (Exception e){
-            return "redirect:" + preUrl;
-        }
-
-        return "domain/reservation/manageReservation";
     }
 
     @PreAuthorize("isAuthenticated()")

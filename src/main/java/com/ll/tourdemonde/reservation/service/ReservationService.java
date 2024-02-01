@@ -1,11 +1,11 @@
 package com.ll.tourdemonde.reservation.service;
 
+import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.global.util.Ut;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.place.entity.Place;
-import com.ll.tourdemonde.place.service.PlaceService;
 import com.ll.tourdemonde.reservation.dto.ReservationCreateForm;
 import com.ll.tourdemonde.reservation.dto.ReservationOptionForm;
 import com.ll.tourdemonde.reservation.entity.Reservation;
@@ -23,8 +23,8 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final PlaceService placeService;
     private final MemberService memberService;
+    private final Rq rq;
 
     @Transactional
     public Reservation createNewReservation(Place place, ReservationCreateForm form) {
@@ -122,4 +122,5 @@ public class ReservationService {
     public void deleteOption(Reservation reservation, Long optionId) {
         reservation.removeOption(optionId);
     }
+
 }

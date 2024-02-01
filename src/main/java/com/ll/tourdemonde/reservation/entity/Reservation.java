@@ -22,10 +22,6 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "reservations")
 public class Reservation extends BaseTime {
-    @Id
-    @GeneratedValue
-    private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private Member seller;
 
@@ -54,7 +50,6 @@ public class Reservation extends BaseTime {
     }
 
     public void removeOption(Long optionId) {
-        // Todo 옵션이 있는지 확인 하고 없다면 예외처리
         options.removeIf(option -> option.getId().equals(optionId));
     }
 
