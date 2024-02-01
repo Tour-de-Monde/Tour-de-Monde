@@ -21,10 +21,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -78,11 +76,7 @@ public class ReservationController {
             String username = userDetails.getUsername();
 
             // ReservationType의 enum과 value를 Map으로 변환
-            Map<String, String> reservationTypes = Arrays
-                    .stream(ReservationType.values())
-                    .collect(Collectors.toMap(
-                            Enum::toString,
-                            ReservationType::getType));
+            Map<String, String> reservationTypes = ReservationType.getMapValues();
 
             model.addAttribute("place", place);
             // 타입선택을 위해 모델에 추가
@@ -200,7 +194,11 @@ public class ReservationController {
         ReservationOption option = reservationService.findOptionById(reservationId, optionId);
         Reservation reservation = reservationService.findById(option.getReservation().getId());
 
+        // ReservationType의 enum과 value를 Map으로 변환
+        Map<String, String> reservationTypes = ReservationType.getMapValues();
+
         model.addAttribute("reservation", reservation);
+        model.addAttribute("reservationTypes", reservationTypes);
         model.addAttribute("option", option);
         return "domain/reservation/modifyReservationOption";
     }

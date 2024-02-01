@@ -2,6 +2,8 @@ package com.ll.tourdemonde.reservation.service;
 
 import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.global.util.Ut;
+import com.ll.tourdemonde.member.entity.Member;
+import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
 import com.ll.tourdemonde.reservation.dto.ReservationCreateForm;
@@ -22,12 +24,15 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final PlaceService placeService;
+    private final MemberService memberService;
 
     @Transactional
     public Reservation createNewReservation(Place place, ReservationCreateForm form) {
+        Member seller = memberService.findByUsername(form.getSeller())
+                .orElseThrow(()-> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
         Reservation reservation = Reservation.builder()
                 .place(place)
-                .sellerName(form.getSeller())
+                .seller(seller)
                 .type(form.getType())
                 .build();
         return reservationRepository.save(reservation);
@@ -64,13 +69,15 @@ public class ReservationService {
     @Transactional
     public RsData<Reservation> modifyReservation(Reservation reservation, ReservationCreateForm form) {
         // 셀러와 수정한 사람이 동일인인지 확인
-        if (!reservation.getSellerName().equals(form.getSeller())) {
+        Member seller = memberService.findByUsername(form.getSeller())
+                .orElseThrow(()-> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
+        if (!reservation.getSeller().equals(seller)) {
             return new RsData<>("f-modify", "권한이 없는 사용자입니다.", null);
         }
 
         reservation.setType(form.getType());
 
-        return new RsData<>("S-modify", "성공", reservation);
+        return new RsData<>("S-modify", "수정 성공", reservation);
     }
 
     public ReservationOption findOptionById(Long reservationId, Long optionId) {

@@ -123,7 +123,7 @@ public class ReservationControllerTest {
     public void T04ShowCreateReservation() throws Exception {
         ResultActions resultActions = mvc
                 .perform(post("/reserve/1/create")
-                        .param("seller", "판매자1")
+                        .param("seller", "user1")
                         .param("place", "1")
                         .param("type", "LEISURE")
                         .with(csrf()).with(user(getUserDetails())))
@@ -137,7 +137,7 @@ public class ReservationControllerTest {
 
         Reservation reservation = reservationService.findById(1L);
 
-        assertThat(reservation.getSellerName()).as("seller 불일치").isEqualTo("판매자1");
+        assertThat(reservation.getSeller().getUsername()).as("seller 불일치").isEqualTo("user1");
         assertThat(reservation.getPlace().getName()).as("place 불일치").isIn("장소1");
         assertThat(reservation.getType()).as("type 불일치").isIn(ReservationType.LEISURE);
     }
@@ -158,7 +158,7 @@ public class ReservationControllerTest {
                 .andExpect(handler().handlerType(ReservationController.class))
                 .andExpect(handler().methodName("createNewReservationOption"))
                 .andExpect(content().string(containsString("""
-                        <li>판매자명 : %s</li>""".formatted(reservation.getSellerName())
+                        <li>판매자명 : %s</li>""".formatted(reservation.getSeller().getUsername())
                         .stripIndent().trim())));
     }
 
@@ -221,7 +221,7 @@ public class ReservationControllerTest {
                 .andExpect(handler().handlerType(ReservationController.class))
                 .andExpect(handler().methodName("modifyReservation"))
                 .andExpect(content().string(containsString("""
-                        <input type="text" name="seller" value="%s">""".formatted(reservation.getSellerName())
+                        <input type="hidden" name="seller" value="%s">""".formatted(reservation.getSeller().getUsername())
                         .stripIndent().trim())));
 
     }
@@ -232,7 +232,7 @@ public class ReservationControllerTest {
     public void T09ModifyReservation() throws Exception {
         ResultActions resultActions = mvc
                 .perform(put("/reserve/modify/1")
-                        .param("seller", "판매자1")
+                        .param("seller", "user1")
                         .param("place", "1")
                         .param("type", "ACCOMMODATE")
                         .with(csrf()).with(user(getUserDetails())))
@@ -263,7 +263,7 @@ public class ReservationControllerTest {
                 .andExpect(handler().handlerType(ReservationController.class))
                 .andExpect(handler().methodName("modifyOption"))
                 .andExpect(content().string(containsString("""
-                        <li>판매자명 : 판매자1</li>""".stripIndent().trim())))
+                        <li>판매자명 : user1</li>""".stripIndent().trim())))
                 .andExpect(content().string(containsString("""
                         <input type="text" name="time" placeholder="예약시간을 입력해주세요."
                                                required
