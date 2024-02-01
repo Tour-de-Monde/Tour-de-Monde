@@ -36,16 +36,11 @@ out/
 ### VS Code ###
 .vscode/
 
-### CUSTOM ###
-application-secret.yml
-TdM_dev.mv.db
-TdM_dev.trace.db
-
 ### Mac ###
 .DS_Store
 c:/
 
-### 비공개 ###
+### CUSTOM ###
 application-secret.yml
 TdM_dev.mv.db
 TdM_dev.trace.db

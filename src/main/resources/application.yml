@@ -1,7 +1,7 @@
 spring:
   profiles:
     active: dev
-    include: secret # personal yml
+    include: secret
   autoconfigure:
     exclude: # 레디스 디펜던시들이 로컬 환경에서 작동하지 않고 운영환경에서만 작동
       - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
