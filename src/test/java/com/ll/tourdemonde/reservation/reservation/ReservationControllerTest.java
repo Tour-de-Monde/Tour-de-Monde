@@ -1,6 +1,8 @@
 package com.ll.tourdemonde.reservation.reservation;
 
 import com.ll.tourdemonde.global.rsData.RsData;
+import com.ll.tourdemonde.global.security.CustomUserDetailsService;
+import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.place.dto.PlaceDto;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +32,7 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,17 +49,26 @@ public class ReservationControllerTest {
     private PlaceService placeService;
     @Autowired
     private ReservationService reservationService;
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+    public UserDetails getUserDetails() {
+        return customUserDetailsService.loadUserByUsername("user1");
+    }
 
     @Test
     @Rollback(value = false)
-    public void T00testInit(){
-        IntStream.range(1, 4).mapToObj(i -> new PlaceDto("장소"+i, "33.1, 37.1" + i))
+    public void T00testInit() {
+        IntStream.range(1, 4).mapToObj(i -> new PlaceDto("장소" + i, "33.1, 37.1" + i))
                 .forEach(placeService::save);
+        memberService.createMember("user1", "1234", "user@user.com", "user1", null, "000-0000-0000", "user1");
     }
 
     @Test
     @DisplayName("테스트 실행 확인")
-    public void T00(){
+    public void T00() {
         System.out.println("테스트 실행 확인");
     }
 
@@ -72,7 +85,7 @@ public class ReservationControllerTest {
     //장소페이지 GET /reserve/1
     @Test
     @DisplayName("2. 장소페이지(id=1) GET")
-    public void T02ShowplacePage() throws Exception{
+    public void T02ShowplacePage() throws Exception {
         ResultActions resultActions = mvc
                 .perform(get("/reserve/1")) //장소ID 임의지정
                 .andDo(print());
@@ -88,9 +101,9 @@ public class ReservationControllerTest {
     //예약 생성 GET /reserve/create
     @Test
     @DisplayName("3. 예약 생성 GET")
-    public void T03ShowCreateReservation() throws Exception{
+    public void T03ShowCreateReservation() throws Exception {
         ResultActions resultActions = mvc
-                .perform(get("/reserve/1/create"))
+                .perform(get("/reserve/1/create").with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
         resultActions
@@ -107,13 +120,13 @@ public class ReservationControllerTest {
     @Test
     @DisplayName("4. 예약 생성 POST")
     @Rollback(value = false)
-    public void T04ShowCreateReservation() throws Exception{
+    public void T04ShowCreateReservation() throws Exception {
         ResultActions resultActions = mvc
-                .perform(post("/reserve/create")
+                .perform(post("/reserve/1/create")
                         .param("seller", "판매자1")
                         .param("place", "1")
                         .param("type", "LEISURE")
-                        .with(csrf()))
+                        .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
         resultActions
@@ -134,7 +147,8 @@ public class ReservationControllerTest {
     @DisplayName("5. 예약 옵션 생성 GET")
     public void T05createNewReservationOption() throws Exception {
         ResultActions resultActions = mvc
-                .perform(get("/reserve/create/1/detail"))
+                .perform(get("/reserve/create/1/detail")
+                        .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
         Reservation reservation = reservationService.findById(1L);
@@ -152,14 +166,14 @@ public class ReservationControllerTest {
     @Test
     @DisplayName("6. 예약 옵션 생성 POST")
     @Rollback(value = false)
-    public void T06createNewReservationOption() throws Exception{
+    public void T06createNewReservationOption() throws Exception {
         ResultActions resultActions = mvc
                 .perform(post("/reserve/create/1/detail")
                         .param("reservationId", String.valueOf(1L))
                         .param("startDate", LocalDate.now().toString())
                         .param("time", "11:00")
                         .param("price", "1000000")
-                        .with(csrf()))
+                        .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
         resultActions
@@ -179,7 +193,8 @@ public class ReservationControllerTest {
     @DisplayName("7. 관리페이지 GET")
     public void T07ManageReservation() throws Exception {
         ResultActions resultActions = mvc
-                .perform(get("/reserve/manage/1"))
+                .perform(get("/reserve/manage/1")
+                        .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
         resultActions
@@ -195,7 +210,8 @@ public class ReservationControllerTest {
     @DisplayName("8. 예약수정 GET")
     public void T08ModifyReservation() throws Exception {
         ResultActions resultActions = mvc
-                .perform(get("/reserve/modify/1"))
+                .perform(get("/reserve/modify/1")
+                        .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
         Reservation reservation = reservationService.findById(1L);
@@ -213,13 +229,13 @@ public class ReservationControllerTest {
     //예약 수정 PUT /reserve/modify/1
     @Test
     @DisplayName("9. 예약 수정 PUT")
-    public void T09ModifyReservation() throws Exception{
+    public void T09ModifyReservation() throws Exception {
         ResultActions resultActions = mvc
                 .perform(put("/reserve/modify/1")
                         .param("seller", "판매자1")
                         .param("place", "1")
                         .param("type", "ACCOMMODATE")
-                        .with(csrf()))
+                        .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
         resultActions
@@ -232,12 +248,14 @@ public class ReservationControllerTest {
         assertThat(reservation.getType())
                 .isEqualTo(ReservationType.ACCOMMODATE);
     }
+
     //예약 옵션 수정 GET /reserve/modify/1/detail/1
     @Test
     @DisplayName("10. 예약 옵션 수정 GET")
-    public void T10ModifyOption()throws Exception{
+    public void T10ModifyOption() throws Exception {
         ResultActions resultActions = mvc
-                .perform(get("/reserve/modify/1/detail/1"))
+                .perform(get("/reserve/modify/1/detail/1")
+                        .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
         resultActions
@@ -256,14 +274,14 @@ public class ReservationControllerTest {
     //예약 옵션 수정 PUT /reserve/modify/1/detail/1
     @Test
     @DisplayName("11. 예약 수정 PUT")
-    public void T11Modify() throws Exception{
+    public void T11Modify() throws Exception {
         ResultActions resultActions = mvc
                 .perform(put("/reserve/modify/1/detail/1")
                         .param("reservationId", "1")
                         .param("startDate", LocalDate.now().toString())
                         .param("time", "12:00")
                         .param("price", "10")
-                        .with(csrf()))
+                        .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
         resultActions
@@ -277,13 +295,14 @@ public class ReservationControllerTest {
         assertThat(reservationOption.getTime())
                 .isEqualTo("12:00");
     }
+
     //예약 삭제 DELETE /reserve/1
     @Test
     @DisplayName("12. 예약 삭제 DELETE")
-    public void T12deleteReservation() throws Exception{
+    public void T12deleteReservation() throws Exception {
         ResultActions resultActions = mvc
                 .perform(delete("/reserve/delete/1")
-                        .with(csrf()))
+                        .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
         resultActions
@@ -300,10 +319,10 @@ public class ReservationControllerTest {
     //예약 옵션 삭제 DELETE /reserve/1/detail/1
     @Test
     @DisplayName("13. 예약옵션 삭제 DELETE")
-    public void T13DeleteOption() throws Exception{
+    public void T13DeleteOption() throws Exception {
         ResultActions resultActions = mvc
                 .perform(delete("/reserve/delete/1/detail/1")
-                        .with(csrf()))
+                        .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
         resultActions
@@ -318,7 +337,7 @@ public class ReservationControllerTest {
 
     @Test
     @DisplayName("14. 예약하기")
-    public void T14Reserve(){
+    public void T14Reserve() {
         System.out.println("아직 미구현");
     }
 }
