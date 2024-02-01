@@ -3,7 +3,7 @@ package com.ll.tourdemonde.payment.cash.service;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.payment.cash.entity.CashLog;
 import com.ll.tourdemonde.payment.cash.repository.CashLogRepository;
-import com.ll.tourdemonde.reservation.reservationCheck.entity.ReservationCheck;
+import com.ll.tourdemonde.reservation.checkReservation.entity.CheckReservation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ public class CashService {
 
     // 캐시 로그 저장
     @Transactional
-    public CashLog addCash(Member member, long price, CashLog.EventType eventType, ReservationCheck reservationCheck) {
+    public CashLog addCash(Member member, long price, CashLog.EventType eventType, CheckReservation checkReservation) {
         CashLog cashLog = CashLog.builder()
                 .member(member)
                 .price(price)

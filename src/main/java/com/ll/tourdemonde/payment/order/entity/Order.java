@@ -2,7 +2,7 @@ package com.ll.tourdemonde.payment.order.entity;
 
 import com.ll.tourdemonde.global.jpa.BaseEntity;
 import com.ll.tourdemonde.member.entity.Member;
-import com.ll.tourdemonde.reservation.reservationCheck.entity.ReservationCheck;
+import com.ll.tourdemonde.reservation.checkReservation.entity.CheckReservation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
@@ -24,7 +24,7 @@ public class Order extends BaseEntity {
     private Member buyer;
 
     @OneToOne // 하나의 주문에 1개의 예약
-    private ReservationCheck reservationCheck;
+    private CheckReservation checkReservation;
 
     private LocalDateTime payDate; // 결제일
     private LocalDateTime cancelDate; // 취소일
