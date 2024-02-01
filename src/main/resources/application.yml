@@ -60,17 +60,6 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
-  mail: # 이메일 발송
-    host: smtp.gmail.com
-    port: 587
-    username: tourdemonde2024@gmail.com
-    properties:
-      mail:
-        smtp:
-          auth: true
-          timeout: 5000
-          starttls:
-            enable: true
 logging:
   level:
     com.ll.tourdemonde: DEBUG
