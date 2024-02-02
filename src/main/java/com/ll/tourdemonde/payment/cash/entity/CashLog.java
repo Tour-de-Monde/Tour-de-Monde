@@ -18,8 +18,8 @@ import lombok.*;
 public class CashLog extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EventType eventType;
-    private String relTypeCode;
-    private Long relId;
+    private String relTypeCode; // Reservation 타입
+    private Long relId; // Reservation 번호
     @ManyToOne
     private Member member;
     private long price;
