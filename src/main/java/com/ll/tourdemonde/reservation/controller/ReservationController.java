@@ -1,22 +1,26 @@
 package com.ll.tourdemonde.reservation.controller;
 
 import com.ll.tourdemonde.global.rsData.RsData;
+import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
 import com.ll.tourdemonde.reservation.dto.ReservationCreateForm;
 import com.ll.tourdemonde.reservation.dto.ReservationOptionForm;
 import com.ll.tourdemonde.reservation.entity.Reservation;
 import com.ll.tourdemonde.reservation.entity.ReservationOption;
+import com.ll.tourdemonde.reservation.entity.ReservationType;
 import com.ll.tourdemonde.reservation.service.ReservationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,61 +29,109 @@ public class ReservationController {
 
     private final ReservationService reservationService;
     private final PlaceService placeService;
+    private final MemberService memberService;
 
     @GetMapping("")
     public String reservateItem() {
 //        reservationService.createNewReservation(place, reservationDto);
-        return "/domain/reservation/reservationExample";
+        return "domain/reservation/reservationExample";
     }
 
     @GetMapping("/{placeId}")
     public String showReservationFromPlace(@PathVariable("placeId") Long placeId,
                                            @RequestParam(name = "startDate", required = false) String startDate,
                                            @RequestParam(name = "endDate", required = false) String endDate,
-                                           Model model
+                                           Model model,
+                                           HttpServletRequest request
     ) {
         //ToDo 순환참조의 위험이 있으니 차후 가져오는 데이터를 개선하도록 한다.
-        // ToDo 차후 place id로 검색을 하여 place에 있는 예약, 예약 옵션 다 보여주기
-        Place place = placeService.findById(placeId);
-        long reservationId = 1; // 우선 예약ID를 임의로 설정
-        Reservation reservation;
         try {
-            reservation = reservationService.findById(reservationId);
+            Place place = placeService.findById(placeId);
+            RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
+            List<Reservation> reservationList = listRsData.getData();
+
+            // 모델에 추가
+            model.addAttribute("place", place);
+            model.addAttribute("reservationList", reservationList);
+            return "domain/reservation/reservation";
         } catch (Exception e) {
-            // reservation을 찾지 못하는 에러 발생 시 null 반환
-            reservation = null;
+            String preUrl = request.getHeader("Referer");
+            return "redirect:" + preUrl;
         }
-        model.addAttribute("place", place);
-        model.addAttribute("reservation", reservation);
-        return "/domain/reservation/reservation";
+
     }
 
-    //TODO 차후 특정장소에 대응하도록 변경 필요
-    @GetMapping("/create")
-    public String createNewReservation() {
-        return "/domain/reservation/createNewReservation";
+    //관리자 페이지
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/manage/{placeId}")
+    public String manageReservation(@PathVariable("placeId") Long placeId,
+                                    Model model,
+                                    HttpServletRequest request) {
+        String preUrl = request.getHeader("Referer");
+        // Todo 장소에 대한 소유주인지 확인하는 기능 추가 필요 240201, 장소에 member추가 및 등록 기능 필요
+
+        try{
+            Place place = placeService.findById(placeId);
+            RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
+
+            model.addAttribute("place", place);
+            model.addAttribute("reservationList", listRsData.getData());
+        } catch (Exception e){
+            return "redirect:" + preUrl;
+        }
+
+        return "domain/reservation/manageReservation";
     }
 
-    @PostMapping("/create")
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{placeId}/create")
+    public String createNewReservation(@PathVariable("placeId") Long placeId,
+                                       Model model) {
+        try{
+            // 장소 가져오기
+            Place place = placeService.findById(placeId);
+
+            // ReservationType의 enum과 value를 Map으로 변환
+            Map<String, String> reservationTypes = ReservationType.getMapValues();
+
+            model.addAttribute("place", place);
+            // 타입선택을 위해 모델에 추가
+            model.addAttribute("reservationTypes", reservationTypes);
+            return "domain/reservation/createNewReservation";
+        } catch (Exception e) {
+            return "redirect:/";
+        }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{placeId}/create")
     public String createNewReservation(
+            @PathVariable("placeId")Long placeId,
             @Valid ReservationCreateForm form,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "/domain/reservation/createNewReservation";
+            return "domain/reservation/createNewReservation";
         }
-        Reservation reservation = reservationService.createNewReservation(form);
-        return "redirect:/reserve/create/%d/detail".formatted(reservation.getId());
+        try {
+            Place place = placeService.findById(placeId);
+            Reservation reservation = reservationService.createNewReservation(place, form);
+            return "redirect:/reserve/create/%d/detail".formatted(reservation.getId());
+        } catch (Exception e){
+            return "redirect:/";
+        }
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create/{reservationId}/detail")
     public String createNewReservationOption(
-            @PathVariable("reservationId") Long id,
+            @PathVariable("reservationId") Long reservationId,
             Model model) {
-        Reservation reservation = reservationService.findById(id);
+        Reservation reservation = reservationService.findById(reservationId);
         model.addAttribute("reservation", reservation);
-        return "/domain/reservation/createNewReservationOption";
+        return "domain/reservation/createNewReservationOption";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{reservationId}/detail")
     public String createNewReservationOption(
             @PathVariable("reservationId") Long id,
@@ -88,38 +140,21 @@ public class ReservationController {
         if (bindingResult.hasErrors()) {
             return "redirect:/reserve";
         }
-        reservationService.createNewReservationOption(form);
-        return "redirect:/reserve";
+        Reservation reservation = reservationService.createNewReservationOption(form);
+        return "redirect:/reserve/manage/%d".formatted(reservation.getPlace().getId());
     }
 
-    //관리자 페이지
-    @GetMapping("/manage/{placeId}")
-    public String manageReservation(@PathVariable("placeId") long placeId,
-                                    Model model) {
-        // ToDo 차후 place id로 검색을 하여 place에 있는 예약, 예약 옵션 다 보여주기
-        Place place = placeService.findById(placeId);
-        RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
-
-        model.addAttribute("place", place);
-        model.addAttribute("reservationList", listRsData.getData());
-
-        if (listRsData.isFail()) {
-            // ToDo 차후 메세지와 함께 페이지 이동하도록 수정
-            return "/domain/reservation/manageReservation";
-        }
-
-        return "/domain/reservation/manageReservation";
-    }
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{reservationId}")
     public String modifyReservation(@PathVariable("reservationId") Long id,
                                     Model model) {
         Reservation reservation = reservationService.findById(id);
 
         model.addAttribute("reservation", reservation);
-        return "/domain/reservation/modifyReservation";
+        return "domain/reservation/modifyReservation";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/modify/{reservationId}")
     public String modifyReservation(@PathVariable("reservationId") Long reservationId,
                                     @Valid ReservationCreateForm form,
@@ -144,6 +179,7 @@ public class ReservationController {
         return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{reservationId}/detail/{optionId}")
     public String modifyOption(Model model,
                                @PathVariable("reservationId") Long reservationId,
@@ -152,11 +188,16 @@ public class ReservationController {
         ReservationOption option = reservationService.findOptionById(reservationId, optionId);
         Reservation reservation = reservationService.findById(option.getReservation().getId());
 
+        // ReservationType의 enum과 value를 Map으로 변환
+        Map<String, String> reservationTypes = ReservationType.getMapValues();
+
         model.addAttribute("reservation", reservation);
+        model.addAttribute("reservationTypes", reservationTypes);
         model.addAttribute("option", option);
-        return "/domain/reservation/modifyReservationOption";
+        return "domain/reservation/modifyReservationOption";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/modify/{reservationId}/detail/{optionId}")
     public String modifyOption(
             @PathVariable("reservationId") Long reservationId,
@@ -179,6 +220,7 @@ public class ReservationController {
         return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{reservationId}")
     public String deleteReservation(@PathVariable("reservationId") Long reservationId,
                                     Model model) {
@@ -193,6 +235,7 @@ public class ReservationController {
         return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{reservationId}/detail/{optionId}")
     public String deleteReservationOption(@PathVariable("reservationId") Long reservationId,
                                           @PathVariable("optionId") Long optionId,
