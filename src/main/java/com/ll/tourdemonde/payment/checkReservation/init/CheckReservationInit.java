@@ -2,12 +2,12 @@
 //
 //import com.ll.tourdemonde.member.entity.Member;
 //import com.ll.tourdemonde.member.service.MemberService;
+//import com.ll.tourdemonde.payment.checkReservation.service.CheckReservationService;
 //import com.ll.tourdemonde.place.dto.PlaceDto;
 //import com.ll.tourdemonde.place.entity.Place;
 //import com.ll.tourdemonde.place.service.PlaceService;
-//import com.ll.tourdemonde.reservation.checkReservation.dto.CheckReservationReqDto;
-//import com.ll.tourdemonde.reservation.checkReservation.service.CheckReservationService;
 //import com.ll.tourdemonde.reservation.dto.ReservationCreateForm;
+//import com.ll.tourdemonde.reservation.dto.ReservationOptionForm;
 //import com.ll.tourdemonde.reservation.entity.Reservation;
 //import com.ll.tourdemonde.reservation.entity.ReservationType;
 //import com.ll.tourdemonde.reservation.service.ReservationService;
@@ -53,13 +53,21 @@
 //        Place place3 = placeService.save(new PlaceDto("장소3", "33.3, 37.3"));
 //        Place place4 = placeService.save(new PlaceDto("장소4", "33.4, 37.4"));
 //
-//        // Reservation 업체 등록
-//        Reservation reservationCompany1 = reservationService.createNewReservation(new ReservationCreateForm(admin.getUsername(), place1.getId(), ReservationType.RESTAURANT));
-//        Reservation reservationCompany2 = reservationService.createNewReservation(new ReservationCreateForm(admin.getUsername(), place2.getId(), ReservationType.ACCOMMODATE));
-//        Reservation reservationCompany3 = reservationService.createNewReservation(new ReservationCreateForm(admin.getUsername(), place3.getId(), ReservationType.LEISURE));
+//        // 업체 등록
+//        Reservation company1 = reservationService.createNewReservation(place1, new ReservationCreateForm(admin.getUsername(), place1.getId(), ReservationType.RESTAURANT));
+//        Reservation company2 = reservationService.createNewReservation(place2, new ReservationCreateForm(admin.getUsername(), place2.getId(), ReservationType.ACCOMMODATE));
+//        Reservation company3 = reservationService.createNewReservation(place3, new ReservationCreateForm(admin.getUsername(), place3.getId(), ReservationType.LEISURE));
 //
-//        // CheckReservation 사용자 예약 등록
-//        checkReservationService.checkReservation(reservationCompany1.getId(), member1, new CheckReservationReqDto("2024-02-01", "2024-02-01", "11:00", 55_000));
-//        checkReservationService.checkReservation(reservationCompany2.getId(), member2, new CheckReservationReqDto("2024-01-31", "2024-01-31", "14:00", 100_000));
+//        // 업체 예약 등록
+//        Reservation company1ReservationOp1 = reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-04", "2024-02-04", "11:00", 50_000L));
+//        Reservation company1ReservationOp2 = reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-05", "2024-02-06", "11:00", 150_000L));
+//        Reservation company1ReservationOp3 = reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-06", "2024-02-06", "11:00", 150_000L));
+//
+//        Reservation company2ReservationOp1 = reservationService.createNewReservationOption(new ReservationOptionForm(company2.getId(), "2024-02-03", "2024-02-03", "11:00", 100_000L));
+//        Reservation company2ReservationOp2 = reservationService.createNewReservationOption(new ReservationOptionForm(company2.getId(), "2024-02-04", "2024-02-05", "11:00", 150_000L));
+//
+//        // 사용자 예약 등록 - Order, CheckReservation 저장
+//        checkReservationService.checkReservation(company2ReservationOp1.getId(), member1);
+//        checkReservationService.checkReservation(company1ReservationOp1.getId(), member2);
 //    }
 //}

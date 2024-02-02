@@ -2,14 +2,11 @@ package com.ll.tourdemonde.payment.checkReservation.controller;
 
 import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.member.entity.Member;
-import com.ll.tourdemonde.payment.checkReservation.dto.CheckReservationReqDto;
-import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
 import com.ll.tourdemonde.payment.checkReservation.service.CheckReservationService;
-import jakarta.validation.Valid;
+import com.ll.tourdemonde.payment.order.entity.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -20,15 +17,13 @@ public class CheckReservationController {
     private final Rq rq;
 
     // 예약하기 버튼 눌렀을 때 엔드포인트
-    @PostMapping("/reservation/{reservationId}/check")
+    @PostMapping("/reservation/{reservationOpId}/check")
     @PreAuthorize("isAuthenticated()")
-    public String checkReservation(@PathVariable Long reservationId, @Valid CheckReservationReqDto requestDto, Model model) {
+    public String checkReservation(@PathVariable Long reservationOpId) {
         Member buyer = rq.getMember();
 
-        CheckReservation checkReservation = checkReservationService.checkReservation(reservationId, buyer, requestDto);
+        Order order = checkReservationService.checkReservation(reservationOpId, buyer);
 
-        model.addAttribute("checkReservation", checkReservation);
-
-        return "domain/payment/order/detail";
+        return rq.redirect("/order/" + order.getId(), null);
     }
 }

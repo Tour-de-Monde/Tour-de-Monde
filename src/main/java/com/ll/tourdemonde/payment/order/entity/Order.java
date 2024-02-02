@@ -20,7 +20,8 @@ public class Order extends BaseEntity { // 회원의 예약 저장
     @ManyToOne
     private Member buyer;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL) // OneToOne 관계 설정
+    @OneToOne
+    @JoinColumn(name = "check_reservation_id")
     private CheckReservation checkReservation; // 하나의 주문에 1개의 예약
 
     private LocalDateTime payDate; // 결제일
