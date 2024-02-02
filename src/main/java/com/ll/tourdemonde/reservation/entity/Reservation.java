@@ -21,23 +21,24 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "reservations")
-public class Reservation extends BaseTime {
+public class Reservation extends BaseTime { // 판매자가 예약을 생성한다. 대구분(식당, 레져, 숙박)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member seller;
+    private Member seller; // 판매자
 
     @NotNull
     @Enumerated(value = EnumType.STRING) // String 형태로 데이터 저장, 기본은 enum의 순서를 명시(0,1,...)
-    private ReservationType type;
+    private ReservationType type; // 식당, 레져, 숙박
 
     @Builder.Default
     @OneToMany(mappedBy = "reservation",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<ReservationOption> options = new ArrayList<>();
+    private List<ReservationOption> options = new ArrayList<>(); // 예약의 세부 옵션
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Place place;
+    private Place place; // 장소와 연결
 
+    // 세부옵션을 추가
     public void addOption(ReservationOptionForm form) {
         ReservationOption option = ReservationOption.builder()
                 .reservation(this)
@@ -49,10 +50,12 @@ public class Reservation extends BaseTime {
         options.add(option);
     }
 
+    // 세부옵션 제거
     public void removeOption(Long optionId) {
         options.removeIf(option -> option.getId().equals(optionId));
     }
 
+    // 타입 변경
     public void setType(ReservationType type) {
         this.type = type;
     }

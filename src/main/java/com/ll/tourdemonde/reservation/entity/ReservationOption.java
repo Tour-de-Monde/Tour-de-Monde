@@ -19,6 +19,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Table(name = "reservation_details")
 public class ReservationOption extends BaseTime {
+    // 판매자가 설정한 예약의 세부사항 - 예약을 진행할 경우 이 옵션이 선택됨.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservation_Id")
     private Reservation reservation;
@@ -30,7 +31,7 @@ public class ReservationOption extends BaseTime {
 
     @Convert(converter = LocalTimeConverter.class)
     @NotNull
-    private LocalTime time; // 예약 옵션
+    private LocalTime time; // 예약시간 옵션
 
     @NotNull
     private Long price; //옵션의 가격
@@ -38,6 +39,7 @@ public class ReservationOption extends BaseTime {
     @Builder.Default
     private boolean occupied = false; //예약여부 확인
 
+    // 예약의 옵션 내용을 변경
     public ReservationOption modifyValues(LocalDateTime startDate, LocalDateTime endDate, LocalTime time, Long price) {
         if(!this.startDate.equals(startDate)){
             this.startDate = startDate;

@@ -28,6 +28,7 @@ public enum ReservationType {
         return this == RESTAURANT;
     }
 
+    // 상수를 key로, 값을 value로 하여 map 추출
     public static Map<String, String> getMapValues(){
         return Arrays
                 .stream(ReservationType.values())

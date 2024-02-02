@@ -27,6 +27,7 @@ public class ReservationService {
     private final MemberService memberService;
     private final Rq rq;
 
+    // 새로운 예약 생성
     @Transactional
     public Reservation createNewReservation(Place place, ReservationCreateForm form) {
         Member seller = memberService.findByUsername(form.getSeller())
@@ -39,11 +40,13 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
+    // Id로 예약 찾기
     public Reservation findById(Long id) {
         return reservationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다."));
     }
 
+    // 새로운 예약 옵션 생성
     @Transactional
     public Reservation createNewReservationOption(ReservationOptionForm form) {
         Reservation reservation = findById(form.getReservationId());
@@ -56,6 +59,8 @@ public class ReservationService {
         return reservation;
     }
 
+
+    // 장소에 포함된 모든 예약 찾기
     public RsData<List<Reservation>> findAllByPlace(Place place) {
         List<Reservation> reservationList = reservationRepository.findAllByPlaceOrderByIdAsc(place);
 
@@ -67,6 +72,7 @@ public class ReservationService {
         return new RsData<>("S-searchList", "성공", reservationList);
     }
 
+    // 예약 수정
     @Transactional
     public RsData<Reservation> modifyReservation(Reservation reservation, ReservationCreateForm form) {
         // 셀러와 수정한 사람이 동일인인지 확인
@@ -81,6 +87,7 @@ public class ReservationService {
         return new RsData<>("S-modify", "수정 성공", reservation);
     }
 
+    //예약 옵션 찾기
     public ReservationOption findOptionById(Long reservationId, Long optionId) {
         return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다."))
@@ -92,6 +99,7 @@ public class ReservationService {
 
     }
 
+    //예약 옵션 수정
     @Transactional
     public ReservationOption modifyReservationOption(Long reservationId, Long optionId, ReservationOptionForm form) {
         // endDate 초기화
@@ -111,6 +119,7 @@ public class ReservationService {
                 );
     }
 
+    // 예약 삭제
     @Transactional
     public void deleteReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
@@ -119,6 +128,7 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
+    // 예약 옵션 삭제
     @Transactional
     public void deleteOption(Reservation reservation, Long optionId) {
         reservation.removeOption(optionId);

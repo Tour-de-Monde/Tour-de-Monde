@@ -31,12 +31,13 @@ public class ReservationController {
     private final PlaceService placeService;
     private final MemberService memberService;
 
+    // 샘플페이지 Todo 차후 삭제 예정
     @GetMapping("")
     public String reservateItem() {
-//        reservationService.createNewReservation(place, reservationDto);
         return "domain/reservation/reservationExample";
     }
 
+    //장소별 예약내역 조회
     @GetMapping("/{placeId}")
     public String showReservationFromPlace(@PathVariable("placeId") Long placeId,
                                            @RequestParam(name = "startDate", required = false) String startDate,
@@ -58,7 +59,6 @@ public class ReservationController {
             String preUrl = request.getHeader("Referer");
             return "redirect:" + preUrl;
         }
-
     }
 
     //관리자 페이지
@@ -83,6 +83,7 @@ public class ReservationController {
         return "domain/reservation/manageReservation";
     }
 
+    // 예약 생성 페이지 GET
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{placeId}/create")
     public String createNewReservation(@PathVariable("placeId") Long placeId,
@@ -103,6 +104,7 @@ public class ReservationController {
         }
     }
 
+    // 예약 생성 페이지 POST
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{placeId}/create")
     public String createNewReservation(
@@ -121,6 +123,7 @@ public class ReservationController {
         }
     }
 
+    // 예약 옵션 생성페이지 GET
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create/{reservationId}/detail")
     public String createNewReservationOption(
@@ -131,6 +134,7 @@ public class ReservationController {
         return "domain/reservation/createNewReservationOption";
     }
 
+    // 예약 옵션 생성페이지 POST
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{reservationId}/detail")
     public String createNewReservationOption(
@@ -144,6 +148,7 @@ public class ReservationController {
         return "redirect:/reserve/manage/%d".formatted(reservation.getPlace().getId());
     }
 
+    // 예약 수정페이지 GET
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{reservationId}")
     public String modifyReservation(@PathVariable("reservationId") Long id,
@@ -154,6 +159,7 @@ public class ReservationController {
         return "domain/reservation/modifyReservation";
     }
 
+    // 예약 수정페이지 PUT
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/modify/{reservationId}")
     public String modifyReservation(@PathVariable("reservationId") Long reservationId,
@@ -179,6 +185,7 @@ public class ReservationController {
         return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
+    // 예약 옵션 수정페이지 GET
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{reservationId}/detail/{optionId}")
     public String modifyOption(Model model,
@@ -197,6 +204,7 @@ public class ReservationController {
         return "domain/reservation/modifyReservationOption";
     }
 
+    // 예약 옵션 수정페이지 PUT
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/modify/{reservationId}/detail/{optionId}")
     public String modifyOption(
@@ -220,6 +228,7 @@ public class ReservationController {
         return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
+    // 예약 DELETE
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{reservationId}")
     public String deleteReservation(@PathVariable("reservationId") Long reservationId,
@@ -235,6 +244,7 @@ public class ReservationController {
         return "redirect:/reserve/manage/%d".formatted(placeId);
     }
 
+    // 예약 옵션 DELETE
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{reservationId}/detail/{optionId}")
     public String deleteReservationOption(@PathVariable("reservationId") Long reservationId,
