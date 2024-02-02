@@ -1,7 +1,8 @@
 package com.ll.tourdemonde.place.entity;
 
 import com.ll.tourdemonde.post.entity.BaseTime;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

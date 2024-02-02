@@ -1,7 +1,9 @@
 package com.ll.tourdemonde.reservation.entity;
 
 import com.ll.tourdemonde.global.util.Ut;
+import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.place.entity.Place;
+import com.ll.tourdemonde.post.entity.BaseTime;
 import com.ll.tourdemonde.reservation.dto.ReservationOptionForm;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -19,13 +21,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "reservations")
-public class Reservation {
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    //    @OneToMany // 추후 변경 필요
-    private String sellerName;
+public class Reservation extends BaseTime {
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member seller;
 
     @NotNull
     @Enumerated(value = EnumType.STRING) // String 형태로 데이터 저장, 기본은 enum의 순서를 명시(0,1,...)
@@ -37,7 +35,7 @@ public class Reservation {
             orphanRemoval = true)
     private List<ReservationOption> options = new ArrayList<>();
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Place place;
 
     public void addOption(ReservationOptionForm form) {
@@ -52,7 +50,6 @@ public class Reservation {
     }
 
     public void removeOption(Long optionId) {
-        // Todo 옵션이 있는지 확인 하고 없다면 예외처리
         options.removeIf(option -> option.getId().equals(optionId));
     }
 

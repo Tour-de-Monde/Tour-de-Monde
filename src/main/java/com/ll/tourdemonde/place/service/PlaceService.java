@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaceService {
     private final PlaceRepository placeRepository;
 
-
     public Place findById(Long placeId) {
         return placeRepository.findById(placeId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID의 장소를 찾을 수 없습니다."));

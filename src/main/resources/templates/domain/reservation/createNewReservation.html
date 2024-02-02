@@ -2,22 +2,19 @@
     <h2>새로운 예약 생성</h2>
     <div>
         <form method="POST" th:action id="reservationForm">
-            <label>판매자명</label>
-            <input type="text" name="seller">
+            <label>판매자명 : [[${@rq.getUser().getUsername()}]]</label>
+            <input type="hidden" name="seller" th:value="${@rq.getUser().getUsername()}">
             <hr>
-            <label for="select_place">장소 선택</label>
-            <select name="place" id="select_place">
-                <option value="1">장소1</option>
-                <option value="2">장소2</option>
-                <option value="3">장소3</option>
-            </select>
+            <section>
+                <span>장소명 : </span><span th:text="${place.getName()}"></span>
+            </section>
             <hr>
             <fieldset>
                 <legend>type</legend>
-                <label for="leisure">레저</label>
-                <input type="radio" id="leisure" value="LEISURE" name="type">
-                <label for="accommodate">숙박</label>
-                <input type="radio" id="accommodate" value="ACCOMMODATE" name="type">
+                <div th:each="entry : ${reservationTypes}">
+                    <label th:for="${entry.key}">[[${entry.value}]]</label>
+                    <input type="radio" th:id="${entry.key}" th:value="${entry.key}" name="type">
+                </div>
             </fieldset>
             <button type="submit">옵션생성</button>
         </form>
