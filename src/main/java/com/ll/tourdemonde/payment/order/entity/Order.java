@@ -3,10 +3,7 @@ package com.ll.tourdemonde.payment.order.entity;
 import com.ll.tourdemonde.global.jpa.BaseEntity;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,16 +16,19 @@ import java.time.LocalDateTime;
 @Getter
 @ToString(callSuper = true)
 @Table(name = "order_") // order는 SQL의 예약어로 따로 테이블명을 명시
-public class Order extends BaseEntity {
+public class Order extends BaseEntity { // 회원의 예약 저장
     @ManyToOne
     private Member buyer;
 
-    @OneToOne // 하나의 주문에 1개의 예약
-    private CheckReservation checkReservation;
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL) // OneToOne 관계 설정
+    private CheckReservation checkReservation; // 하나의 주문에 1개의 예약
 
     private LocalDateTime payDate; // 결제일
     private LocalDateTime cancelDate; // 취소일
     private LocalDateTime refundDate; // 환불일
+
+    // TODO 환불예정, 환불중 - 상태 구분 컬럼
+    // TODO (결제전 취소?, 결제후 취소?) 언제인지 구분이 안될 수 있다. 상태 구분 컬럼 추가하기
 
     public void setPaymentDone() {
         payDate = LocalDateTime.now();
