@@ -4,6 +4,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="/resource/global.js"></script>
 
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <main>
@@ -18,8 +20,8 @@
                 <hr>
                 <h3>예약 [[${index.index + 1}]]</h3>
                 <div><span>구분 : </span><span th:text="${reservation.type}"></span></div>
-                <a method="PUT" th:href="|/reserve/modify/${reservation.id}|">수정하기</a>
-                <a method="DELETE" th:href="|/reserve/delete/${reservation.id}|">삭제하기</a>
+                <a th:href="|/reserve/modify/${reservation.id}|">수정하기</a>
+                <a method="DELETE" th:href="|/reserve/delete/${reservation.id}|" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제하기</a>
                 <div th:if="${!reservation.getOptions().isEmpty()}">
                     <span>옵션 개수 : </span><span th:text="${reservation.getOptions().size()}"></span>
                 </div>
@@ -34,7 +36,7 @@
                     <div>끝 날짜 : [[${option.endDate}]]</div>
                     <div>시간 : [[${option.time}]]</div>
                     <div>가격 : [[${option.price}]]</div>
-                    <a method="PUT" th:href="|/reserve/modify/${reservation.id}/detail/${option.id}|">옵션설정</a>
+                    <a th:href="|/reserve/modify/${reservation.id}/detail/${option.id}|">옵션설정</a>
                     <a method="DELETE" th:href="|/reserve/delete/${reservation.id}/${option.id}|">옵션 삭제</a>
                 </div>
 

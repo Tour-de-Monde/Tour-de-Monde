@@ -1,7 +1,7 @@
 <main>
     <h2>예약 수정</h2>
     <div>
-        <form method="POST" th:action id="reservationForm">
+        <form th:method="PUT" th:action id="reservationForm">
             <label>판매자명 : [[${reservation.getSeller().getUsername()}]]</label>
             <input type="hidden" name="seller" th:value="${reservation.getSeller().getUsername()}">
             <hr>
@@ -12,7 +12,7 @@
                 <legend>type</legend>
                 <div th:each="entry : ${reservationTypes}">
                     <label th:for="${entry.key}">[[${entry.value}]]</label>
-                    <input type="radio" th:id="${entry.key}" th:value="${entry.key}" name="type" th:checked="${reservation.getType() == entry.key}">
+                    <input type="radio" th:id="${entry.key}" th:value="${entry.key}" name="type" th:checked="${reservation.getType().toString() == entry.key}">
                 </div>
             </fieldset>
             <button type="submit">수정완료</button>

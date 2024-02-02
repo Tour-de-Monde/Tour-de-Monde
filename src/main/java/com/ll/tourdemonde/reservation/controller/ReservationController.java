@@ -154,8 +154,10 @@ public class ReservationController {
     public String modifyReservation(@PathVariable("reservationId") Long id,
                                     Model model) {
         Reservation reservation = reservationService.findById(id);
+        Map<String, String> reservationTypes = ReservationType.getMapValues();
 
         model.addAttribute("reservation", reservation);
+        model.addAttribute("reservationTypes", reservationTypes);
         return "domain/reservation/modifyReservation";
     }
 
@@ -177,8 +179,8 @@ public class ReservationController {
         RsData<Reservation> reservationRsData = reservationService.modifyReservation(reservation, form);
 
         if (reservationRsData.isFail()) {
-            String preURL = request.getHeader("Referer");
-            return "redirect:" + preURL;
+//            String preURL = request.getHeader("Referer");
+            return "redirect:/reserve/modify/%d".formatted(reservationId);
         }
 
         // 관리페이지로 이동

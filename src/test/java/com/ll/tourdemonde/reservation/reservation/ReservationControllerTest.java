@@ -265,7 +265,7 @@ public class ReservationControllerTest {
                 .andExpect(content().string(containsString("""
                         <li>판매자명 : user1</li>""".stripIndent().trim())))
                 .andExpect(content().string(containsString("""
-                        <input type="text" name="time" placeholder="예약시간을 입력해주세요."
+                        <input type="time" name="time" pattern="[0-9]{2}:[0-9]{2}"
                                                required
                                         value="11:00">""".stripIndent().trim())));
 
