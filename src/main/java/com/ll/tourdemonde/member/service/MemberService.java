@@ -1,5 +1,7 @@
 package com.ll.tourdemonde.member.service;
 
+import com.ll.tourdemonde.base.genFile.entity.GenFile;
+import com.ll.tourdemonde.base.genFile.service.GenFileService;
 import com.ll.tourdemonde.global.app.AppConfig;
 import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.global.util.Ut;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final GenFileService genFileService;
 
     @Transactional
     public Member createMember(String username, String password,
@@ -62,6 +65,13 @@ public class MemberService {
     public RsData<Member> join(String username, String password,
                                String email, String memberName,
                                LocalDate birthDate, String phoneNumber, String nickname) {
+        return join(username, password, email, memberName, birthDate, phoneNumber, nickname, "");
+    }
+
+    @Transactional
+    public RsData<Member> join(String username, String password,
+                               String email, String memberName,
+                               LocalDate birthDate, String phoneNumber, String nickname, String profileImgFilePath) {
         if (findByUsername(username).isPresent()) {
             return RsData.of("400-2", "이미 존재하는 회원입니다.");
         }
@@ -75,8 +85,15 @@ public class MemberService {
                 .nickname(nickname)
                 .build();
         memberRepository.save(member);
+        if (Ut.str.hasLength(profileImgFilePath)) {
+            saveProfileImg(member, profileImgFilePath);
+        }
         return RsData.of("200", "%s님 환영합니다. 회원가입이 완료되었습니다. 로그인 후 이용해주세요.".formatted(member.getUsername()), member);
     }
+        private void saveProfileImg(Member member, String profileImgFilePath) {
+            genFileService.save(member.getModelName(), member.getId(), "common", "profileImg", 1, profileImgFilePath);
+        }
+
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
@@ -99,6 +116,20 @@ public class MemberService {
             return member.get();
         } else {
             throw new NullPointerException("member not found");
+        }
+    }
+
+    public String getProfileImgUrl(Member member) {
+        return Optional.ofNullable(member)
+                .flatMap(this::findProfileImgUrl)
+                .orElse("https://placehold.co/30x30?text=UU");
+    }
+
+    private Optional<String> findProfileImgUrl(Member member){
+            return genFileService.findBy(
+                            member.getModelName(), member.getId(), "common", "profileImg", 1
+                    )
+                    .map(GenFile::getUrl);
         }
     }
 }
