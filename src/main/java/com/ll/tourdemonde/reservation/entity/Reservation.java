@@ -45,7 +45,7 @@ public class Reservation {
                 .reservation(this)
                 .startDate(Ut.stringToLocalDateTime(form.getStartDate()))
                 .endDate(Ut.stringToLocalDateTime(form.getEndDate()))
-                .time(form.getTime())
+                .time(Ut.stringToLocalTime(form.getTime()))
                 .price(form.getPrice())
                 .build();
         options.add(option);

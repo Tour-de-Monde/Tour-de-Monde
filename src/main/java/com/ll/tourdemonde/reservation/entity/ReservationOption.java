@@ -1,5 +1,6 @@
 package com.ll.tourdemonde.reservation.entity;
 
+import com.ll.tourdemonde.reservation.entity.converter.LocalTimeConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -29,13 +31,14 @@ public class ReservationOption {
 
     private LocalDateTime endDate;
 
+    @Convert(converter = LocalTimeConverter.class)
     @NotNull
-    private String time;
+    private LocalTime time;
 
     @NotNull
     private Long price;
 
-    public ReservationOption modifyValues(LocalDateTime startDate, LocalDateTime endDate, String time, Long price) {
+    public ReservationOption modifyValues(LocalDateTime startDate, LocalDateTime endDate, LocalTime time, Long price) {
         if(!this.startDate.equals(startDate)){
             this.startDate = startDate;
         }

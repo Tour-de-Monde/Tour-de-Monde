@@ -24,10 +24,9 @@ public class ReservationOptionForm {
         return !endDate.isBlank();
     }
 
-    public ReservationOptionForm initEndDateIfNotExists(){
+    public void initEndDateIfNotExists(){
         if (!hasEndDate()) {
             this.endDate = startDate;
         }
-        return this;
     }
 }
