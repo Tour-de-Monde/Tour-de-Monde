@@ -3,14 +3,12 @@ package com.ll.tourdemonde.reservation.entity;
 import com.ll.tourdemonde.post.entity.BaseTime;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Setter
 @Getter
 @Builder
 @NoArgsConstructor

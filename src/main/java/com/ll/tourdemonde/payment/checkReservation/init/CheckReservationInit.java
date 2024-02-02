@@ -1,8 +1,10 @@
-//package com.ll.tourdemonde.reservation.checkReservation.init;
+//package com.ll.tourdemonde.payment.checkReservation.init;
 //
 //import com.ll.tourdemonde.member.entity.Member;
 //import com.ll.tourdemonde.member.service.MemberService;
 //import com.ll.tourdemonde.payment.checkReservation.service.CheckReservationService;
+//import com.ll.tourdemonde.payment.order.entity.Order;
+//import com.ll.tourdemonde.payment.order.service.OrderService;
 //import com.ll.tourdemonde.place.dto.PlaceDto;
 //import com.ll.tourdemonde.place.entity.Place;
 //import com.ll.tourdemonde.place.service.PlaceService;
@@ -27,6 +29,7 @@
 //    private CheckReservationInit self;
 //    private final MemberService memberService;
 //    private final PlaceService placeService;
+//    private final OrderService orderService;
 //    private final ReservationService reservationService;
 //    private final CheckReservationService checkReservationService;
 //
@@ -67,7 +70,11 @@
 //        Reservation company2ReservationOp2 = reservationService.createNewReservationOption(new ReservationOptionForm(company2.getId(), "2024-02-04", "2024-02-05", "11:00", 150_000L));
 //
 //        // 사용자 예약 등록 - Order, CheckReservation 저장
-//        checkReservationService.checkReservation(company2ReservationOp1.getId(), member1);
-//        checkReservationService.checkReservation(company1ReservationOp1.getId(), member2);
+//        Order order1 = checkReservationService.checkReservation(company2ReservationOp1.getId(), member1);
+//        Order order2 = checkReservationService.checkReservation(company1ReservationOp1.getId(), member2);
+//
+//        // 토스페이먼츠 결제
+//        orderService.payByTossPayments(order1, 100_000L);
+//        orderService.payByTossPayments(order2, 50_000L);
 //    }
 //}

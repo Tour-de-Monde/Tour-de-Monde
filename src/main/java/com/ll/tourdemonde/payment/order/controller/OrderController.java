@@ -4,9 +4,8 @@ import com.ll.tourdemonde.global.app.AppConfig;
 import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.member.entity.Member;
+import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.payment.order.service.OrderService;
-import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
-import com.ll.tourdemonde.payment.checkReservation.service.CheckReservationService;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -32,34 +31,11 @@ import java.util.Base64;
 public class OrderController {
     private final Rq rq;
     private final OrderService orderService;
-    private final CheckReservationService checkReservationService;
 
     // 주문 현황 페이지
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public String showDetail(@PathVariable long id, Model model) {
-        // TODO id로 Order를 찾으면 안되고 CheckReservation을 찾아야 하네
-        CheckReservation checkReservation = checkReservationService.findById(id).orElse(null);
-
-        if (checkReservation == null) {
-            throw new GlobalException("400-1", "존재하지 않는 예약입니다.");
-        }
-
-        Member member = rq.getMember();
-
-        if (!orderService.memberCheckReservation(member, checkReservation)) {
-            throw new GlobalException("403", "권한이 없습니다.");
-        }
-
-        model.addAttribute("checkReservation", checkReservation);
-
-        return "domain/payment/order/detail";
-    }
-/*
-    @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String showDetail(@PathVariable long id, Model model) {
-        // TODO id로 Order를 찾으면 안되고 CheckReservation을 찾아야 하네
         Order order = orderService.findById(id).orElse(null);
 
         if (order == null) {
@@ -68,6 +44,7 @@ public class OrderController {
 
         Member member = rq.getMember();
 
+        // 주문 상세페이지는 구매자만 볼 수 있습니다.
         if (!orderService.memberCanSee(member, order)) {
             throw new GlobalException("403", "권한이 없습니다.");
         }
@@ -76,7 +53,6 @@ public class OrderController {
 
         return "domain/payment/order/detail";
     }
-*/
 
     // 성공, 실패 코드 토스페이먼츠에서 제공한 코드를 따라가자.
     @GetMapping("/success")
@@ -88,7 +64,7 @@ public class OrderController {
     @GetMapping("/fail")
     @PreAuthorize("isAuthenticated()")
     public String showFail(String failCode, String failMessage) {
-        rq.setAttribute("code", failCode); // model.addAttribute()써도 되고 rq.setAttribute() 써도 된다.
+        rq.setAttribute("code", failCode);
         rq.setAttribute("message", failMessage);
 
         return "domain/payment/order/fail";

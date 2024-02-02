@@ -50,4 +50,9 @@ public class Order extends BaseEntity { // 회원의 예약 저장
 
         return true; // 결제가 가능하다.
     }
+
+    // 장소의 타입 - LEISURE, ACCOMMODATE, RESTAURANT
+    public String getType() {
+        return this.getCheckReservation().getReservationOption().getReservation().getType().name();
+    }
 }

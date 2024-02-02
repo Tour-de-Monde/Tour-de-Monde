@@ -2,10 +2,10 @@ package com.ll.tourdemonde.payment.order.service;
 
 import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.member.entity.Member;
+import com.ll.tourdemonde.payment.cash.entity.CashLog;
 import com.ll.tourdemonde.payment.cash.service.CashService;
 import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.payment.order.repository.OrderRepository;
-import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,11 +28,6 @@ public class OrderService {
         return order.getBuyer().equals(member);
     }
 
-    // 주문 상세페이지는 구매자만 볼 수 있습니다.
-    public boolean memberCheckReservation(Member member, CheckReservation checkReservation) {
-        return checkReservation.getBuyer().equals(member);
-    }
-
     // 주문자의 결제캐시랑 클라이언트측에서 준 결제캐시랑 같은지 확인
     public void checkCanPay(String orderCode, long pgPayPrice) {
         // 주문 찾기
@@ -47,8 +42,8 @@ public class OrderService {
             throw new GlobalException("400-3", "이미 결제한 주문입니다.");
         }
 
-        // 생각해보기 TODO 예약에 적힌 가격이랑 pgPayPrice 가격이랑 같은지 확인
-        if (order.getCheckReservation().getPrice() != pgPayPrice)
+        // 예약에 적힌 가격이랑 pgPayPrice 가격이랑 같은지 확인
+        if (order.getCheckReservation().getReservationOption().getPrice() != pgPayPrice)
             throw new GlobalException("400-2", "예약하신 금액과 등록된 결제 금액이 일치하지 않습니다.");
     }
 
@@ -61,10 +56,11 @@ public class OrderService {
     @Transactional
     public void payByTossPayments(Order order, long pgPayPrice) {
         Member buyer = order.getBuyer();
-        long price = order.getCheckReservation().getPrice();
 
-        // TODO payByTossPayments() 이어서 작업하기
-        // 결제 완료
+        cashService.addCash(buyer, pgPayPrice * -1, CashLog.EventType.사용__토스페이먼츠_주문결제, order);
+
+        // 결제 완료 -> Order의 payDate 결제 완료, ReservationOption의 occupied true 로 바꾸기
         order.setPaymentDone();
+        order.getCheckReservation().getReservationOption().setOccupied(true);
     }
 }
