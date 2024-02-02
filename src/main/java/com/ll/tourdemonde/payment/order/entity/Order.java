@@ -2,7 +2,7 @@ package com.ll.tourdemonde.payment.order.entity;
 
 import com.ll.tourdemonde.global.jpa.BaseEntity;
 import com.ll.tourdemonde.member.entity.Member;
-import com.ll.tourdemonde.reservation.checkReservation.entity.CheckReservation;
+import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
@@ -27,8 +27,10 @@ public class Order extends BaseEntity {
     private CheckReservation checkReservation;
 
     private LocalDateTime payDate; // 결제일
-    private LocalDateTime cancelDate; // 취소일
+    private LocalDateTime cancelDate; // 취소일 TODO (결제전 취소?, 결제후 취소?) 언제인지 구분이 안될 수 있다. 상태 구분 컬럼 추가하기
     private LocalDateTime refundDate; // 환불일
+
+    // TODO 환불예정, 환불중 - 상태 구분 컬럼
 
     public void setPaymentDone() {
         payDate = LocalDateTime.now();

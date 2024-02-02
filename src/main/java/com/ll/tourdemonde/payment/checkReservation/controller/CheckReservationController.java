@@ -1,10 +1,10 @@
-package com.ll.tourdemonde.reservation.checkReservation.controller;
+package com.ll.tourdemonde.payment.checkReservation.controller;
 
 import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.member.entity.Member;
-import com.ll.tourdemonde.reservation.checkReservation.dto.CheckReservationReqDto;
-import com.ll.tourdemonde.reservation.checkReservation.entity.CheckReservation;
-import com.ll.tourdemonde.reservation.checkReservation.service.CheckReservationService;
+import com.ll.tourdemonde.payment.checkReservation.dto.CheckReservationReqDto;
+import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
+import com.ll.tourdemonde.payment.checkReservation.service.CheckReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
