@@ -1,5 +1,6 @@
 package com.ll.tourdemonde.reservation.entity;
 
+import com.ll.tourdemonde.post.entity.BaseTime;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,11 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "reservation_details")
-public class ReservationOption {
-    @Id
-    @GeneratedValue
-    private Long id;
-
+public class ReservationOption extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservation_Id")
     private Reservation reservation;
@@ -30,10 +27,13 @@ public class ReservationOption {
     private LocalDateTime endDate;
 
     @NotNull
-    private String time;
+    private String time; // 예약옵션
 
     @NotNull
-    private Long price;
+    private Long price; //옵션의 가격
+
+    @Builder.Default
+    private boolean occupied = false; //예약여부 확인
 
     public ReservationOption modifyValues(LocalDateTime startDate, LocalDateTime endDate, String time, Long price) {
         if(!this.startDate.equals(startDate)){
