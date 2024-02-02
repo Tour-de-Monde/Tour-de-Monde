@@ -2,7 +2,7 @@ package com.ll.tourdemonde.payment.order.entity;
 
 import com.ll.tourdemonde.global.jpa.BaseEntity;
 import com.ll.tourdemonde.member.entity.Member;
-import com.ll.tourdemonde.reservation.checkReservation.entity.CheckReservation;
+import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;

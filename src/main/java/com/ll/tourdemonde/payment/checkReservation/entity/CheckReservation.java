@@ -1,4 +1,4 @@
-package com.ll.tourdemonde.reservation.checkReservation.entity;
+package com.ll.tourdemonde.payment.checkReservation.entity;
 
 import com.ll.tourdemonde.global.jpa.BaseEntity;
 import com.ll.tourdemonde.member.entity.Member;

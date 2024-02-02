@@ -5,7 +5,7 @@ import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.payment.cash.service.CashService;
 import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.payment.order.repository.OrderRepository;
-import com.ll.tourdemonde.reservation.checkReservation.entity.CheckReservation;
+import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

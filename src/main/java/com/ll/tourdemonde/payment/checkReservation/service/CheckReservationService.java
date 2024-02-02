@@ -1,11 +1,11 @@
-package com.ll.tourdemonde.reservation.checkReservation.service;
+package com.ll.tourdemonde.payment.checkReservation.service;
 
 import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.member.entity.Member;
-import com.ll.tourdemonde.reservation.checkReservation.dto.CheckReservationReqDto;
-import com.ll.tourdemonde.reservation.checkReservation.entity.CheckReservation;
-import com.ll.tourdemonde.reservation.checkReservation.repository.CheckReservationRepository;
+import com.ll.tourdemonde.payment.checkReservation.dto.CheckReservationReqDto;
+import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
+import com.ll.tourdemonde.payment.checkReservation.repository.CheckReservationRepository;
 import com.ll.tourdemonde.reservation.entity.Reservation;
 import com.ll.tourdemonde.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
