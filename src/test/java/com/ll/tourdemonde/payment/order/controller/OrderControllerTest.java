@@ -1,23 +1,15 @@
 package com.ll.tourdemonde.payment.order.controller;
 
-import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
+import com.ll.tourdemonde.payment.checkReservation.controller.CheckReservationController;
 import com.ll.tourdemonde.payment.checkReservation.service.CheckReservationService;
 import com.ll.tourdemonde.payment.order.service.OrderService;
-import com.ll.tourdemonde.place.dto.PlaceDto;
-import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.repository.PlaceRepository;
 import com.ll.tourdemonde.place.service.PlaceService;
-import com.ll.tourdemonde.reservation.dto.ReservationCreateForm;
-import com.ll.tourdemonde.reservation.dto.ReservationOptionForm;
-import com.ll.tourdemonde.reservation.entity.Reservation;
-import com.ll.tourdemonde.reservation.entity.ReservationType;
 import com.ll.tourdemonde.reservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,13 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
 @Slf4j
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OrderControllerTest {
     @Autowired
     private MockMvc mvc;
@@ -53,7 +46,7 @@ class OrderControllerTest {
     @Autowired
     private CheckReservationService checkReservationService;
 
-    @BeforeAll
+    /*@BeforeAll
     public void setup() { // @BeforeAll은 static만 붙여야 되는 줄 알았는데 아니네 public 붙이니깐 의존성 주입이 되네
         log.info("프로젝트 기본 세팅");
         Member admin = memberService.createMember("admin", "1234", "admin@test.com", "adminName", null, null, "adminNick");
@@ -82,6 +75,12 @@ class OrderControllerTest {
 
         Reservation company2ReservationOp1 = reservationService.createNewReservationOption(new ReservationOptionForm(company2.getId(), "2024-02-03", "2024-02-03", "11:00", 100_000L));
         Reservation company2ReservationOp2 = reservationService.createNewReservationOption(new ReservationOptionForm(company2.getId(), "2024-02-04", "2024-02-05", "11:00", 150_000L));
+    }*/
+
+    @Test
+    @DisplayName("테스트 실행 확인")
+    void test() {
+        System.out.println("테스트 실행 확인");
     }
 
 
@@ -93,25 +92,21 @@ class OrderControllerTest {
         // GIVEN
 //        Order order1 = checkReservationService.checkReservation(company2ReservationOp1.getId(), member1);
 //        Order order2 = checkReservationService.checkReservation(company1ReservationOp1.getId(), member2);
-        int reservationOpId = 1;
+//        int reservationOpId = 1;
 
         // WHEN
-        try {
-            ResultActions resultActions = mvc
-                    .perform(
-                            post("/reservation/" + reservationOpId + "/check")
-                                    .with(csrf())
-                    )
-                    .andDo(print());
-        } catch (Exception e) {
-            System.out.println("e.getMessage() = " + e.getMessage());
-        }
+        ResultActions resultActions = mvc
+                .perform(
+                        post("/reservation/1/check")
+                                .with(csrf())
+                )
+                .andDo(print());
 
         // THEN
-        /*resultActions
-                .andExpect(status().isOk())
+        resultActions
+                .andExpect(status().is3xxRedirection()) // /order/{orderId}로 이동
                 .andExpect(handler().handlerType(CheckReservationController.class))
-                .andExpect(handler().methodName("showDetail"));*/
+                .andExpect(handler().methodName("showDetail"));
 
         // 검증
     }
