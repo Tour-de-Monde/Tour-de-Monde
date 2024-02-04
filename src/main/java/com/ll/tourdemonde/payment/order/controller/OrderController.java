@@ -54,6 +54,18 @@ public class OrderController {
         return "domain/payment/order/detail";
     }
 
+    @PostMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String payByToss(@PathVariable long id) {
+        Order order = orderService.findById(id).orElse(null);
+
+        if (order == null) {
+            throw new GlobalException("400-1", "존재하지 않는 주문입니다.");
+        }
+
+        return rq.redirect("/order/" + order.getId(), "결제가 완료되었습니다.");
+    }
+
     // 성공, 실패 코드 토스페이먼츠에서 제공한 코드를 따라가자.
     @GetMapping("/success")
     @PreAuthorize("isAuthenticated()")

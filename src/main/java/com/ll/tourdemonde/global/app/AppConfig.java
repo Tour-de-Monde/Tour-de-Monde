@@ -49,4 +49,12 @@ public class AppConfig {
     public void setTossPaymentsWidgetSecretKey(String tossPaymentsWidgetSecretKey) {
         this.tossPaymentsWidgetSecretKey = tossPaymentsWidgetSecretKey;
     }
+
+    @Getter
+    private static int orderCancelableSeconds;
+
+    @Value("${custom.order.cancelableSeconds}")
+    public void setOrderCancelableSeconds(int orderCancelableSeconds) {
+        AppConfig.orderCancelableSeconds = orderCancelableSeconds;
+    }
 }
