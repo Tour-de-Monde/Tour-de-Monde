@@ -1,23 +1,15 @@
 package com.ll.tourdemonde.mypage.controller;
 
-import com.ll.tourdemonde.member.dto.MemberCreateForm;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.mypage.service.MypageService;
 import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.post.entity.Post;
-import com.ll.tourdemonde.post.service.PostService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
