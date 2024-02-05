@@ -71,17 +71,21 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createNewOrder(Member buyer, ReservationOption option) {
+    public Order createNewOrderOrFind(Member buyer, ReservationOption option) {
+        // 사용자의 주문 중 미결재 주문조회
         List<Order> orderList = orderRepository.findByMemberAndCreateDate(buyer, null);
 
+        // 주문가능한 주문이 있을 경우 해당 주문 리턴
         if (!orderList.isEmpty()){
             return orderList.getFirst();
         }
-        // Todo 예외는 차후 설정
+
+        // Order 생성
         Order order = Order.builder()
                 .buyer(buyer)
                 .build();
 
+        // 예약check 추가
         order.newCheckReservation(option);
 
         return orderRepository.save(order);

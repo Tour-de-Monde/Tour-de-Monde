@@ -72,15 +72,14 @@ public class OrderController {
             @PathVariable("reservationId") long reservationId,
             @PathVariable("optionId") long optionId,
             Model model) {
-        Member buyer = rq.getMember();
+        // order생성 및 조회에 필요한 정보 불러오기
+        Member buyer = rq.getMember(); // 사용자
+        Place place = placeService.findById(placeId); //예약 장소
+        ReservationType type = reservationService.findById(reservationId).getType();//예약 종류
+        ReservationOption option = reservationService.findOptionById(reservationId,optionId); //예약 옵션
 
-        Place place = placeService.findById(placeId);
-
-        ReservationType type = reservationService.findById(reservationId).getType();
-
-        ReservationOption option = reservationService.findOptionById(reservationId,optionId);
-
-        Order order = orderService.createNewOrder(buyer, option);
+        // 새로운 order 생성
+        Order order = orderService.createNewOrderOrFind(buyer, option);
 
         model.addAttribute("order", order);
         model.addAttribute("place", place);
@@ -93,6 +92,7 @@ public class OrderController {
     public String completeReservation(
             @PathVariable("orderId") Long orderId,
             Model model) {
+        // 결제를 하지않고(캐쉬 차감 x) 결재완료
         Order order = orderService.payByChash(orderId);
 
         model.addAttribute("order", order);
