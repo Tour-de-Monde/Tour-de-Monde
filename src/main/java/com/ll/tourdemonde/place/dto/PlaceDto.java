@@ -10,7 +10,7 @@ public class PlaceDto {
     private String name;
     private String coordinate;
 
-    public Place toEntity(){
+    public Place toEntity() {
         return Place.builder()
                 .name(this.name)
                 .coordinate(this.coordinate)

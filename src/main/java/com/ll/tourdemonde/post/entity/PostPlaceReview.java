@@ -16,7 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Builder
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-public class PostPlaceReview extends BaseTime{
+public class PostPlaceReview extends BaseTime {
 
     @ManyToOne
     private Member author;

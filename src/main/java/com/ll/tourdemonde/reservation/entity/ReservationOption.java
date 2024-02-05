@@ -25,7 +25,7 @@ public class ReservationOption extends BaseTime {
     private Reservation reservation;
 
     @NotNull(message = "시작날짜는 빈칸일 수 없습니다.")
-    private LocalDateTime startDate;
+    private LocalDateTime startDate; // 예약 날짜
 
     private LocalDateTime endDate;
 
@@ -45,15 +45,15 @@ public class ReservationOption extends BaseTime {
             this.startDate = startDate;
         }
 
-        if(!this.endDate.equals(endDate)){
+        if (!this.endDate.equals(endDate)) {
             this.endDate = endDate;
         }
 
-        if(!this.time.equals(time)){
+        if (!this.time.equals(time)) {
             this.time = time;
         }
 
-        if(!this.price.equals(price)){
+        if (!this.price.equals(price)) {
             this.price = price;
         }
         return this;

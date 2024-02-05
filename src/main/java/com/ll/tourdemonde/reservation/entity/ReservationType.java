@@ -36,4 +36,5 @@ public enum ReservationType {
                         Enum::toString,
                         ReservationType::getType));
     }
+
 }

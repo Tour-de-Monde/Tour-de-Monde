@@ -123,7 +123,7 @@ public class ReservationService {
     @Transactional
     public void deleteReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
-                        .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다."));
 
         reservationRepository.delete(reservation);
     }
