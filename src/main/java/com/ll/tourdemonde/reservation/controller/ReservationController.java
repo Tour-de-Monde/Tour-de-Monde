@@ -40,25 +40,42 @@ public class ReservationController {
     //장소별 예약내역 조회
     @GetMapping("/{placeId}")
     public String showReservationFromPlace(@PathVariable("placeId") Long placeId,
+                                           @RequestParam(name = "page", defaultValue = "0") int page,
                                            @RequestParam(name = "startDate", required = false) String startDate,
                                            @RequestParam(name = "endDate", required = false) String endDate,
                                            Model model,
                                            HttpServletRequest request
     ) {
         //ToDo 순환참조의 위험이 있으니 차후 가져오는 데이터를 개선하도록 한다.
-        try {
-            Place place = placeService.findById(placeId);
-            RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
-            List<Reservation> reservationList = listRsData.getData();
+//        try {
+        Place place = placeService.findById(placeId);
+        RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
+        List<Reservation> reservationList = listRsData.getData();
+//
+//        // startDate와 endDate 기본값 설정
+//        LocalDateTime startDateConverted;
+//        if (startDate.isBlank()) {
+//            startDateConverted = LocalDateTime.now();
+//        } else {
+//            startDateConverted = Ut.stringToLocalDateTime(startDate);
+//        }
+//        LocalDateTime endDateConverted;
+//        if (endDate.isBlank()) {
+//            endDateConverted = LocalDateTime.now();
+//        } else {
+//            endDateConverted = Ut.stringToLocalDateTime(endDate);
+//        }
+//
+//        RsData<Page<Reservation>> pageRsData = reservationService.findByDates(page, placeId, startDateConverted, endDateConverted);
 
-            // 모델에 추가
-            model.addAttribute("place", place);
-            model.addAttribute("reservationList", reservationList);
-            return "domain/reservation/reservation";
-        } catch (Exception e) {
-            String preUrl = request.getHeader("Referer");
-            return "redirect:" + preUrl;
-        }
+        // 모델에 추가
+        model.addAttribute("place", place);
+        model.addAttribute("reservationList", reservationList);
+//        model.addAttribute("pages", pageRsData.getData());
+        return "domain/reservation/reservation";
+//        } catch (Exception e) {
+//            throw new RuntimeException();
+//        }
     }
 
     //관리자 페이지
@@ -70,13 +87,13 @@ public class ReservationController {
         String preUrl = request.getHeader("Referer");
         // Todo 장소에 대한 소유주인지 확인하는 기능 추가 필요 240201, 장소에 member추가 및 등록 기능 필요
 
-        try{
+        try {
             Place place = placeService.findById(placeId);
             RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
 
             model.addAttribute("place", place);
             model.addAttribute("reservationList", listRsData.getData());
-        } catch (Exception e){
+        } catch (Exception e) {
             return "redirect:" + preUrl;
         }
 
@@ -88,7 +105,7 @@ public class ReservationController {
     @GetMapping("/{placeId}/create")
     public String createNewReservation(@PathVariable("placeId") Long placeId,
                                        Model model) {
-        try{
+        try {
             // 장소 가져오기
             Place place = placeService.findById(placeId);
 
@@ -108,7 +125,7 @@ public class ReservationController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{placeId}/create")
     public String createNewReservation(
-            @PathVariable("placeId")Long placeId,
+            @PathVariable("placeId") Long placeId,
             @Valid ReservationCreateForm form,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -118,7 +135,7 @@ public class ReservationController {
             Place place = placeService.findById(placeId);
             Reservation reservation = reservationService.createNewReservation(place, form);
             return "redirect:/reserve/create/%d/detail".formatted(reservation.getId());
-        } catch (Exception e){
+        } catch (Exception e) {
             return "redirect:/";
         }
     }

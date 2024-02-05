@@ -12,10 +12,16 @@ import com.ll.tourdemonde.reservation.entity.Reservation;
 import com.ll.tourdemonde.reservation.entity.ReservationOption;
 import com.ll.tourdemonde.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -134,4 +140,21 @@ public class ReservationService {
         reservation.removeOption(optionId);
     }
 
+    public RsData<Page<Reservation>> findByDates(int page, Long placeId, LocalDateTime startDate, LocalDateTime endDate) {
+        // pageable
+        int pageSize = 10;
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("startDate"));
+        sorts.add(Sort.Order.desc("endDate"));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
+
+        Page<Reservation> reservationPage =
+                reservationRepository.search(placeId, startDate, endDate, pageable);
+
+        if(reservationPage.isEmpty()){
+            return new RsData<>("S-","없음", null);
+        }
+
+        return new RsData<>("S-", "성공", reservationPage);
+    }
 }
