@@ -9,6 +9,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -82,7 +83,7 @@ public class Order extends BaseEntity { // 회원의 예약 저장
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // LocalDateTime 객체를 문자열로 변환
-        return getCreateDate().format(formatter) + "__" + getId();
+        return getCreateDate().format(formatter) + (AppConfig.isNotProd() ? "-test-" + UUID.randomUUID() : "") + "__" + getId();
     }
 
     public String getForPrintPayStatus() {

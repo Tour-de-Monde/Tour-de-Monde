@@ -57,4 +57,19 @@ public class AppConfig {
     public void setOrderCancelableSeconds(int orderCancelableSeconds) {
         AppConfig.orderCancelableSeconds = orderCancelableSeconds;
     }
+
+    private static String activeProfile;
+
+    @Value("${spring.profiles.active}")
+    public void setActiveProfile(String value) {
+        activeProfile = value;
+    }
+
+    public static boolean isProd() {
+        return activeProfile.equals("prod");
+    }
+
+    public static boolean isNotProd() {
+        return !isProd();
+    }
 }

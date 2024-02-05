@@ -7,11 +7,14 @@
 //import com.ll.tourdemonde.payment.order.service.OrderService;
 //import com.ll.tourdemonde.place.dto.PlaceDto;
 //import com.ll.tourdemonde.place.entity.Place;
+//import com.ll.tourdemonde.place.repository.PlaceRepository;
 //import com.ll.tourdemonde.place.service.PlaceService;
 //import com.ll.tourdemonde.reservation.dto.ReservationCreateForm;
 //import com.ll.tourdemonde.reservation.dto.ReservationOptionForm;
 //import com.ll.tourdemonde.reservation.entity.Reservation;
+//import com.ll.tourdemonde.reservation.entity.ReservationOption;
 //import com.ll.tourdemonde.reservation.entity.ReservationType;
+//import com.ll.tourdemonde.reservation.repository.ReservationOptionRepository;
 //import com.ll.tourdemonde.reservation.service.ReservationService;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,8 @@
 //    private final OrderService orderService;
 //    private final ReservationService reservationService;
 //    private final CheckReservationService checkReservationService;
+//    private final PlaceRepository placeRepository;
+//    private final ReservationOptionRepository reservationOptionRepository;
 //
 //    @Bean
 //    ApplicationRunner initNotProd() {
@@ -46,15 +51,19 @@
 //
 //        // 멤버 등록
 //        Member admin = memberService.createMember("admin", "1234", "admin@test.com", "adminName", null, null, "adminNick");
-//        Member member1 = memberService.createMember("user1", "1234", "test1@test.com", "user1Name", null, null, "user1Nick");
-//        Member member2 = memberService.createMember("user2", "1234", "test2@test.com", "user2Name", null, null, "user2Nick");
+//        Member member1 = memberService.createMember("user1", "1234", "test1@test.com", "박보검", null, null, "user1Nick");
+//        Member member2 = memberService.createMember("user2", "1234", "test2@test.com", "서강준", null, null, "user2Nick");
 //
 //        // 장소 등록
-//        // TODO 반환값 지우기 반환타입도 void로 바꾸기
-//        Place place1 = placeService.save(new PlaceDto("장소1", "33.1, 37.1"));
-//        Place place2 = placeService.save(new PlaceDto("장소2", "33.2, 37.2"));
-//        Place place3 = placeService.save(new PlaceDto("장소3", "33.3, 37.3"));
-//        Place place4 = placeService.save(new PlaceDto("장소4", "33.4, 37.4"));
+//        placeService.save(new PlaceDto("장소1", "33.1, 37.1"));
+//        placeService.save(new PlaceDto("장소2", "33.2, 37.2"));
+//        placeService.save(new PlaceDto("장소3", "33.3, 37.3"));
+//        placeService.save(new PlaceDto("장소4", "33.4, 37.4"));
+//
+//        Place place1 = placeRepository.findById(1L).get();
+//        Place place2 = placeRepository.findById(2L).get();
+//        Place place3 = placeRepository.findById(3L).get();
+//        Place place4 = placeRepository.findById(4L).get();
 //
 //        // 업체 등록
 //        Reservation company1 = reservationService.createNewReservation(place1, new ReservationCreateForm(admin.getUsername(), place1.getId(), ReservationType.RESTAURANT));
@@ -62,19 +71,26 @@
 //        Reservation company3 = reservationService.createNewReservation(place3, new ReservationCreateForm(admin.getUsername(), place3.getId(), ReservationType.LEISURE));
 //
 //        // 업체 예약 등록
-//        Reservation company1ReservationOp1 = reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-04", "2024-02-04", "11:00", 50_000L));
-//        Reservation company1ReservationOp2 = reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-05", "2024-02-06", "11:00", 150_000L));
-//        Reservation company1ReservationOp3 = reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-06", "2024-02-06", "11:00", 150_000L));
+//        reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-04", "2024-02-04", "11:00", 50_000L));
+//        reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-05", "2024-02-06", "11:00", 60_000L));
+//        reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-06", "2024-02-06", "11:00", 70_000L));
 //
-//        Reservation company2ReservationOp1 = reservationService.createNewReservationOption(new ReservationOptionForm(company2.getId(), "2024-02-03", "2024-02-03", "11:00", 100_000L));
-//        Reservation company2ReservationOp2 = reservationService.createNewReservationOption(new ReservationOptionForm(company2.getId(), "2024-02-04", "2024-02-05", "11:00", 150_000L));
+//        reservationService.createNewReservationOption(new ReservationOptionForm(company2.getId(), "2024-02-03", "2024-02-03", "11:00", 80_000L));
+//        reservationService.createNewReservationOption(new ReservationOptionForm(company2.getId(), "2024-02-04", "2024-02-05", "11:00", 90_000L));
+//
+//        ReservationOption reservationOption1 = reservationOptionRepository.findById(1L).get();
+//        ReservationOption reservationOption2 = reservationOptionRepository.findById(2L).get();
+//        ReservationOption reservationOption3 = reservationOptionRepository.findById(3L).get();
+//
+//        ReservationOption reservationOption4 = reservationOptionRepository.findById(4L).get();
+//        ReservationOption reservationOption5 = reservationOptionRepository.findById(5L).get();
 //
 //        // 사용자 예약 등록 - Order, CheckReservation 저장
-//        Order order1 = checkReservationService.checkReservation(company2ReservationOp1.getId(), member1);
-//        Order order2 = checkReservationService.checkReservation(company1ReservationOp1.getId(), member2);
+//        Order order1 = checkReservationService.checkReservation(reservationOption1.getId(), member1);
+//        Order order2 = checkReservationService.checkReservation(reservationOption4.getId(), member2);
 //
 //        // 토스페이먼츠 결제
-//        orderService.payByTossPayments(order1, 100_000L);
+////        orderService.payByTossPayments(order1, 100_000L);
 //        orderService.payByTossPayments(order2, 50_000L);
 //    }
 //}

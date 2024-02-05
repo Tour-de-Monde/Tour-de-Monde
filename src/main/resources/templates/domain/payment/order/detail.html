@@ -57,18 +57,18 @@
             <div>
                 <label>고객 이메일</label>
                 <input type="email" name="customerEmail" placeholder="customer@email.com" class="input input-bordered"
-                       value="test@test.com">
+                       th:value="${order.buyer.email}">
             </div>
 
             <div>
                 <label>고객 이름(실명)</label>
-                <input type="text" name="customerName" placeholder="홍길동" class="input input-bordered" value="홍길동">
+                <input type="text" name="customerName" placeholder="홍길동" class="input input-bordered" th:value="${order.buyer.memberName}">
             </div>
 
             <div>
                 <label>고객 휴대전화번호(- 제외)</label>
                 <input type="text" name="customerMobilePhone" placeholder="01012341234" class="input input-bordered"
-                       value="01012341234">
+                       th:value="${order.buyer.phoneNumber}">
             </div>
 
             <div>
@@ -100,14 +100,11 @@
             // @docs https://docs.tosspayments.com/reference/widget-sdk#renderagreement선택자-옵션
             paymentWidget.renderAgreement("#agreement", {variantKey: "AGREEMENT"});
 
-            let submitPayFormDone = false;
-
             function submitPayForm(form) {
-                if ( submitPayFormDone ) return;
 
                 form.customerEmail.value = form.customerEmail.value.trim();
 
-                if (form.customerEmail.value.length == 0) {
+                if (form.customerEmail.value.length === 0) {
                     toastWarning("고객 이메일을 입력해주세요.");
                     form.customerEmail.focus();
 
@@ -116,7 +113,7 @@
 
                 form.customerName.value = form.customerName.value.trim();
 
-                if (form.customerName.value.length == 0) {
+                if (form.customerName.value.length === 0) {
                     toastWarning("고객 이름(실명)을 입력해주세요.");
                     form.customerName.focus();
 
@@ -125,24 +122,12 @@
 
                 form.customerMobilePhone.value = form.customerMobilePhone.value.trim();
 
-                if (form.customerMobilePhone.value.length == 0) {
+                if (form.customerMobilePhone.value.length === 0) {
                     toastWarning("고객 휴대전화번호를 입력해주세요.");
                     form.customerMobilePhone.focus();
 
                     return;
                 }
-
-                form.useCash.value = form.useCash.value.trim();
-
-                const useCash = form.useCash.valueAsNumber || 0;
-
-                if ( amount - useCash == 0 ) {
-                    form.submit();
-                    submitPayFormDone = true;
-                    return;
-                }
-
-                paymentMethodWidget.updateAmount(amount - useCash);
 
                 paymentWidget.requestPayment({
                     orderId: orderCode,
