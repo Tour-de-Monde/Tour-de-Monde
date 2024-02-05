@@ -1,1 +1,56 @@
+<html>
+<head>
+    <!-- 제이쿼리 불러오기 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/resource/global.js"></script>
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
 <h1>디테일</h1>
+
+<!-- 희영 작성본-->
+<h1>예약하기</h1>
+<!--예약 정보-->
+<section>
+    <h2>예약정보</h2>
+    <div>
+        <span>예약장소 : </span><span th:text="${place.getName()}"></span>
+    </div>
+    <div>
+        <span>예약종류 : </span> <span th:text="${reservationType}"></span>
+    </div>
+    <div>
+        <div>
+            <span>예약 날짜 : </span><span
+                th:text="${order.getCheckReservation().getReservationOption().startDate}"></span>
+        </div>
+        <div th:if="${reservationType == 'ACCOMMODATE'}">
+            <span>예약 종료일 : </span><span
+                th:text="${order.getCheckReservation().getReservationOption().endDate}"></span>
+        </div>
+        <div>
+            <span>예약 시간 : </span><span
+                th:text="${order.getCheckReservation().getReservationOption().time}"></span>
+        </div>
+        <div>
+            <span>결재금액 : </span><span
+                th:text="${order.getCheckReservation().getReservationOption().price}"></span>
+            <span> 원</span>
+        </div>
+    </div>
+</section>
+<!--예약자 정보-->
+<section>
+    <h2>예약자 정보</h2>
+    <div>
+        <span>예약자명 : </span><span th:if="${@rq.isLogin()}" th:text="${@rq.getMember().getUsername()}"></span>
+    </div>
+    <div>
+        <span>예약자 전화번호 : </span><span th:if="${@rq.isLogin()}" th:text="${@rq.getMember().getPhoneNumber()}"></span>
+    </div>
+</section>
+<a method="POST" th:href="|/order/${order.id}|">결제하기</a>
+</body>
+</html>

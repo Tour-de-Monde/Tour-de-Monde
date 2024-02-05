@@ -3,13 +3,15 @@ package com.ll.tourdemonde.payment.order.service;
 import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.payment.cash.service.CashService;
+import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
 import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.payment.order.repository.OrderRepository;
-import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
+import com.ll.tourdemonde.reservation.entity.ReservationOption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,5 +68,39 @@ public class OrderService {
         // TODO payByTossPayments() 이어서 작업하기
         // 결제 완료
         order.setPaymentDone();
+    }
+
+    @Transactional
+    public Order createNewOrder(Member buyer, ReservationOption option) {
+        List<Order> orderList = orderRepository.findByMemberAndCreateDate(buyer, null);
+
+        if (!orderList.isEmpty()){
+            return orderList.getFirst();
+        }
+        // Todo 예외는 차후 설정
+        Order order = Order.builder()
+                .buyer(buyer)
+                .build();
+
+        order.newCheckReservation(option);
+
+        return orderRepository.save(order);
+    }
+
+    @Transactional
+    public Order payByChash(final Long orderId) {
+        // 주문 찾기
+        Order order =  orderRepository.findById(orderId)
+                .orElseThrow(()-> new RuntimeException("찾는 주문이 없습니다."));
+
+        //캐쉬 감소 로직 필요
+
+        // 옵션예약에 체크
+        order.getCheckReservation().getReservationOption().completeReservation();
+
+        // 주문 결제처리
+        order.setPaymentDone();
+
+        return order;
     }
 }

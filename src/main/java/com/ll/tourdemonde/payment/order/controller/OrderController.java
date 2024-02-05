@@ -4,9 +4,15 @@ import com.ll.tourdemonde.global.app.AppConfig;
 import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.member.entity.Member;
-import com.ll.tourdemonde.payment.order.service.OrderService;
 import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
 import com.ll.tourdemonde.payment.checkReservation.service.CheckReservationService;
+import com.ll.tourdemonde.payment.order.entity.Order;
+import com.ll.tourdemonde.payment.order.service.OrderService;
+import com.ll.tourdemonde.place.entity.Place;
+import com.ll.tourdemonde.place.service.PlaceService;
+import com.ll.tourdemonde.reservation.entity.ReservationOption;
+import com.ll.tourdemonde.reservation.entity.ReservationType;
+import com.ll.tourdemonde.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -33,6 +39,8 @@ public class OrderController {
     private final Rq rq;
     private final OrderService orderService;
     private final CheckReservationService checkReservationService;
+    private final ReservationService reservationService;
+    private final PlaceService  placeService;
 
     // 주문 현황 페이지
     @GetMapping("/{id}")
@@ -55,6 +63,43 @@ public class OrderController {
 
         return "domain/payment/order/detail";
     }
+
+    // 주문 현황 페이지 - 희영: 예약 기능 완성을 위한 임시 엔드포인트
+    @GetMapping("/{placeId}/{reservationId}/{optionId}")
+    @PreAuthorize("isAuthenticated()")
+    public String showDetail(
+            @PathVariable("placeId") long placeId,
+            @PathVariable("reservationId") long reservationId,
+            @PathVariable("optionId") long optionId,
+            Model model) {
+        Member buyer = rq.getMember();
+
+        Place place = placeService.findById(placeId);
+
+        ReservationType type = reservationService.findById(reservationId).getType();
+
+        ReservationOption option = reservationService.findOptionById(reservationId,optionId);
+
+        Order order = orderService.createNewOrder(buyer, option);
+
+        model.addAttribute("order", order);
+        model.addAttribute("place", place);
+        model.addAttribute("reservationType", type);
+        return "domain/payment/order/detail";
+    }
+
+    @PostMapping("/{orderId}")
+    @PreAuthorize("isAuthenticated()")
+    public String completeReservation(
+            @PathVariable("orderId") Long orderId,
+            Model model) {
+        Order order = orderService.payByChash(orderId);
+
+        model.addAttribute("order", order);
+        return "domain/payment/order/complete";
+    }
+
+
 /*
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")

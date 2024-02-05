@@ -58,4 +58,8 @@ public class ReservationOption extends BaseTime {
         }
         return this;
     }
+
+    public void completeReservation(){
+        this.occupied = true;
+    }
 }

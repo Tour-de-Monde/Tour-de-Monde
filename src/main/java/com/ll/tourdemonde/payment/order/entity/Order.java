@@ -3,6 +3,7 @@ package com.ll.tourdemonde.payment.order.entity;
 import com.ll.tourdemonde.global.jpa.BaseEntity;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
+import com.ll.tourdemonde.reservation.entity.ReservationOption;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -47,5 +48,13 @@ public class Order extends BaseEntity {
         if (cancelDate != null) return false; // 취소일이 null이 아닐경우 false
 
         return true; // 결제가 가능하다.
+    }
+
+    public void newCheckReservation(ReservationOption option){
+        this.checkReservation = CheckReservation
+                .builder()
+                .order(this)
+                .reservationOption(option)
+                .build();
     }
 }
