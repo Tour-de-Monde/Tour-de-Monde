@@ -2,6 +2,7 @@ package com.ll.tourdemonde.post.entity;
 
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.place.entity.Place;
+import com.ll.tourdemonde.place.entity.PlaceReview;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,15 +26,21 @@ public class Post extends BaseTime {
     @OrderBy("id ASC")
     @Builder.Default
     private List<PostPlace> postPlaces = new ArrayList<>();
-    @OneToMany
-    private List<PostPlaceReview> review;
 
-    public void addPlace(Place place) {
+
+    public void addPlace(Place place, PlaceReview review) {
         PostPlace postPlace = PostPlace.builder()
                 .post(this)
                 .place(place)
-                .author(this.getAuthor())
                 .build();
+
+        PostPlacePlaceReview postPlacePlaceReview = PostPlacePlaceReview.builder()
+                .placeReview(review)
+                .postPlace(postPlace)
+                .build();
+
+        postPlace.setPostPlacePlaceReview(postPlacePlaceReview);
+
         postPlaces.add(postPlace);
     }
 }

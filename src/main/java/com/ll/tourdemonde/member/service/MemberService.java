@@ -101,4 +101,13 @@ public class MemberService {
             throw new NullPointerException("member not found");
         }
     }
+
+    public Member findByIdElseThrow(Long authorId) {
+        return memberRepository.findById(authorId)
+                .orElseThrow(() -> new RuntimeException("member not found"));
+    }
+
+    public Optional<Member> findById(Long authorId) {
+        return memberRepository.findById(authorId);
+    }
 }

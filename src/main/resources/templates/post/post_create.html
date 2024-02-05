@@ -29,29 +29,7 @@
             </select>
         </div>
         <!-------------------------------------------------------------지도 장소 데이터 확인 및 리뷰작성-------------------------------------------------------------------------------------------------------------------------------->
-       <div id="placeList">
-            <div th:each="placeName, iterStat : *{placeNames}">
-                &lt;!&ndash;<div class="form-group">
-                    <label th:for="${'placeName' + iterStat.index}">장소 이름</label>
-                    <input type="text" th:id="${'placeName' + iterStat.index}" th:field="*{placeNames[__${iterStat.index}__]}" placeholder="장소 이름을 입력하세요" />
-                </div>
-
-                <div class="form-group">
-                    <label th:for="${'coordinate' + iterStat.index}">좌표</label>
-                    <input type="text" th:id="${'coordinate' + iterStat.index}" th:field="*{coordinates[__${iterStat.index}__]}" placeholder="좌표를 입력하세요" />
-                </div>&ndash;&gt;
-
-                <div class="form-group">
-                    <label th:for="${'rating' + iterStat.index}">평점</label>
-                    <input type="number" th:id="${'rating' + iterStat.index}" th:field="*{ratings[__${iterStat.index}__]}" min="1" max="5"/>
-                </div>
-
-                <div class="form-group">
-                    <label th:for="${'review' + iterStat.index}">리뷰</label>
-                    <textarea th:id="${'review' + iterStat.index}" th:field="*{reviews[__${iterStat.index}__]}" placeholder="리뷰를 작성하세요"></textarea>
-                </div>
-            </div>
-        </div>
+       <div id="placeList"></div>
 
         <script>
             function addPlaceInput() {
@@ -63,22 +41,24 @@
                 newPlaceInput.innerHTML = `
         <div class="form-group">
             <label>장소 이름</label>
-            <input type="text" name="placeNames[${index}]" placeholder="장소 이름을 입력하세요" />
+            <input type="text" name="postPlaces[${index}].placeName" placeholder="장소 이름을 입력하세요" />
         </div>
         <div class="form-group">
             <label>좌표</label>
-            <input type="text" name="coordinates[${index}]" placeholder="좌표를 입력하세요" />
+            <input type="text" name="postPlaces[${index}].coordinate" placeholder="좌표를 입력하세요" />
         </div>
         <div class="form-group">
             <label>평점</label>
-            <input type="number" name="ratings[${index}]" min="1" max="5" placeholder="평점을 입력하세요 " />
+            <input type="number" name="postPlaces[${index}].rating" min="1" max="5" placeholder="평점을 입력하세요 " />
         </div>
         <div class="form-group">
             <label>리뷰</label>
-            <textarea name="reviews[${index}]" placeholder="리뷰를 작성하세요"></textarea>
+            <textarea name="postPlaces[${index}].review" placeholder="리뷰를 작성하세요"></textarea>
         </div>`;
                 placeList.appendChild(newPlaceInput);
             }
+
+            addPlaceInput();
         </script>
 
 
