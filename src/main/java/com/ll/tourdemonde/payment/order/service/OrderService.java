@@ -50,7 +50,7 @@ public class OrderService {
     public void payByTossPayments(Order order, long pgPayPrice) {
         Member buyer = order.getBuyer();
         long price = order.getCheckReservation().getPrice();
-        
+
         // TODO payByTossPayments() 이어서 작업하기
     }
 }

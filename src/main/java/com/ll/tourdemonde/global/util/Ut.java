@@ -26,14 +26,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class Ut {
-    public static LocalDateTime stringToLocalDateTime(String string){
+    public static LocalDateTime stringToLocalDateTime(String string) {
         // html input은 String으로 날짜만 반환한다. ex) 2024-01-24
         LocalDate date = LocalDate.parse(string, DateTimeFormatter.ISO_LOCAL_DATE);
         // 00시 00분으로 설정
-        LocalTime time = LocalTime.of(0,0,0);
+        LocalTime time = LocalTime.of(0, 0, 0);
         // LocalDateTime으로 parse
         return date.atTime(time);
     }
+
     public static class date {
         private date() {
         }

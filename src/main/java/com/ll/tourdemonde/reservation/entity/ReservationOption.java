@@ -36,19 +36,19 @@ public class ReservationOption extends BaseTime {
     private boolean occupied = false; //예약여부 확인
 
     public ReservationOption modifyValues(LocalDateTime startDate, LocalDateTime endDate, String time, Long price) {
-        if(!this.startDate.equals(startDate)){
+        if (!this.startDate.equals(startDate)) {
             this.startDate = startDate;
         }
 
-        if(!this.endDate.equals(endDate)){
+        if (!this.endDate.equals(endDate)) {
             this.endDate = endDate;
         }
 
-        if(!this.time.equals(time)){
+        if (!this.time.equals(time)) {
             this.time = time;
         }
 
-        if(!this.price.equals(price)){
+        if (!this.price.equals(price)) {
             this.price = price;
         }
         return this;
