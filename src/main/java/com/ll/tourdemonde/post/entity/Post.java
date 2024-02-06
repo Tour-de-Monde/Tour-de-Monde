@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +22,10 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 public class Post extends BaseTime {
 
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @EqualsAndHashCode.Include
+    private Long id;
     private String title;
     private String category;
     private Long view;
