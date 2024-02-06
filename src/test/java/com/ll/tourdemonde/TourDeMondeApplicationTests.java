@@ -38,13 +38,12 @@ class TourDeMondeApplicationTests {
                         .build()
         );
 
-        Member member2 = memberRepository.save(
-                Member.builder()
-                        .username("user1")
-                        .password("1234")
-                        .build()
-        );
-
+		Member member2 = memberRepository.save(
+				Member.builder()
+						.username("user2")
+						.password("1234")
+						.build()
+		);
 
         Place place1 = placeRepository.save(
                 Place.builder()
