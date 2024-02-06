@@ -19,13 +19,5 @@ public class PostCreateForm {
     @NotEmpty(message = "카테고리를 입력해주세요.")
     private String category;
     private Long authorId;
-//    private List<PostPlace> postPlaces;
-
     private List<PostPlaceDTO> postPlaces;
-
-//    private List<String> placeNames;
-//    private List<String> coordinates;
-//
-//    private List<Integer> ratings;
-//    private List<String> reviews;
 }

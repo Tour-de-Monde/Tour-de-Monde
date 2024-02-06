@@ -2,15 +2,12 @@ package com.ll.tourdemonde.post.service;
 
 
 import com.ll.tourdemonde.member.entity.Member;
-import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.place.dto.PlaceDto;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.entity.PlaceReview;
-import com.ll.tourdemonde.place.repository.PlaceRepository;
 import com.ll.tourdemonde.place.service.PlaceService;
 import com.ll.tourdemonde.post.dto.PostCreateForm;
 import com.ll.tourdemonde.post.entity.Post;
-import com.ll.tourdemonde.post.repository.PostPlaceRepository;
 import com.ll.tourdemonde.post.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +23,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final PlaceService placeService;
-    private final PostPlaceService postPlaceService;
-    private final PlaceRepository placeRepository;
-    private final PostPlaceRepository postPlaceRepository;
-    private final MemberService memberService;
+
 
     @Transactional
     public void writePost(PostCreateForm form, Member author) {
