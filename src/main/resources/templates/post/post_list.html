@@ -29,6 +29,7 @@
             <img th:src="@{/images/card-image.png}" alt="Card Image">
             <h5 th:text="${post.title}">게시물 제목</h5>
             <h5 th:text="${post.author.getUsername()}">작성자</h5>
+            <h5 th:text="${post.view}">조회수</h5>
         </a>
     </th:block>
 
