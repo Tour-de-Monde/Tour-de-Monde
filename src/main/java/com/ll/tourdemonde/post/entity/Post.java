@@ -22,7 +22,7 @@ public class Post extends BaseTime {
 
     private String title;
     private String category;
-    private int view;
+    private Long view;
     @ManyToOne
     private Member author;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
