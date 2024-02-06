@@ -1,11 +1,9 @@
 package com.ll.tourdemonde.reservation.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor // TODO 희영님 코드라서 지워야함
 public class ReservationOptionForm {
     private Long reservationId;
 

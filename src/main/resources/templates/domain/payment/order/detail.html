@@ -6,6 +6,7 @@
     <script src="https://js.tosspayments.com/v1/payment-widget"></script>
 
     <script th:inline="javascript">
+        const orderId = /*[[ ${order.id} ]]*/ null;
         const orderCode = /*[[ ${order.code} ]]*/ null;
         const buyerUsername = /*[[ ${order.buyer.username} ]]*/ null;
         const orderName = /*[[ ${order.placeName} ]]*/ null;
@@ -53,7 +54,6 @@
 
         <!-- 결제하기 버튼 -->
         <form method="POST" th:action="|/order/${order.id}|" onsubmit="submitPayForm(this); return false;">
-<!--            TODO 아래 입력값 우리팀에 맞게 바꾸기 -->
             <div>
                 <label>고객 이메일</label>
                 <input type="email" name="customerEmail" placeholder="customer@email.com" class="input input-bordered"
@@ -102,6 +102,9 @@
 
             function submitPayForm(form) {
 
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+                const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+
                 form.customerEmail.value = form.customerEmail.value.trim();
 
                 if (form.customerEmail.value.length === 0) {
@@ -129,6 +132,31 @@
                     return;
                 }
 
+                const headers = {
+                    "Content-Type": "application/json",
+                }
+                headers[csrfHeader] = csrfToken;
+                const dataBody = {
+                    customerEmail: form.customerEmail.value,
+                    customerName: form.customerName.value,
+                    customerMobilePhone: form.customerMobilePhone.value
+                }
+
+                // 사용자 정보 저장하기 - 비동기 통신
+                // form.submit();
+                fetch(`https://${window.location.origin}/${orderId}`, {
+                    method: "POST",
+                    headers: headers,
+                    body: JSON.stringify(dataBody),
+                }).then(
+                    resp => resp.json()
+                ).then(
+                    data => {
+                        console.log(data);
+                    }
+                ).catch(err => console.log(err));
+
+                // 결제창을 호출하는 메서드 {결제관련 메서드 저장}
                 paymentWidget.requestPayment({
                     orderId: orderCode,
                     orderName: orderName,
@@ -138,6 +166,7 @@
                     customerName: form.customerName.value,
                     customerMobilePhone: form.customerMobilePhone.value,
                 });
+
             }
         </script>
 

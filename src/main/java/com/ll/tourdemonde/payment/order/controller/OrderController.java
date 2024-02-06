@@ -4,6 +4,7 @@ import com.ll.tourdemonde.global.app.AppConfig;
 import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.member.entity.Member;
+import com.ll.tourdemonde.payment.order.dto.OrderReqDto;
 import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.payment.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -54,16 +55,21 @@ public class OrderController {
         return "domain/payment/order/detail";
     }
 
+    @ResponseBody
     @PostMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String payByToss(@PathVariable long id) {
+    public ResponseEntity<String> payByToss(@PathVariable long id, @RequestBody OrderReqDto orderReqDto) {
         Order order = orderService.findById(id).orElse(null);
 
         if (order == null) {
             throw new GlobalException("400-1", "존재하지 않는 주문입니다.");
         }
 
-        return rq.redirect("/order/" + order.getId(), "결제가 완료되었습니다.");
+        Member member = rq.getMember();
+
+        orderService.addColumnToMember(member, orderReqDto);
+
+        return ResponseEntity.ok("사용자 정보 저장 완료");
     }
 
     // 성공, 실패 코드 토스페이먼츠에서 제공한 코드를 따라가자.

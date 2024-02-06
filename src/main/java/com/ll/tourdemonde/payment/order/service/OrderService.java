@@ -4,6 +4,7 @@ import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.payment.cash.entity.CashLog;
 import com.ll.tourdemonde.payment.cash.service.CashService;
+import com.ll.tourdemonde.payment.order.dto.OrderReqDto;
 import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.payment.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,5 +63,12 @@ public class OrderService {
         // 결제 완료 -> Order의 payDate 결제 완료, ReservationOption의 occupied true 로 바꾸기
         order.setPaymentDone();
         order.getCheckReservation().getReservationOption().setOccupied(true);
+    }
+
+    @Transactional
+    public void addColumnToMember(Member member, OrderReqDto reqDto) {
+        member.setMemberName(member.getMemberName() != null ? member.getMemberName() : reqDto.getCustomerName());
+        member.setEmail(member.getEmail() != null ? member.getEmail() : reqDto.getCustomerEmail());
+        member.setPhoneNumber(member.getPhoneNumber() != null ? member.getPhoneNumber() : reqDto.getCustomerMobilePhone());
     }
 }
