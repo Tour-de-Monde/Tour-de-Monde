@@ -1,7 +1,6 @@
 package com.ll.tourdemonde.post.entity;
 
 
-import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.place.entity.Place;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -9,6 +8,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,13 +20,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class PostPlace extends BaseTime {
 
-    @ManyToOne
-    private Member author;
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     private Post post;
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     private Place place;
-    @OneToOne
-    private PostPlaceReview postPlaceReview;
 
+    @OneToOne(mappedBy = "postPlace", cascade = PERSIST)
+    @Setter
+    private PostPlacePlaceReview postPlacePlaceReview;
 }

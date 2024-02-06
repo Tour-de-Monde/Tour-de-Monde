@@ -96,7 +96,7 @@ public class ReservationController {
 
             model.addAttribute("place", place);
             model.addAttribute("reservationList", listRsData.getData());
-        } catch (Exception e) {
+        } catch (Exception e){
             return "redirect:" + preUrl;
         }
 
@@ -108,7 +108,7 @@ public class ReservationController {
     @GetMapping("/{placeId}/create")
     public String createNewReservation(@PathVariable("placeId") Long placeId,
                                        Model model) {
-        try {
+        try{
             // 장소 가져오기
             Place place = placeService.findById(placeId);
 

@@ -67,8 +67,8 @@ class TourDeMondeApplicationTests {
                         .build()
         );
 
-        post1.addPlace(place2);
-        post1.addPlace(place1);
+//		post1.addPlace(place2);
+//		post1.addPlace(place1);
 
         Post post2 = postRepository.save(
                 Post.builder()
@@ -77,8 +77,8 @@ class TourDeMondeApplicationTests {
                         .build()
         );
 
-        post2.addPlace(place1);
-    }
+//		post2.addPlace(place1);
+	}
 
     @Test
     public void 게시물리스트테스트() {
