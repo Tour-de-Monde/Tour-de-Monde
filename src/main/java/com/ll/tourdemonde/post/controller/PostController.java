@@ -1,10 +1,15 @@
 package com.ll.tourdemonde.post.controller;
 
 
+<<<<<<< HEAD
 import com.ll.tourdemonde.comment.dto.CommentCreateForm;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.place.service.PlaceService;
+=======
+import com.ll.tourdemonde.member.entity.Member;
+import com.ll.tourdemonde.member.service.MemberService;
+>>>>>>> bff8c11 (Feat: 게시글 작성자 추가)
 import com.ll.tourdemonde.post.dto.PostCreateForm;
 import com.ll.tourdemonde.post.entity.Post;
 import com.ll.tourdemonde.post.service.PostService;
@@ -26,7 +31,10 @@ public class PostController {
 
     private final PostService postService;
     private final MemberService memberService;
+<<<<<<< HEAD
     private final PlaceService placeService;
+=======
+>>>>>>> bff8c11 (Feat: 게시글 작성자 추가)
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
@@ -37,14 +45,22 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
+<<<<<<< HEAD
     public String createPost(@Valid @ModelAttribute PostCreateForm postCreateForm, BindingResult bindingResult, Principal principal) {
+=======
+    public String createPost(@Valid PostCreateForm postCreateForm, BindingResult bindingResult, Principal principal) {
+>>>>>>> bff8c11 (Feat: 게시글 작성자 추가)
         Member member = memberService.getMember(principal.getName());
         if (bindingResult.hasErrors()) {
             return "post/post_create";
         }
+<<<<<<< HEAD
 
         postService.writePost(postCreateForm, member);
 
+=======
+        postService.writePost(postCreateForm, member);
+>>>>>>> bff8c11 (Feat: 게시글 작성자 추가)
         return "redirect:/post/list";
     }
 
