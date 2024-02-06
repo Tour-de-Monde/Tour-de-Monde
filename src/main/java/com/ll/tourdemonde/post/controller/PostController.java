@@ -58,9 +58,7 @@ public class PostController {
     @GetMapping("/detail/{id}")
     public String showPostDetail(Model model, @PathVariable("id") Long id) {
         Post post = postService.getPost(id);
-//        List<PostPlaceReview> postPlaceReviewList = postService.getPostPlaceReview(id);
         model.addAttribute("post", post);
-//        model.addAttribute("postPlaceReviewList", postPlaceReviewList);
         return "post/post_detail";
     }
 }

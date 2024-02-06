@@ -12,12 +12,14 @@
   <div th:if="${!post.postPlaces.empty}">
     <h2>장소 목록</h2>
     <ul>
-      <div th:each="placeReview : ${postPlaceReviewList}">
+      <div th:each="postPlace : ${post.postPlaces}">
         <div>
-          <h3 th:text="${'장소 이름: ' + placeReview.place.name}">장소 이름</h3>
-          <p th:text="${'좌표: ' + placeReview.place.coordinate}">좌표</p>
-          <p th:text="${'평점: ' + placeReview.rating}">평점</p>
-          <p th:text="${'리뷰 내용: ' + placeReview.review}">리뷰 내용</p>
+          <h3 th:text="${'장소 이름: ' + postPlace.place.name}">장소 이름</h3>
+          <p th:text="${'좌표: ' + postPlace.place.coordinate}">좌표</p>
+          <div th:if="${postPlace.postPlacePlaceReview != null}">
+            <p th:text="${'평점: ' + postPlace.postPlacePlaceReview.placeReview.rating}">평점</p>
+            <p th:text="${'리뷰 내용: ' + postPlace.postPlacePlaceReview.placeReview.review}">리뷰 내용</p>
+          </div>
         </div>
       </div>
     </ul>
