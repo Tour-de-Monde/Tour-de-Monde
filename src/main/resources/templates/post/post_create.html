@@ -95,11 +95,15 @@
         <input type="hidden" name="postPlaces[${index}].id" value="${selectedData.id}"/>
         <div class="form-group">
             <label>장소 이름</label>
-            <input type="text" name="postPlaces[${index}].placeName" value="${selectedData.address_name}" placeholder="장소 이름을 입력하세요" />
+            <input type="text" name="postPlaces[${index}].placeName" value="${selectedData.place_name}" placeholder="장소 이름을 입력하세요" />
+        </div>
+        <div class="form-group">
+            <label>주소</label>
+            <input type="text" name="postPlaces[${index}].addressName" value = "${selectedData.address_name}" placeholder="주소를 입력하세요" />
         </div>
         <div class="form-group">
             <label>좌표</label>
-            <input type="text" name="postPlaces[${index}].coordinate" placeholder="좌표를 입력하세요" />
+            <input type="number" name="postPlaces[${index}].coordinate" value="${selectedData.x}" placeholder="좌표 입력하세요 " />
         </div>
         <div class="form-group">
             <label>평점</label>
@@ -219,7 +223,7 @@
                 kakao.maps.event.addListener(marker, 'mouseout', function() {
                     infowindow.close();
                 });
-
+                //리스트 마우스오버 이벤트
                 itemEl.onmouseover =  function () {
                     displayInfowindow(marker, title);
                 };
