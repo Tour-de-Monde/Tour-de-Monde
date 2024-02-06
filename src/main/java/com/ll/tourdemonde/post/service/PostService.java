@@ -33,6 +33,7 @@ public class PostService {
                 .title(form.getTitle())
                 .category(form.getCategory())
                 .author(author)
+                .view(0L)
                 .build();
 
         // post ~~ place
