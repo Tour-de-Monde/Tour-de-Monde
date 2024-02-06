@@ -2,7 +2,10 @@ package com.ll.tourdemonde.post.entity;
 
 
 import com.ll.tourdemonde.place.entity.Place;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,7 +18,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Builder
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-public class PostPlace extends BaseTime{
+public class PostPlace extends BaseTime {
 
     @ManyToOne(fetch = LAZY)
     private Post post;
