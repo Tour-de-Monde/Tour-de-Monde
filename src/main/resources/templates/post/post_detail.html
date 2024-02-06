@@ -24,8 +24,22 @@
       </div>
     </ul>
   </div>
-
+  <div>
+  <a href="javascript:void(0);" class="recommend" th:data-uri="@{|/post/vote/${post.id}|}"> 추천
+    <span th:text="${#lists.size(post.voter)}"></span>
+  </a>
+  </div>
   <a th:href="@{/post/list}">게시물 목록으로 돌아가기</a>
 </div>
 </body>
+<script>
+const recommend_elements = document.getElementsByClassName("recommend");
+Array.from(recommend_elements).forEach(function(element) {
+  element.addEventListener('click', function() {
+    if(confirm("정말로 추천하시겠습니까?")) {
+      location.href = this.dataset.uri;
+    };
+  });
+});
+</script>
 </html>

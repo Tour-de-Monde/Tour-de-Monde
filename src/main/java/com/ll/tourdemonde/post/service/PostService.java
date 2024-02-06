@@ -63,4 +63,21 @@ public class PostService {
             throw new EntityNotFoundException("해당 게시물이 존재하지 않습니다.");
         }
     }
+
+    public void vote(Post post, Member member) {
+        if (post.getVoter().contains(member)){
+            post.getVoter().remove(member);
+        } else {
+            post.getVoter().add(member);
+        } postRepository.save(post);
+    }
+
+    public Post getPostForVote(Long id) {
+        Optional<Post> post = postRepository.findById(id);
+        if (post.isPresent()){
+            return post.get();
+        } else {
+            throw new EntityNotFoundException("해당 게시물이 존재하지 않습니다.");
+        }
+    }
 }

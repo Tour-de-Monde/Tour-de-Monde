@@ -61,4 +61,13 @@ public class PostController {
         model.addAttribute("post", post);
         return "post/post_detail";
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/vote/{id}")
+    public String votePost(Principal principal, @PathVariable("id") Long id) {
+        Post post = postService.getPostForVote(id);
+        Member member = memberService.getMember(principal.getName());
+        postService.vote(post, member);
+        return String.format("redirect:/post/detail/%s", id);
+    }
 }
