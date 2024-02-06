@@ -1,80 +1,95 @@
-<main>
-    <h2>예약 옵션 변경</h2>
-    <div>
-        <ol>
-            <li>판매자명 : [[${reservation.seller.username}]]</li>
-            <li>장소명 : [[${reservation.place.getName()}]]</li>
-        </ol>
-        <hr>
-        <form method="POST" th:action>
-            <div>옵션 세부사항</div>
-            <input hidden type="text" th:value="${reservation.getId()}" name="reservationId">
-            <label for="startDate">시작 날짜선택</label>
-            <input type="date" id="startDate" name="startDate" required th:value="${option.startDate}">
-            <label for="endDate">끝 날짜선택</label>
-            <input type="date" id="endDate" name="endDate" th:value="${option.endDate}">
-            <label>
-                <div>예약시간 변경</div>
-                <input type="text" name="time" placeholder="예약시간을 입력해주세요."
-                       required
-                       th:value="${option.time}">
-            </label>
-            <label>
-                <div>예약 금액 변경</div>
-                <input type="text" name="price" placeholder="예약금액을 입력해주세요."
-                       required
-                       th:value="${option.price}">
-            </label>
+<html layout:decorate="~{global/usrLayout}">
 
-            <button type="submit">옵션 변경</button>
-            <button>옵션 취소</button>
+<head>
+    <title>업체 - 예약 옵션 변경</title>
+</head>
 
-            <!--        <ol id="timeList"></ol>--><!-- 불필요 -->
-            <!--        <div>-->
-            <!--            <input type="text" id="addValue" placeholder="시간을 입력해주세요."><button onclick="addList()">추가</button>-->
-            <!--            <button onclick="removeItem()">삭제</button>-->
-            <!--            <button>저장(미구현)</button>-->
-            <!--        </div>-->
-        </form>
-    </div>
-</main>
-<!--<script>--> <!-- 시간이 1개 이므로 1개만 만들수 있도록 구현 <- 불필요 -->
-<!--    function addList()  {-->
+<body>
 
-<!--        // 1. 추가할 값을 input창에서 읽어온다-->
-<!--        const addValue-->
-<!--            = document.getElementById('addValue').value;-->
+<div layout:fragment="content">
 
-<!--        // 2. 추가할 li element 생성-->
-<!--        // 2-1. 추가할 li element 생성-->
-<!--        const li = document.createElement("li");-->
+    <main>
+        <h2>예약 옵션 변경</h2>
+        <div>
+            <ol>
+                <li>판매자명 : [[${reservation.seller.username}]]</li>
+                <li>장소명 : [[${reservation.place.getName()}]]</li>
+            </ol>
+            <hr>
+            <form method="POST" th:action>
+                <div>옵션 세부사항</div>
+                <input hidden type="text" th:value="${reservation.getId()}" name="reservationId">
+                <label for="startDate">시작 날짜선택</label>
+                <input type="date" id="startDate" name="startDate" required th:value="${option.startDate}">
+                <label for="endDate">끝 날짜선택</label>
+                <input type="date" id="endDate" name="endDate" th:value="${option.endDate}">
+                <label>
+                    <div>예약시간 변경</div>
+                    <input type="text" name="time" placeholder="예약시간을 입력해주세요."
+                           required
+                           th:value="${option.time}">
+                </label>
+                <label>
+                    <div>예약 금액 변경</div>
+                    <input type="text" name="price" placeholder="예약금액을 입력해주세요."
+                           required
+                           th:value="${option.price}">
+                </label>
 
-<!--        // 2-2. li에 id 속성 추가-->
-<!--        li.setAttribute('id',addValue);-->
+                <button type="submit">옵션 변경</button>
+                <button>옵션 취소</button>
 
-<!--        // 2-3. li에 text node 추가-->
-<!--        const textNode = document.createTextNode(addValue);-->
-<!--        li.appendChild(textNode);-->
+                <!--        <ol id="timeList"></ol>--><!-- 불필요 -->
+                <!--        <div>-->
+                <!--            <input type="text" id="addValue" placeholder="시간을 입력해주세요."><button onclick="addList()">추가</button>-->
+                <!--            <button onclick="removeItem()">삭제</button>-->
+                <!--            <button>저장(미구현)</button>-->
+                <!--        </div>-->
+            </form>
+        </div>
+    </main>
+    <!--<script>--> <!-- 시간이 1개 이므로 1개만 만들수 있도록 구현 <- 불필요 -->
+    <!--    function addList()  {-->
 
-<!--        // 3. 생성된 li를 ul에 추가-->
-<!--        document-->
-<!--            .getElementById('timeList')-->
-<!--            .appendChild(li);-->
-<!--    }-->
+    <!--        // 1. 추가할 값을 input창에서 읽어온다-->
+    <!--        const addValue-->
+    <!--            = document.getElementById('addValue').value;-->
 
-<!--    function removeItem()  {-->
+    <!--        // 2. 추가할 li element 생성-->
+    <!--        // 2-1. 추가할 li element 생성-->
+    <!--        const li = document.createElement("li");-->
 
-<!--        // 1. <ul> element 선택-->
-<!--        const ul = document-->
-<!--            .getElementById('timeList');-->
+    <!--        // 2-2. li에 id 속성 추가-->
+    <!--        li.setAttribute('id',addValue);-->
 
-<!--        // 2. <li> 목록 선택-->
-<!--        const items = ul.getElementsByTagName('li');-->
+    <!--        // 2-3. li에 text node 추가-->
+    <!--        const textNode = document.createTextNode(addValue);-->
+    <!--        li.appendChild(textNode);-->
 
-<!--        // 3. <li> 목록 중 첫번째 item 삭제-->
-<!--        if(items.length > 0)  {-->
-<!--            items[0].remove();-->
-<!--        }-->
+    <!--        // 3. 생성된 li를 ul에 추가-->
+    <!--        document-->
+    <!--            .getElementById('timeList')-->
+    <!--            .appendChild(li);-->
+    <!--    }-->
 
-<!--    }-->
-<!--</script>-->
+    <!--    function removeItem()  {-->
+
+    <!--        // 1. <ul> element 선택-->
+    <!--        const ul = document-->
+    <!--            .getElementById('timeList');-->
+
+    <!--        // 2. <li> 목록 선택-->
+    <!--        const items = ul.getElementsByTagName('li');-->
+
+    <!--        // 3. <li> 목록 중 첫번째 item 삭제-->
+    <!--        if(items.length > 0)  {-->
+    <!--            items[0].remove();-->
+    <!--        }-->
+
+    <!--    }-->
+    <!--</script>-->
+</div>
+
+</body>
+
+</html>

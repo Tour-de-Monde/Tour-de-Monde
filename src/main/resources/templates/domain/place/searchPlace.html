@@ -1,47 +1,61 @@
-<main>
-    <h1>장소찾기</h1>
-    <div>
-        <label>
-            <div>장소이름</div>
-            <input type="text" placeholder="장소이름" id="name">
-        </label>
-        <label>
-            <div>장소주소</div>
-            <input type="text" placeholder="장소주소" id="address">
-        </label>
-        <button onclick="makeSearchParam()">검색</button>
-    </div>
-    <section>
+<html layout:decorate="~{global/usrLayout}">
+
+<head>
+    <title>장소 검색</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+    <main>
+        <h1>장소찾기</h1>
         <div>
-            <h3>예시) 장소1</h3>
-            <span>예시) 장소1의 주소</span>
+            <label>
+                <div>장소이름</div>
+                <input type="text" placeholder="장소이름" id="name">
+            </label>
+            <label>
+                <div>장소주소</div>
+                <input type="text" placeholder="장소주소" id="address">
+            </label>
+            <button onclick="makeSearchParam()">검색</button>
         </div>
-        <hr>
-        <div th:each="place : ${page}">
+        <section>
             <div>
-                <h3>[[${place.name}]]</h3>
-                <span th:text="${place.address}"></span>
+                <h3>예시) 장소1</h3>
+                <span>예시) 장소1의 주소</span>
             </div>
             <hr>
-        </div>
-    </section>
-</main>
+            <div th:each="place : ${page}">
+                <div>
+                    <h3>[[${place.name}]]</h3>
+                    <span th:text="${place.address}"></span>
+                </div>
+                <hr>
+            </div>
+        </section>
+    </main>
 
-<script>
-    function makeSearchParam() {
-        const nameVal = document.getElementById("name").value;
-        const addressVal = document.getElementById("address").value;
+    <script>
+        function makeSearchParam() {
+            const nameVal = document.getElementById("name").value;
+            const addressVal = document.getElementById("address").value;
 
-        const searchParams = new URLSearchParams({
-                name: nameVal,
-                address: addressVal
-            }
-        );
+            const searchParams = new URLSearchParams({
+                    name: nameVal,
+                    address: addressVal
+                }
+            );
 
-        const queryString = searchParams.toString();
+            const queryString = searchParams.toString();
 
-        const currentURL = window.location.href.split("\?").at(0);
+            const currentURL = window.location.href.split("\?").at(0);
 
-        window.location.href = currentURL + "?" + queryString;
-    }
-</script>
+            window.location.href = currentURL + "?" + queryString;
+        }
+    </script>
+</div>
+
+</body>
+
+</html>
