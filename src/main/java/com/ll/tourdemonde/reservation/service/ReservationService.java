@@ -140,7 +140,7 @@ public class ReservationService {
         reservation.removeOption(optionId);
     }
 
-    public RsData<Page<Reservation>> findByDates(int page, Long placeId, LocalDateTime startDate, LocalDateTime endDate) {
+    public RsData<Page<ReservationOption>> findByDates(int page, Long placeId, LocalDateTime startDate, LocalDateTime endDate) {
         // pageable
         int pageSize = 10;
         List<Sort.Order> sorts = new ArrayList<>();
@@ -148,13 +148,13 @@ public class ReservationService {
         sorts.add(Sort.Order.desc("endDate"));
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
 
-        Page<Reservation> reservationPage =
+        Page<ReservationOption> optionPage =
                 reservationRepository.search(placeId, startDate, endDate, pageable);
 
-        if(reservationPage.isEmpty()){
+        if(optionPage.isEmpty()){
             return new RsData<>("S-","없음", null);
         }
 
-        return new RsData<>("S-", "성공", reservationPage);
+        return new RsData<>("S-", "성공", optionPage);
     }
 }

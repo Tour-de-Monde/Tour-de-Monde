@@ -13,61 +13,40 @@
                 <span>종료일</span>
                 <input type="date" id="endDate">
             </label>
-            <button onclick="makeSearchParam()">검색</button>
+            <button onclick="onlySearch()">검색</button>
         </div>
         <hr>
-        <!--예약가능 리스트 보여주기-->
-        <section th:if="${reservationList != null}">
-            <th:block th:each="reservation, dex : ${reservationList}">
-                <div th:text="${dex}"></div>
-                <div th:text="${reservation.options.size()}"></div>
-                <th:block th:each="option, index : ${reservation.options}"
-                     th:if="${!reservation.options.isEmpty()}">
-                    <article th:if="${!option.occupied}">
-                        <div th:text="${index}"></div>
-                        <div>
-                            <span th:text="${reservation.getType()}"></span>
-                        </div>
-                        <div>
-                            <span>예약시간 : </span><span th:text="${option.time}"></span><span
-                                th:if="${option.occupied}">예약됨</span>
-                        </div>
-                        <div>
-                            <span>가격 : </span><span th:text="${option.price}"></span><span>원</span>
-                        </div>
-                        <a th:href="|/order/${place.id}/${reservation.id}/${option.id}|">예약하기</a>
-                    </article>
-                </th:block>
-            </th:block>
-        </section>
-        <section th:if="${reservationList == null}">
+        <!--예약이 없을 경우 생성-->
+        <section th:if="${options == null}">
             <div>예약을 생성해주세요.</div>
         </section>
-        <hr>
-        <hr>
-<!--        <section>-->
-<!--            <div th:each="page : ${pages}">-->
-<!--                <div th:each="reservationpage : ${page}">-->
-<!--                    <div th:if="${!reservationpage.getOptions().isEmpty()}">-->
-<!--                        <div th:each="optionpage : ${reservationpage.getOptions()}">-->
-<!--                            <article th:if="${!optionpage.occupied}">-->
-<!--                                <div>-->
-<!--                                    <span th:text="${reservationpage.getType()}"></span>-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <span>예약시간 : </span><span th:text="${optionpage.time}"></span><span-->
-<!--                                        th:if="${optionpage.occupied}">예약됨</span>-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <span>가격 : </span><span th:text="${optionpage.price}"></span><span>원</span>-->
-<!--                                </div>-->
-<!--                                <a th:href="|/order/${place.id}/${reservationpage.id}/${optionpage.id}|">예약하기</a>-->
-<!--                            </article>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </section>-->
+        <!--예약가능 리스트 보여주기-->
+        <section th:if="${options != null}">
+            <div th:each="option : ${options}">
+                <article>
+                    <div>
+                        <span th:text="${option.getReservation().type}"></span>
+                    </div>
+                    <div>
+                        <span>예약일 : </span><span th:text="${option.startDate}"></span>
+                        <span th:if="${option.reservation.type == 'ACCOMMODATE'}"
+                              th:text="|'~' ${option.endDate}|"></span>
+                    </div>
+                    <div>
+                        <span>예약시간 : </span><span th:text="${option.time}"></span><span
+                            th:if="${option.occupied}">예약됨</span>
+                    </div>
+                    <div>
+                        <span>가격 : </span><span th:text="${option.price}"></span><span>원</span>
+                    </div>
+                    <a th:if="${!option.occupied}"
+                       th:href="|/order/${place.id}/${option.getReservation().id}/${option.id}|">예약하기</a>
+                </article>
+            </div>
+            <span th:each="num : ${#numbers.sequence(1,options.totalPages)}">
+                <a th:href="'javascript: pageMove(' + ${num} + ');'" th:text="${num}"></a>
+            </span>
+        </section>
     </section>
 </main>
 <script>
@@ -84,12 +63,43 @@
             }
         );
 
-        const queryString = searchParams.toString();
+        return searchParams.toString()
+    }
 
+    function sendQuery(queryString) {
         const currentURL = window.location.href.split("\?").at(0);
 
         console.log(currentURL);
 
         window.location.href = currentURL + "?" + queryString;
+    }
+
+    function onlySearch() {
+        sendQuery(makeSearchParam());
+    }
+
+    function pageMove(num) {
+        const currentURL = window.location.href.split("\?")[0];
+        const params = new URLSearchParams(window.location.search);
+
+        params.delete("page");
+        params.set("page", num);
+
+        const queryString = params.toString();
+
+        window.location.href = currentURL + (queryString ? "?" + queryString : "");
+    }
+
+    window.onload =  function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const startDate = urlParams.get("startDate");
+        const endDate = urlParams.get("endDate");
+
+        if (startDate) {
+            document.getElementById("startDate").value = startDate;
+        }
+
+        if (endDate){
+        document.getElementById("endDate").value = endDate;}
     }
 </script>

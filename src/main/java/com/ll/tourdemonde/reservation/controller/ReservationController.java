@@ -1,6 +1,7 @@
 package com.ll.tourdemonde.reservation.controller;
 
 import com.ll.tourdemonde.global.rsData.RsData;
+import com.ll.tourdemonde.global.util.Ut;
 import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
@@ -13,12 +14,14 @@ import com.ll.tourdemonde.reservation.service.ReservationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +43,7 @@ public class ReservationController {
     //장소별 예약내역 조회
     @GetMapping("/{placeId}")
     public String showReservationFromPlace(@PathVariable("placeId") Long placeId,
-                                           @RequestParam(name = "page", defaultValue = "0") int page,
+                                           @RequestParam(name = "page", defaultValue = "1") int page,
                                            @RequestParam(name = "startDate", required = false) String startDate,
                                            @RequestParam(name = "endDate", required = false) String endDate,
                                            Model model,
@@ -49,29 +52,28 @@ public class ReservationController {
         //ToDo 순환참조의 위험이 있으니 차후 가져오는 데이터를 개선하도록 한다.
 //        try {
         Place place = placeService.findById(placeId);
-        RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
-        List<Reservation> reservationList = listRsData.getData();
-//
-//        // startDate와 endDate 기본값 설정
-//        LocalDateTime startDateConverted;
-//        if (startDate.isBlank()) {
-//            startDateConverted = LocalDateTime.now();
-//        } else {
-//            startDateConverted = Ut.stringToLocalDateTime(startDate);
-//        }
-//        LocalDateTime endDateConverted;
-//        if (endDate.isBlank()) {
-//            endDateConverted = LocalDateTime.now();
-//        } else {
-//            endDateConverted = Ut.stringToLocalDateTime(endDate);
-//        }
-//
-//        RsData<Page<Reservation>> pageRsData = reservationService.findByDates(page, placeId, startDateConverted, endDateConverted);
 
+        // startDate와 endDate 기본값 설정
+        LocalDateTime startDateConverted;
+        if (startDate == null || startDate.isBlank()) {
+            startDateConverted = LocalDateTime.now();
+        } else {
+            startDateConverted = Ut.stringToLocalDateTime(startDate);
+        }
+        LocalDateTime endDateConverted;
+        if (endDate == null || endDate.isBlank()) {
+            endDateConverted = LocalDateTime.now();
+        } else {
+            endDateConverted = Ut.stringToLocalDateTime(endDate);
+        }
+
+        page = page - 1;
+        RsData<Page<ReservationOption>> pageRsData = reservationService.findByDates(page, placeId, startDateConverted, endDateConverted);
+
+        Page<ReservationOption> options = pageRsData.getData();
         // 모델에 추가
         model.addAttribute("place", place);
-        model.addAttribute("reservationList", reservationList);
-//        model.addAttribute("pages", pageRsData.getData());
+        model.addAttribute("options", options);
         return "domain/reservation/reservation";
 //        } catch (Exception e) {
 //            throw new RuntimeException();
