@@ -45,4 +45,8 @@ public class CommentService {
         commentRepository.save(modifiedComment);
     }
 
+    public void deleteComment(Comment comment) {
+        commentRepository.delete(comment);
+    }
+
 }
