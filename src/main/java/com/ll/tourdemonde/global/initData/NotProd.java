@@ -1,7 +1,6 @@
 package com.ll.tourdemonde.global.initData;
 
 import com.ll.tourdemonde.member.service.MemberService;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;

@@ -10,7 +10,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -65,13 +68,13 @@ public class MemberController {
 
     //로그인
     @GetMapping("/signin")
-    public String signin(){
+    public String signin() {
         return "domain/member/signIn";
     }
 
     //메일로 아이디 찾기
     @GetMapping("/findid")
-    public String findId(){
+    public String findId() {
         return "domain/member/findId";
     }
 
@@ -94,7 +97,7 @@ public class MemberController {
 
     //아이디, 메일을 통해 비밀번호 재발급
     @GetMapping("/renewpassword")
-    public String renewPassword(){
+    public String renewPassword() {
         return "domain/member/renewPassword";
     }
 
@@ -102,7 +105,7 @@ public class MemberController {
     @PostMapping("/renewpassword")
     public String renewPassword(@RequestParam(value = "username") String username,
                                 @RequestParam(value = "email") String email,
-                                Model model){
+                                Model model) {
         Optional<Member> member = memberService.findMemberByEmail(email);
         String _username;
         String newPassword;
@@ -116,7 +119,7 @@ public class MemberController {
         _username = memberService.findUsername(member.get());
 
         //입력한 메일의 가입 정보가 존재하지만 아이디가 일치하지 않는 경우
-        if (!username.equals(_username)){
+        if (!username.equals(_username)) {
             model.addAttribute("error", "아이디와 이메일을 확인해주세요.");
             return "domain/member/renewpassword";
         }

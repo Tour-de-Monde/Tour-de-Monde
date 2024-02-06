@@ -1,22 +1,38 @@
-<main>
-    <h2>예약 수정</h2>
-    <div>
-        <form method="POST" th:action id="reservationForm">
-            <label>판매자명 : [[${reservation.getSeller().getUsername()}]]</label>
-            <input type="hidden" name="seller" th:value="${reservation.getSeller().getUsername()}">
-            <hr>
-            <div>장소 : [[${reservation.getPlace().name}]]</div>
-            <input hidden name="place" type="text" th:value="${reservation.getPlace().id}">
-            <hr>
-            <fieldset>
-                <legend>type</legend>
-                <div th:each="entry : ${reservationTypes}">
-                    <label th:for="${entry.key}">[[${entry.value}]]</label>
-                    <input type="radio" th:id="${entry.key}" th:value="${entry.key}" name="type" th:checked="${reservation.getType() == entry.key}">
-                </div>
-            </fieldset>
-            <button type="submit">수정완료</button>
-        </form>
-    </div>
+<html layout:decorate="~{global/usrLayout}">
 
-</main>
+<head>
+    <title>업체 - 예약 수정</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <main>
+        <h2>예약 수정</h2>
+        <div>
+            <form method="POST" th:action id="reservationForm">
+                <label>판매자명 : [[${reservation.getSeller().getUsername()}]]</label>
+                <input type="hidden" name="seller" th:value="${reservation.getSeller().getUsername()}">
+                <hr>
+                <div>장소 : [[${reservation.getPlace().name}]]</div>
+                <input hidden name="place" type="text" th:value="${reservation.getPlace().id}">
+                <hr>
+                <fieldset>
+                    <legend>type</legend>
+                    <div th:each="entry : ${reservationTypes}">
+                        <label th:for="${entry.key}">[[${entry.value}]]</label>
+                        <input type="radio" th:id="${entry.key}" th:value="${entry.key}" name="type"
+                               th:checked="${reservation.getType() == entry.key}">
+                    </div>
+                </fieldset>
+                <button type="submit">수정완료</button>
+            </form>
+        </div>
+
+    </main>
+</div>
+
+</body>
+
+</html>
