@@ -1,6 +1,7 @@
 package com.ll.tourdemonde.post.controller;
 
 
+import com.ll.tourdemonde.comment.dto.CommentCreateForm;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.place.service.PlaceService;
@@ -56,7 +57,7 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")
-    public String showPostDetail(Model model, @PathVariable("id") Long id) {
+    public String showPostDetail(Model model, @PathVariable("id") Long id, CommentCreateForm commentCreateForm) {
         Post post = postService.getPostWithViewCount(id);
         model.addAttribute("post", post);
         return "post/post_detail";

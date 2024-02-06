@@ -1,5 +1,6 @@
 package com.ll.tourdemonde.post.entity;
 
+import com.ll.tourdemonde.comment.entity.Comment;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.entity.PlaceReview;
@@ -30,7 +31,8 @@ public class Post extends BaseTime {
     private List<PostPlace> postPlaces = new ArrayList<>();
     @ManyToMany
     Set<Member> voter;
-
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList;
 
     public void addPlace(Place place, PlaceReview review) {
         PostPlace postPlace = PostPlace.builder()

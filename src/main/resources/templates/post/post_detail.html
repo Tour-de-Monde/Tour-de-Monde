@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>게시물 상세 정보</title>
@@ -28,6 +28,27 @@
   <a href="javascript:void(0);" class="recommend" th:data-uri="@{|/post/vote/${post.id}|}"> 추천
     <span th:text="${#lists.size(post.voter)}"></span>
   </a>
+  </div>
+  <h5 th:text="|${#lists.size(post.commentList)}개의 답변이 있습니다.|"></h5>
+  <!-- 답변 반복 시작 -->
+  <div th:each="comment : ${post.commentList}">
+    <div>
+      <div th:text="${comment.content}"></div>
+      <div>
+        <div>
+          <div>
+            <span th:if="${comment.author != null}" th:text="${comment.author.username}"></span>
+          </div>
+          <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <form th:action="@{|/comment/create/${post.id}|}" th:object="${commentCreateForm}" method="post">
+      <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
+      <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
+      <input type="submit" value="답변등록">
+    </form>
   </div>
   <a th:href="@{/post/list}">게시물 목록으로 돌아가기</a>
 </div>
