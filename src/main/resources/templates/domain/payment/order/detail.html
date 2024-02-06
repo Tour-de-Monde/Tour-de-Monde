@@ -144,7 +144,7 @@
 
                 // 사용자 정보 저장하기 - 비동기 통신
                 // form.submit();
-                fetch(`https://${window.location.origin}/${orderId}`, {
+                fetch(`${window.location.origin}/order/${orderId}`, { // window.location.origin = http://localhost:8080
                     method: "POST",
                     headers: headers,
                     body: JSON.stringify(dataBody),
