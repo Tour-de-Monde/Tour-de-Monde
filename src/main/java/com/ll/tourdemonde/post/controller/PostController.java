@@ -76,6 +76,10 @@ public class PostController {
     public String showPostDetail(Model model, @PathVariable("id") Long id, CommentCreateForm commentCreateForm) {
         Post post = postService.getPostWithViewCount(id);
         model.addAttribute("post", post);
+<<<<<<< HEAD
+=======
+        model.addAttribute("postPlaceReviewList", postPlaceReviewList);
+>>>>>>> d98e20b (Refact: 게시물 저장 시 인덱스 문제 해결 및 게시물 상세 페이지 수정)
         return "post/post_detail";
     }
 

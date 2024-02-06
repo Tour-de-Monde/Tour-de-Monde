@@ -25,9 +25,9 @@
     </ul>
   </div>
   <div>
-  <a href="javascript:void(0);" class="recommend" th:data-uri="@{|/post/vote/${post.id}|}"> 추천
-    <span th:text="${#lists.size(post.voter)}"></span>
-  </a>
+    <a href="javascript:void(0);" class="recommend" th:data-uri="@{|/post/vote/${post.id}|}"> 추천
+      <span th:text="${#lists.size(post.voter)}"></span>
+    </a>
   </div>
   <h5 th:text="|${#lists.size(post.commentList)}개의 답변이 있습니다.|"></h5>
   <!-- 답변 반복 시작 -->
@@ -53,31 +53,31 @@
       </div>
     </div>
   </div>
-    <form th:action="@{|/comment/create/${post.id}|}" th:object="${commentCreateForm}" method="post">
-      <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
-      <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
-      <input type="submit" value="답변등록">
-    </form>
-  </div>
-  <a th:href="@{/post/list}">게시물 목록으로 돌아가기</a>
+  <form th:action="@{|/comment/create/${post.id}|}" th:object="${commentCreateForm}" method="post">
+    <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
+    <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
+    <input type="submit" value="답변등록">
+  </form>
+</div>
+<a th:href="@{/post/list}">게시물 목록으로 돌아가기</a>
 </body>
 <script>
-const recommend_elements = document.getElementsByClassName("recommend");
-Array.from(recommend_elements).forEach(function(element) {
-  element.addEventListener('click', function() {
-    if(confirm("정말로 추천하시겠습니까?")) {
-      location.href = this.dataset.uri;
-    };
+  const recommend_elements = document.getElementsByClassName("recommend");
+  Array.from(recommend_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+      if(confirm("정말로 추천하시겠습니까?")) {
+        location.href = this.dataset.uri;
+      };
+    });
   });
-});
 
-const delete_elements = document.getElementsByClassName("delete");
-Array.from(delete_elements).forEach(function(element) {
-  element.addEventListener('click', function() {
-    if(confirm("정말로 삭제하시겠습니까?")) {
-      location.href = this.dataset.uri;
-    };
+  const delete_elements = document.getElementsByClassName("delete");
+  Array.from(delete_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+      if(confirm("정말로 삭제하시겠습니까?")) {
+        location.href = this.dataset.uri;
+      };
+    });
   });
-});
 </script>
 </html>
