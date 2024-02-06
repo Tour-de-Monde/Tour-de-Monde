@@ -67,6 +67,7 @@ public class ReservationController {
             endDateConverted = Ut.stringToLocalDateTime(endDate);
         }
 
+        // page가 1부터 시작하여 숫자 조정
         page = page - 1;
         RsData<Page<ReservationOption>> pageRsData = reservationService.findByDates(page, placeId, startDateConverted, endDateConverted);
 
