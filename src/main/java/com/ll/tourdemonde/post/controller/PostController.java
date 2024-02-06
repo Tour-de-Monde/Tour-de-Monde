@@ -57,7 +57,7 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")
     public String showPostDetail(Model model, @PathVariable("id") Long id) {
-        Post post = postService.getPost(id);
+        Post post = postService.getPostWithViewCount(id);
         model.addAttribute("post", post);
         return "post/post_detail";
     }
@@ -65,7 +65,7 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
     public String votePost(Principal principal, @PathVariable("id") Long id) {
-        Post post = postService.getPostForVote(id);
+        Post post = postService.getPost(id);
         Member member = memberService.getMember(principal.getName());
         postService.vote(post, member);
         return String.format("redirect:/post/detail/%s", id);

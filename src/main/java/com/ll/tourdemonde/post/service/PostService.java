@@ -52,7 +52,7 @@ public class PostService {
         return postRepository.findAll();
     }
 
-    public Post getPost(Long id) {
+    public Post getPostWithViewCount(Long id) {
         Optional<Post> opPost = postRepository.findById(id);
         if (opPost.isPresent()){
             Post post = opPost.get();
@@ -72,7 +72,7 @@ public class PostService {
         } postRepository.save(post);
     }
 
-    public Post getPostForVote(Long id) {
+    public Post getPost(Long id) {
         Optional<Post> post = postRepository.findById(id);
         if (post.isPresent()){
             return post.get();
