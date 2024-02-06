@@ -22,6 +22,7 @@ import java.util.Optional;
 public class PostService {
 
     private final PostRepository postRepository;
+<<<<<<< HEAD
     private final PlaceService placeService;
 
 
@@ -32,6 +33,17 @@ public class PostService {
         Post post = Post.builder()
                 .title(form.getTitle())
                 .category(form.getCategory())
+=======
+    private final PlaceRepository placeRepository;
+    private final MemberRepository memberRepository;
+    private final PostPlaceReviewRepository postPlaceReviewRepository;
+
+    public void writePost(PostCreateForm postCreateForm, Member author) {
+        // 게시글 생성
+        Post post = Post.builder()
+                .title(postCreateForm.getTitle())
+                .category(postCreateForm.getCategory())
+>>>>>>> bff8c11 (Feat: 게시글 작성자 추가)
                 .author(author)
                 .build();
 
