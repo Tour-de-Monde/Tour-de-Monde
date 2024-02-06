@@ -21,17 +21,6 @@ public class HomeController {
 
     }
 
-    @GetMapping("/map")
-//    @ResponseBody
-    String showMap() {
-        return "map";
-    }
-
-    @GetMapping("/search")
-//    @ResponseBody
-    String showSearch() {
-        return "search";
-    }
 
     @GetMapping("/session")
     @ResponseBody

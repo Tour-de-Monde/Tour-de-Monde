@@ -29,45 +29,13 @@
             </select>
         </div>
         <!-------------------------------------------------------------지도 장소 데이터 확인 및 리뷰작성-------------------------------------------------------------------------------------------------------------------------------->
-
-       <div id="placeList">
-            <div th:each="placeName, iterStat : *{placeNames}">
-                &lt;!&ndash;<div class="form-group">
-                    <label th:for="${'placeName' + iterStat.index}">장소 이름</label>
-                    <input type="text" th:id="${'placeName' + iterStat.index}" th:field="*{placeNames[__${iterStat.index}__]}" placeholder="장소 이름을 입력하세요" />
-                </div>
-
-                <div class="form-group">
-                    <label th:for="${'coordinate' + iterStat.index}">좌표</label>
-                    <input type="text" th:id="${'coordinate' + iterStat.index}" th:field="*{coordinates[__${iterStat.index}__]}" placeholder="좌표를 입력하세요" />
-                </div>&ndash;&gt;
-
-                <div class="form-group">
-                    <label th:for="${'rating' + iterStat.index}">평점</label>
-                    <input type="number" th:id="${'rating' + iterStat.index}" th:field="*{ratings[__${iterStat.index}__]}" min="1" max="5"/>
-                </div>
-
-                <div class="form-group">
-                    <label th:for="${'review' + iterStat.index}">리뷰</label>
-                    <textarea th:id="${'review' + iterStat.index}" th:field="*{reviews[__${iterStat.index}__]}" placeholder="리뷰를 작성하세요"></textarea>
-                </div>
-            </div>
-        </div>
-
+        <div id="placeList"></div>
 
         <script>
             function addPlaceInput() {
 
                 var placeList = document.getElementById("placeList");
-<<<<<<< HEAD
-
                 var index = placeList.children.length;
-
-                var index = Math.floor(placeList.children.length / 2);
-
-=======
-                var index = placeList.children.length;
->>>>>>> d98e20b (Refact: 게시물 저장 시 인덱스 문제 해결 및 게시물 상세 페이지 수정)
                 var newPlaceInput = document.createElement("div");
 
                 newPlaceInput.innerHTML = `
@@ -90,10 +58,7 @@
                 placeList.appendChild(newPlaceInput);
             }
 
-
             addPlaceInput();
-
-
         </script>
 
 
