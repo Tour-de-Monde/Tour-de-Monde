@@ -1,3 +1,6 @@
+<html layout:decorate="~{global/usrlayout}">
+
+<a class="btn btn-link" href="/post/list">홈</a>
 <style>
     .grid-container {
         display: grid;
@@ -23,15 +26,17 @@
     }
 </style>
 
-<div class="grid-container">
+<div layout:fragment="content" class="grid-container">
     <th:block th:each="post : ${postList}">
         <a th:href="@{/post/detail/{id}(id=${post.id})}" class="grid-item">
             <img th:src="@{/images/card-image.png}" alt="Card Image">
             <h5 th:text="${post.title}">게시물 제목</h5>
             <h5 th:text="${post.author.getUsername()}">작성자</h5>
+
             <h5 th:text="${post.view}">조회수</h5>
+
         </a>
     </th:block>
 
 </div>
-
+</html>
