@@ -1,3 +1,6 @@
+<html layout:decorate="~{global/usrlayout}">
+
+<a class="btn btn-link" href="/post/list">홈</a>
 <style>
     .grid-container {
         display: grid;
@@ -23,7 +26,7 @@
     }
 </style>
 
-<div class="grid-container">
+<div layout:fragment="content" class="grid-container">
     <th:block th:each="post : ${postList}">
         <a th:href="@{/post/detail/{id}(id=${post.id})}" class="grid-item">
             <img th:src="@{/images/card-image.png}" alt="Card Image">
@@ -36,4 +39,4 @@
     </th:block>
 
 </div>
-
+</html>

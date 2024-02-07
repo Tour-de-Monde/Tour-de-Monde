@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{global/usrlayout}" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
     <title>게시물 상세 정보</title>
 </head>
 <body>
-<div class="container">
+<div layout:fragment="content" class="container">
     <h1 th:text="${post.title}">게시물 제목</h1>
     <p th:text="${'카테고리: ' + post.category}">카테고리</p>
 
