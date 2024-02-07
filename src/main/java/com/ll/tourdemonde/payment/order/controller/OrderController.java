@@ -64,42 +64,6 @@ public class OrderController {
         return "domain/payment/order/detail";
     }
 
-    // 주문 현황 페이지 - 희영: 예약 기능 완성을 위한 임시 엔드포인트
-    @GetMapping("/{placeId}/{reservationId}/{optionId}")
-    @PreAuthorize("isAuthenticated()")
-    public String showDetail(
-            @PathVariable("placeId") long placeId,
-            @PathVariable("reservationId") long reservationId,
-            @PathVariable("optionId") long optionId,
-            Model model) {
-        // order생성 및 조회에 필요한 정보 불러오기
-        Member buyer = rq.getMember(); // 사용자
-        Place place = placeService.findById(placeId); //예약 장소
-        ReservationType type = reservationService.findById(reservationId).getType();//예약 종류
-        ReservationOption option = reservationService.findOptionById(reservationId,optionId); //예약 옵션
-
-        // 새로운 order 생성
-        Order order = orderService.createNewOrderOrFind(buyer, option);
-
-        model.addAttribute("order", order);
-        model.addAttribute("place", place);
-        model.addAttribute("reservationType", type);
-        return "domain/payment/order/detail";
-    }
-
-    @PostMapping("/{orderId}")
-    @PreAuthorize("isAuthenticated()")
-    public String completeReservation(
-            @PathVariable("orderId") Long orderId,
-            Model model) {
-        // 결제를 하지않고(캐쉬 차감 x) 결재완료
-        Order order = orderService.payByChash(orderId);
-
-        model.addAttribute("order", order);
-        return "domain/payment/order/complete";
-    }
-
-
 /*
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
@@ -208,5 +172,47 @@ public class OrderController {
         responseStream.close();
 
         return ResponseEntity.status(code).body(jsonObject);
+    }
+
+
+    // 주문 현황 페이지 - 희영: 예약 기능 완성을 위한 임시 엔드포인트
+    @GetMapping("/{placeId}/{reservationId}/{optionId}")
+    @PreAuthorize("isAuthenticated()")
+    public String showDetail(
+            @PathVariable("placeId") long placeId,
+            @PathVariable("reservationId") long reservationId,
+            @PathVariable("optionId") long optionId,
+            Model model) {
+        // order생성 및 조회에 필요한 정보 불러오기
+        Member buyer = rq.getMember(); // 사용자
+        Place place = placeService.findById(placeId); //예약 장소
+        ReservationType type = reservationService.findById(reservationId).getType();//예약 종류
+        ReservationOption option = reservationService.findOptionById(reservationId,optionId); //예약 옵션
+
+        // 새로운 order 생성
+        Order order = orderService.createNewOrderOrFind(buyer, option);
+
+        model.addAttribute("order", order);
+        model.addAttribute("place", place);
+        model.addAttribute("reservationType", type);
+        return "domain/payment/order/detail";
+    }
+
+    @PostMapping("/{orderId}")
+    @PreAuthorize("isAuthenticated()")
+    public String completeReservation(
+            @PathVariable("orderId") Long orderId,
+            Model model) {
+        // 결제를 하지않고(캐쉬 차감 x) 결재완료
+        Order order = orderService.payByChash(orderId);
+
+        model.addAttribute("order", order);
+        return "domain/payment/order/complete";
+    }
+
+    @PostMapping("/cancle/{orderId}")
+    @PreAuthorize("isAuthenticated()")
+    public String cancleOrder(){
+        return "현재 미구현";
     }
 }
