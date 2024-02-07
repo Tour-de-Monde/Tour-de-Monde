@@ -4,30 +4,6 @@
     <meta charset="UTF-8">
     <title>게시글 작성</title>
     <!-- 필요한 CSS 파일 추가 -->
-<!--    할일
-    클릭이벤트시 마커 한개만 남기기
-
-    인포윈도우위에 정보 다띄우기
-
-    지도는 타임리프로 구조화하기
-    이슈 #22
-    1. 지도 키워드 검색 시 마커 지우기
-    2. 지도 목록에서 클릭이벤트 설정
-    Json으로 받은데이터를 파싱해서 html에 넘겨주기
-    1.  좌표 데이터 뽑아내기
-    2. 좌표 에 마커 올리기
-    (step.2)지도 목록에서 여러개 선택할 수 있기
-
-    #28
-    (step.3)여러개 마커 사이에 동선 그려지기 및 이동시간 띄우기
-
-    3. 저장하기 버튼으로 게시글 장소 데이터와 creatform 내용 데이터
-    전달되기
-    #29
-    (step2.) 마커 위 윈도우에 작성하기 버튼 만들어서 각 장소에대한 리뷰 글과 이미지 첨부하기-->
-
-
-
 </head>
 <body>
 <div class="container">
@@ -35,7 +11,7 @@
     <form th:action="@{/post/create}" th:object="${postCreateForm}" method="post">
         <div class="form-group">
             <label for="title">제목</label>
-            <input type="text" id="title" th:field="*{title}" placeholder="제목을 입력하세요" />
+            <input type="text" id="title" th:field="*{title}" placeholder="게시물 제목을 입력하세요" />
         </div>
 
         <div class="form-group">
@@ -104,6 +80,7 @@
         <div class="form-group">
             <label>좌표</label>
             <input type="number" name="postPlaces[${index}].coordinate" value="${selectedData.x}" placeholder="좌표 입력하세요 " />
+            <input type="number" name="postPlaces[${index}].coordinate" value="${ selectedData.y}" placeholder="좌표 입력하세요 " />
         </div>
         <div class="form-group">
             <label>평점</label>
@@ -116,7 +93,7 @@
         placeList.appendChild(newPlaceInput);
     }
 
-    addPlaceInput();
+    //addPlaceInput();
 
     // 마커를 담을 배열입니다
     var markers = [];
@@ -226,30 +203,30 @@
                 //리스트 마우스오버 이벤트
                 itemEl.onmouseover =  function () {
                     displayInfowindow(marker, title);
+                    //marker.setMap(map);
                 };
 
                 itemEl.onmouseout =  function () {
                     infowindow.close();
+                    //marker.setMap(null);
                 };
             })(marker, places[i].place_name);
 
             fragment.appendChild(itemEl);
 
-            (function (marker, place){
+            (function (marker, placeData){
                 itemEl.onclick = function () {
-                    console.log("클릭 이벤트 발생!!!")
+                    //console.log("클릭 이벤트 발생!!!")
                     markers.forEach(marker=>{
                         marker.setMap(null);
+                        console.log("다른 마커들삭제")
                     });
+                    console.log("마커보이기")
                     marker.setMap(map);
-                    console.log(place)
-                    selectedData = place;
+                    console.log(placeData)
+                    selectedData = placeData;
                 }
-                // kakao.maps.event.addListener(marker, 'click', function (){
-                //
-                //     // Todo: addMarker 함수에서 MarkerImage 생성 부분을 참고하여 마커 이미지를 변경해주세요.
-                //
-                // });
+
             })(marker, places[i]);
         }
 
