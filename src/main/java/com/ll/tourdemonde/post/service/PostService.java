@@ -54,11 +54,11 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public Page<Post> getPostList(int page) {
+    public Page<Post> getPostList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 15, Sort.by(sorts));
-        return postRepository.findAll(pageable);
+        return postRepository.findAllByKeyword(kw, pageable);
     }
 
     public Post getPostWithViewCount(Long id) {
@@ -88,5 +88,5 @@ public class PostService {
         } else {
             throw new EntityNotFoundException("해당 게시물이 존재하지 않습니다.");
         }
-    }
+    }g
 }

@@ -1,6 +1,10 @@
+
 <html layout:decorate="~{global/usrlayout}">
 
 <a class="btn btn-link" href="/post/list">홈</a>
+
+<html xmlns:layout="http://www.w3.org/1999/xhtml">
+
 <style>
     .grid-container {
         display: grid;
@@ -25,6 +29,16 @@
         display: block; /* 블록 레벨 링크 */
     }
 </style>
+<body>
+    <div>
+        <div>
+            <div >
+                <input type="text" id="search_kw" th:value="${kw}">
+                <button type="button" id="btn_search">찾기</button>
+            </div>
+        </div>
+    </div>
+
 
 
 <div layout:fragment="content" class="grid-container">
@@ -48,19 +62,60 @@
         <li th:classappend="${!paging.hasPrevious} ? 'disabled'">
             <a th:href="@{|?page=${paging.number-1}|}">
                 <span>이전</span>
+
+    <div class="grid-container">
+        <th:block th:each="post : ${paging}">
+            <a th:href="@{/post/detail/{id}(id=${post.id})}" class="grid-item">
+                <img th:src="@{/images/card-image.png}" alt="Card Image">
+                <h5 th:text="${post.title}">게시물 제목</h5>
+                <h5 th:text="${post.author.getUsername()}">작성자</h5>
+                <h5 th:text="${post.view}">조회수</h5>
             </a>
-        </li>
-        <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
-            th:if="${page >= paging.number-2 and page <= paging.number+2}"
-            th:classappend="${page == paging.number} ? 'active'">
-            <a th:text="${page+1}" th:href="@{|?page=${page}|}"></a>
-        </li>
-        <li th:classappend="${!paging.hasNext} ? 'disabled'">
-            <a th:href="@{|?page=${paging.number+1}|}">
-                <span>다음</span>
-            </a>
-        </li>
-    </ul>
-</div>
+        </th:block>
+    </div>
 
 <a th:href="@{/post/create}">질문 등록하기</a>
+    <div th:if="${!paging.isEmpty()}">
+        <ul>
+            <li th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a href="javascript:void(0)" th:data-page="${paging.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-2 and page <= paging.number+2}"
+                th:classappend="${page == paging.number} ? 'active'">
+                <a th:text="${page+1}" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a href="javascript:void(0)" th:data-page="${paging.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <a th:href="@{/post/create}">질문 등록하기</a>
+    </div>
+    <form th:action="@{/post/list}" method="get" id="searchForm">
+        <input type="hidden" id="kw" name="kw" th:value="${kw}">
+        <input type="hidden" id="page" name="page" th:value="${paging.number}">
+    </form>
+</body>
+<script layout:fragment="script" type='text/javascript'>
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+    const btn_search = document.getElementById("btn_search");
+    btn_search.addEventListener('click', function() {
+        document.getElementById('kw').value = document.getElementById('search_kw').value;
+        document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+        document.getElementById('searchForm').submit();
+    });
+</script>
+</html>
+
