@@ -72,11 +72,11 @@ custom:
     name: Tour-de-Monde
     baseUrl: "http://localhost:${server.port}"
   temp:
-#    dirPath: c:/temp/TdM_dev/temp
-    dirPath: /tmp/TdM_dev/temp
+    dirPath: c:/temp/TdM_dev/temp
+#    dirPath: /tmp/TdM_dev/temp # Mac 환경
   genFile:
-#    dirPath: c:/temp/TdM_dev
-    dirPath: /tmp/TdM_dev
+    dirPath: c:/temp/TdM_dev
+#    dirPath: /tmp/TdM_dev # Mac 환경
   tossPayments:
     widget:
       clientKey: test_ck_0RnYX2w532wDqZARKgegVNeyqApQ
