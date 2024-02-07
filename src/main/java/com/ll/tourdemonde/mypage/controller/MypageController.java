@@ -40,11 +40,17 @@ public class MypageController {
 
         List<Post> myPostList = mypageService.myPostList(username);
         List<Post> votePostList = mypageService.votePostList(username);
+<<<<<<< HEAD
         List<Order> myOrderList = mypageService.myOrderList(username);
 
         model.addAttribute("myPostList", myPostList); //현재 로그인한 사용자가 작성한 글 리스트 전달
         model.addAttribute("votePostList", votePostList); //현재 로그인한 사용자가 좋아요 한 글 리스트 전달
         model.addAttribute("myOrderList", myOrderList); //현재 로그인한 사용자의 예약 리스트 전달
+=======
+
+        model.addAttribute("myPostList", myPostList); //현재 로그인한 사용자가 작성한 글 리스트 전달
+        model.addAttribute("votePostList", votePostList); //현재 로그인한 사용자가 좋아요 한 글 리스트 전달
+>>>>>>> 26a5936 (feat : 마이페이지 좋아요 누른 글 리스트 구현)
 
         return "mypage/mypage";
     }

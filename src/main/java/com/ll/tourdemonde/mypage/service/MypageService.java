@@ -34,9 +34,12 @@ public class MypageService {
     private final OrderRepository orderRepository;
 
     //현재 로그인한 사용자가 작성한 글 리스트 반환
+<<<<<<< HEAD
 =======
 
 >>>>>>> 380496b (feat : 마이페이지 내가 쓴 글 목록 구현)
+=======
+>>>>>>> 26a5936 (feat : 마이페이지 좋아요 누른 글 리스트 구현)
     public List<Post> myPostList(String username) {
         List<Post> postList = postRepository.findAll();
         Optional<Member> member = memberRepository.findByUsername(username);
@@ -49,18 +52,26 @@ public class MypageService {
         return myPostList;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 26a5936 (feat : 마이페이지 좋아요 누른 글 리스트 구현)
 
     //현재 로그인한 사용자가 좋아요 한 글 리스트 반환
     public List<Post> votePostList(String username) {
         List<Post> postList = postRepository.findAll();
         Optional<Member> member = memberRepository.findByUsername(username);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 26a5936 (feat : 마이페이지 좋아요 누른 글 리스트 구현)
         List<Post> votePostList = postList.stream()
                 .filter(post -> post.getVoter().stream().anyMatch(v -> v.equals(member.get())))
                 .collect(Collectors.toList());
 
         return votePostList;
     }
+<<<<<<< HEAD
 
     //현재 로그인한 사용자의 예약 리스트 반환
     public List<Order> myOrderList(String username) {
@@ -76,4 +87,6 @@ public class MypageService {
     }
 =======
 >>>>>>> 380496b (feat : 마이페이지 내가 쓴 글 목록 구현)
+=======
+>>>>>>> 26a5936 (feat : 마이페이지 좋아요 누른 글 리스트 구현)
 }
