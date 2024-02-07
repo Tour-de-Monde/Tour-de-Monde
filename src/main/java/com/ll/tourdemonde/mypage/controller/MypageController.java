@@ -49,6 +49,7 @@ public class MypageController {
         Optional<Member> member = this.memberService.findByUsername(principal.getName());
         String username = memberService.findUsername(member.get());
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         List<Post> myPostList = mypageService.myPostList(username);
         List<Post> votePostList = mypageService.votePostList(username);
@@ -63,8 +64,14 @@ public class MypageController {
 }
 =======
         List<Post> myPostList = mypageService.myPostList(username);
+=======
+>>>>>>> 9f2bb3c (feat : 마이페이지 좋아요 누른 글 리스트 구현)
 
-        model.addAttribute("myPostList", myPostList);
+        List<Post> myPostList = mypageService.myPostList(username);
+        List<Post> votePostList = mypageService.votePostList(username);
+
+        model.addAttribute("myPostList", myPostList); //현재 로그인한 사용자가 작성한 글 리스트 전달
+        model.addAttribute("votePostList", votePostList); //현재 로그인한 사용자가 좋아요 한 글 리스트 전달
 
         return "mypage/mypage";
     }
