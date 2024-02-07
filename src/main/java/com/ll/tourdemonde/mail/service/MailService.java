@@ -19,7 +19,7 @@ public class MailService {
     public void sendMail(String email, String subject, String body) {
         MimeMessage message = javaMailSender.createMimeMessage();
 
-        try{
+        try {
             message.setFrom("tourdemonde2024@gmail.com");
             message.setRecipients(MimeMessage.RecipientType.TO, email);
             message.setSubject(subject);

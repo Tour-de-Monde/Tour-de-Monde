@@ -3,14 +3,12 @@ package com.ll.tourdemonde.reservation.entity;
 import com.ll.tourdemonde.post.entity.BaseTime;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Setter
 @Getter
 @Builder
 @NoArgsConstructor
@@ -36,19 +34,19 @@ public class ReservationOption extends BaseTime {
     private boolean occupied = false; //예약여부 확인
 
     public ReservationOption modifyValues(LocalDateTime startDate, LocalDateTime endDate, String time, Long price) {
-        if(!this.startDate.equals(startDate)){
+        if (!this.startDate.equals(startDate)) {
             this.startDate = startDate;
         }
 
-        if(!this.endDate.equals(endDate)){
+        if (!this.endDate.equals(endDate)) {
             this.endDate = endDate;
         }
 
-        if(!this.time.equals(time)){
+        if (!this.time.equals(time)) {
             this.time = time;
         }
 
-        if(!this.price.equals(price)){
+        if (!this.price.equals(price)) {
             this.price = price;
         }
         return this;

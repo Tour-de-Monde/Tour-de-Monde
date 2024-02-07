@@ -75,3 +75,9 @@ custom:
     dirPath: c:/temp/TdM_dev/temp
   genFile:
     dirPath: c:/temp/TdM_dev
+  tossPayments:
+    widget:
+      clientKey: test_ck_0RnYX2w532wDqZARKgegVNeyqApQ
+      secretKey: ON_SECRET
+  order:
+    cancelableSeconds: 3600
