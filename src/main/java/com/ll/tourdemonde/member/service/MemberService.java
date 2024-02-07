@@ -62,10 +62,8 @@ public class MemberService {
     }
 
     @Transactional
-    public RsData<Member> join(String username, String password,
-                               String email, String memberName,
-                               LocalDate birthDate, String phoneNumber, String nickname) {
-        return join(username, password, email, memberName, birthDate, phoneNumber, nickname, "");
+    public RsData<Member> join(String username, String password, String email, String memberName, LocalDate birthDate, String phoneNumber, String nickname) {
+        return join(username, password, email, memberName, birthDate, phoneNumber, nickname, null);
     }
 
     @Transactional
@@ -107,7 +105,7 @@ public class MemberService {
 
         String filePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
 
-        return join(username, "", "", "", null, "", nickname);
+        return join(username, "", "", "", null, "", nickname, filePath);
     }
 
     public Member getMember(String username) {
