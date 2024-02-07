@@ -1,7 +1,6 @@
 <html layout:decorate="~{global/usrlayout}">
 
 <body>
-<<<<<<< HEAD
 <div layout:fragment="content">
     <div class="grid place-items-center">
         <div class="image-container">
@@ -91,26 +90,6 @@
                 </div>
             </div>
         </div>
-=======
-<div class="container">
-    <ul class="tabs">
-        <li class="tab-link current" data-tab="tab-1">내가 쓴 글</li>
-        <li class="tab-link" data-tab="tab-2">좋아요 누른 글</li>
-        <li class="tab-link" data-tab="tab-3">찜한 장소</li>
-    </ul>
-    <div id="tab-1" class="tab-content current">
-        <ul th:each="post : ${myPostList}">
-            <li>
-                <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
-            </li>
-        </ul>
-    </div>
-    <div id="tab-2" class="tab-content">
-        탭2 내용
-    </div>
-    <div id="tab-3" class="tab-content">
-        탭3 내용
->>>>>>> 8a294b5 (feat : 마이페이지 내가 쓴 글 목록 구현)
     </div>
 </div>
 
