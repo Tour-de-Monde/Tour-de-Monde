@@ -18,6 +18,7 @@ public class MypageService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
+    //현재 로그인한 사용자가 작성한 글 리스트 반환
     public List<Post> myPostList(String username) {
         List<Post> postList = postRepository.findAll();
         Optional<Member> member = memberRepository.findByUsername(username);
@@ -28,5 +29,18 @@ public class MypageService {
                 .collect(Collectors.toList());
 
         return myPostList;
+    }
+
+    //현재 로그인한 사용자가 좋아요 한 글 리스트 반환
+    public List<Post> votePostList(String username) {
+        List<Post> postList = postRepository.findAll();
+        Optional<Member> member = memberRepository.findByUsername(username);
+
+
+        List<Post> votePostList = postList.stream()
+                .filter(post -> post.getVoter().stream().anyMatch(v -> v.equals(member.get())))
+                .collect(Collectors.toList());
+
+        return votePostList;
     }
 }

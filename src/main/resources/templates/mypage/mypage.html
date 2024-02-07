@@ -68,7 +68,11 @@
         </ul>
     </div>
     <div id="tab-2" class="tab-content">
-        탭2 내용
+        <ul th:each="post : ${votePostList}">
+            <li>
+                <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+            </li>
+        </ul>
     </div>
     <div id="tab-3" class="tab-content">
         탭3 내용

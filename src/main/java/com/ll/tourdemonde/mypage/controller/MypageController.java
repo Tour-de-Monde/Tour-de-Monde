@@ -28,9 +28,12 @@ public class MypageController {
     public String mypage(Principal principal, Model model){
         Optional<Member> member = this.memberService.findByUsername(principal.getName());
         String username = memberService.findUsername(member.get());
-        List<Post> myPostList = mypageService.myPostList(username);
 
-        model.addAttribute("myPostList", myPostList);
+        List<Post> myPostList = mypageService.myPostList(username);
+        List<Post> votePostList = mypageService.votePostList(username);
+
+        model.addAttribute("myPostList", myPostList); //현재 로그인한 사용자가 작성한 글 리스트 전달
+        model.addAttribute("votePostList", votePostList); //현재 로그인한 사용자가 좋아요 한 글 리스트 전달
 
         return "mypage/mypage";
     }
