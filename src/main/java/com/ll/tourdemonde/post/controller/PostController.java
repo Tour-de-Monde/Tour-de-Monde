@@ -70,7 +70,6 @@ public class PostController {
             model.addAttribute("kw", kw);
             return "post/post_list";
         }
-    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")

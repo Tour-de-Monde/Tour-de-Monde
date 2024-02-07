@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAll(Pageable pageable);
 
+
     @Query("select "
             + "distinct p "
             + "from Post p "
