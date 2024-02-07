@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>게시글 작성</title>
+
     <!-- 필요한 CSS 파일 추가 -->
 </head>
 <body>
 <div class="container">
     <h1>게시글 작성</h1>
+
     <form th:action="@{/post/create}" th:object="${postCreateForm}" method="post">
         <div class="form-group">
             <label for="title">제목</label>
@@ -27,10 +29,11 @@
                 <option value="제주">제주</option>
             </select>
         </div>
+        <h3>목록에서 장소를 클릭하고 장소저장버튼으로 장소를 저장하세요</h3>
         <!-------------------------------------------------------------지도 장소 데이터 확인 및 리뷰작성-------------------------------------------------------------------------------------------------------------------------------->
         <div id="placeList"></div>
 
-        <button type="button" onclick="addPlaceInput()">장소 추가</button>
+        <button type="button" onclick="addPlaceInput()">장소 저장</button>
         <button type="submit">저장하기</button>
     </form>
 </div>
