@@ -11,9 +11,14 @@ import com.ll.tourdemonde.post.entity.Post;
 import com.ll.tourdemonde.post.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,8 +54,11 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public List<Post> showPostList() {
-        return postRepository.findAll();
+    public Page<Post> getPostList(int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 15, Sort.by(sorts));
+        return postRepository.findAll(pageable);
     }
 
     public Post getPostWithViewCount(Long id) {

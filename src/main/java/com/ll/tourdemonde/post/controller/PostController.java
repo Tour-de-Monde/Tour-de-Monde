@@ -10,6 +10,7 @@ import com.ll.tourdemonde.post.entity.Post;
 import com.ll.tourdemonde.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -49,9 +49,9 @@ public class PostController {
     }
 
     @GetMapping("/list")
-    public String showPostList(Model model) {
-        List<Post> postList = postService.showPostList();
-        model.addAttribute("postList", postList);
+    public String showPostList(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<Post> paging = postService.getPostList(page);
+        model.addAttribute("paging", paging);
         return "post/post_list";
     }
 
