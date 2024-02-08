@@ -4,6 +4,7 @@ import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.global.security.SecurityUser;
 import com.ll.tourdemonde.global.util.Ut;
 import com.ll.tourdemonde.member.entity.Member;
+import com.ll.tourdemonde.member.service.MemberService;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +26,7 @@ public class Rq {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManager entityManager;
+    private final MemberService memberService;
     private Member member;
 
     public String redirect(String url, String msg) {
@@ -112,5 +114,9 @@ public class Rq {
         }
 
         return member;
+    }
+
+    public String getProfileImgUrl() {
+        return memberService.getProfileImgUrl(getMember());
     }
 }

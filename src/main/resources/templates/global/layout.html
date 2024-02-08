@@ -29,7 +29,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <div th:if="${@rq.login}" class="flex items-center gap-2">
-<!--    <img class="w-10 rounded-full" th:src="${@rq.profileImgUrl}">-->
+    <img class="w-10 rounded-full" th:src="${@rq.profileImgUrl}">
     <a href="/member/me">
         <span th:text="${@rq.member.nickname}"></span>님 환영합니다.
     </a>

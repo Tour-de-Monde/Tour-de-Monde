@@ -26,17 +26,28 @@
     }
 </style>
 
+
 <div layout:fragment="content" class="grid-container">
-    <th:block th:each="post : ${postList}">
-        <a th:href="@{/post/detail/{id}(id=${post.id})}" class="grid-item">
-            <img th:src="@{/images/card-image.png}" alt="Card Image">
-            <h5 th:text="${post.title}">게시물 제목</h5>
-            <h5 th:text="${post.author.getUsername()}">작성자</h5>
 
-            <h5 th:text="${post.view}">조회수</h5>
+    <body class="p-5">
 
-        </a>
-    </th:block>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
 
+    <h2>게시물 목록</h2>
+
+    <div class="grid-container">
+        <th:block th:each="post : ${postList}">
+            <a th:href="@{/post/detail/{id}(id=${post.id})}" class="grid-item">
+                <img th:src="@{/images/card-image.png}" alt="Card Image">
+                <h5 th:text="${post.title}">게시물 제목</h5>
+                <h5 th:text="${post.author.getUsername()}">작성자</h5>
+
+                <h5 th:text="${post.view}">조회수</h5>
+
+            </a>
+        </th:block>
+    </div>
+    </body>
 </div>
 </html>
