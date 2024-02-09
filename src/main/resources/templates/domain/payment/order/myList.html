@@ -2,12 +2,15 @@
 
 <head>
     <title>내 주문</title>
+    <!-- DaisyUI 스타일시트 및 Tailwind CSS 불러오기 -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
 
 <div layout:fragment="content">
-    <form>
+    <form class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <select class="select select-bordered" name="cancelStatus" onchange="$(this).closest('form').submit()"
                 th:value="${param.cancelStatus}">
             <option value="">취소상태 - 전체</option>
@@ -28,7 +31,7 @@
         </select>
     </form>
 
-    <ul class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <ul class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-2">
         <li class="card bg-base-100 shadow-xl" th:each="order : ${orderPage.content}">
             <div class="card-body">
                 <h2 class="card-title">
@@ -50,14 +53,13 @@
                     <div>환불상태: [[${order.forPrintRefundStatus}]]</div>
                 </div>
                 <div class="card-actions justify-end">
-<!--                    TODO 취소 기능 만들기-->
-                    <!--<a
+                    <a
                             th:if="${order.cancelable}"
                             onclick="return confirm('정말로 취소하시겠습니까?');"
                             method="DELETE"
                             th:href="|${order.id}/cancel?redirectUrl=${@rq.encodedCurrentUrl}|"
                             class="btn btn-sm btn-secondary"
-                    >주문취소</a>-->
+                    >주문취소</a>
                     <a th:href="|${order.id}|" class="btn btn-sm btn-primary">자세히 보기</a>
                 </div>
             </div>
