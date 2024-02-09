@@ -3,6 +3,7 @@ package com.ll.tourdemonde.payment.order.controller;
 import com.ll.tourdemonde.global.app.AppConfig;
 import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.global.rq.Rq;
+import com.ll.tourdemonde.global.util.Ut;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.payment.order.dto.OrderReqDto;
 import com.ll.tourdemonde.payment.order.entity.Order;
@@ -38,6 +39,31 @@ import java.util.List;
 public class OrderController {
     private final Rq rq;
     private final OrderService orderService;
+
+    // 주문 취소
+    @DeleteMapping("/{id}/cancel")
+    public String cancel(@PathVariable("id") long id, String redirectUrl) {
+        Order order = orderService.findById(id).orElse(null);
+
+        if (order == null) {
+            throw new GlobalException("400-1", "존재하지 않는 주문입니다.");
+        }
+
+        Member member = rq.getMember();
+
+        // 주문 상세페이지는 구매자만 볼 수 있습니다.
+        if (!orderService.memberCanSee(member, order)) {
+            throw new GlobalException("403", "권한이 없습니다.");
+        }
+
+        orderService.cancel(order);
+
+        if (Ut.str.isBlank(redirectUrl)) {
+            redirectUrl = "/order/" + order.getId();
+        }
+
+        return rq.redirect(redirectUrl, "주문이 취소되었습니다.");
+    }
 
     // 주문 현황 페이지
     @GetMapping("/{id}")

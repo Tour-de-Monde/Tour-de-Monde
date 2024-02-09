@@ -77,4 +77,26 @@ public class OrderService {
     public Page<Order> search(Member buyer, Boolean payStatus, Boolean cancelStatus, Boolean refundStatus, Pageable pageable) {
         return orderRepository.search(buyer, payStatus, cancelStatus, refundStatus, pageable);
     }
+
+    @Transactional
+    public void cancel(Order order) {
+        if (!order.isCancelable())
+            throw new GlobalException("400-4", "취소할 수 없는 주문입니다.");
+
+        order.setCancelDone();
+
+        if (order.isPayDone())
+            refund(order);
+    }
+
+    @Transactional
+    public void refund(Order order) {
+        long payPrice = order.getPrice();
+
+        cashService.addCash(order.getBuyer(), payPrice * -1, CashLog.EventType.환불__예치금_주문결제, order);
+
+        order.setRefundDone();
+
+        order.getCheckReservation().getReservationOption().setOccupied(false);
+    }
 }

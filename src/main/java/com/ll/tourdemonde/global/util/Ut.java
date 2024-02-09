@@ -1,6 +1,7 @@
 package com.ll.tourdemonde.global.util;
 
 import com.ll.tourdemonde.global.app.AppConfig;
+import org.apache.catalina.util.URLEncoder;
 import org.apache.tika.Tika;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +13,7 @@ import java.net.URISyntaxException;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -287,6 +289,10 @@ public class Ut {
             String urlAfter = url.substring(startPoint + endPoint + 1);
 
             return url.substring(0, startPoint) + urlAfter;
+        }
+
+        public static String encode(String url) {
+            return new URLEncoder().encode(url, StandardCharsets.UTF_8);
         }
     }
 

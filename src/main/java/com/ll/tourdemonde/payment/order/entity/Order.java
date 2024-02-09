@@ -110,4 +110,8 @@ public class Order extends BaseEntity { // 회원의 예약 저장
 
         return "환불가능";
     }
+
+    public boolean isPayDone() {
+        return payDate != null;
+    }
 }

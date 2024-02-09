@@ -119,4 +119,19 @@ public class Rq {
     public String getProfileImgUrl() {
         return memberService.getProfileImgUrl(getMember());
     }
+
+    public String getEncodedCurrentUrl() {
+        return Ut.url.encode(getCurrentUrl());
+    }
+
+    public String getCurrentUrl() {
+        String url = request.getRequestURI();
+        String queryString = request.getQueryString();
+
+        if (queryString != null) {
+            url += "?" + queryString;
+        }
+
+        return url;
+    }
 }

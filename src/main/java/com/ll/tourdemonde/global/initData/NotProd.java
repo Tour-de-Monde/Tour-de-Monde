@@ -92,7 +92,7 @@ public class NotProd {
         Order order2 = checkReservationService.checkReservation(reservationOption4.getId(), member2);
 
         // 토스페이먼츠 결제
-//        orderService.payByTossPayments(order1, 100_000L);
+        orderService.payByTossPayments(order1, 100_000L);
         orderService.payByTossPayments(order2, 50_000L);
     }
 }
