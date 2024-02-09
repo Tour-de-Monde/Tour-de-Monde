@@ -42,7 +42,7 @@ public class OrderController {
     // 주문 현황 페이지
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String showDetail(@PathVariable long id, Model model) {
+    public String showDetail(@PathVariable("id") long id, Model model) {
         Order order = orderService.findById(id).orElse(null);
 
         if (order == null) {
@@ -84,7 +84,7 @@ public class OrderController {
     @ResponseBody
     @PostMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> payByToss(@PathVariable long id, @RequestBody OrderReqDto orderReqDto) {
+    public ResponseEntity<String> payByToss(@PathVariable("id") long id, @RequestBody OrderReqDto orderReqDto) {
         Order order = orderService.findById(id).orElse(null);
 
         if (order == null) {

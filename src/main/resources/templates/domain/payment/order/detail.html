@@ -125,10 +125,9 @@
 
                 form.customerMobilePhone.value = form.customerMobilePhone.value.trim();
 
-                if (form.customerMobilePhone.value.length === 0) {
-                    toastWarning("고객 휴대전화번호를 입력해주세요.");
+                if (form.customerMobilePhone.value.length === 0 || form.customerMobilePhone.value.includes('-') || form.customerMobilePhone.value.length !== 11) {
+                    toastWarning("고객 휴대전화번호를 입력해주세요.(- 제외) (숫자 11자리로만 입력해주세요.)");
                     form.customerMobilePhone.focus();
-
                     return;
                 }
 

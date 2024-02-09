@@ -19,11 +19,11 @@ public class CheckReservationController {
     // 예약하기 버튼 눌렀을 때 엔드포인트
     @PostMapping("/reservation/{reservationOpId}/check")
     @PreAuthorize("isAuthenticated()")
-    public String checkReservation(@PathVariable Long reservationOpId) {
+    public String checkReservation(@PathVariable("reservationOpId") Long reservationOpId) {
         Member buyer = rq.getMember();
 
         Order order = checkReservationService.checkReservation(reservationOpId, buyer);
 
-        return rq.redirect("/order/" + order.getId(), null);
+        return rq.redirect("/order/" + order.getId(), "");
     }
 }
