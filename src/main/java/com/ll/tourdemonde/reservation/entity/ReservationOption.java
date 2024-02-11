@@ -4,15 +4,13 @@ import com.ll.tourdemonde.reservation.entity.converter.LocalTimeConverter;
 import com.ll.tourdemonde.post.entity.BaseTime;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
+@Setter
 @Getter
 @Builder
 @NoArgsConstructor

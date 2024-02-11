@@ -1,13 +1,12 @@
-<html lang="kor">
+<html layout:decorate="~{global/usrLayout}">
 <head>
-    <!-- 제이쿼리 불러오기 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="/resource/global.js"></script>
+    <title>업체 - 장소 관리페이지</title>
 
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
+<div layout:fragment="content">
 <main>
     <h1>장소 관리페이지</h1>
     <a th:href="|/reserve/${place.getId()}/create|">예약 추가</a>
@@ -39,11 +38,11 @@
                     <a th:href="|/reserve/modify/${reservation.id}/detail/${option.id}|">옵션설정</a>
                     <a method="DELETE" th:href="|/reserve/delete/${reservation.id}/${option.id}|">옵션 삭제</a>
                 </div>
+                </article>
+            </div>
 
-            </article>
-        </div>
-
-    </section>
-</main>
+        </section>
+    </main>
+</div>
 </body>
 </html>

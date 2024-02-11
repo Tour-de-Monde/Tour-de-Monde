@@ -1,23 +1,38 @@
-<main>
-    <h2>새로운 예약 생성</h2>
-    <div>
-        <form method="POST" th:action id="reservationForm">
-            <label>판매자명 : [[${@rq.getUser().getUsername()}]]</label>
-            <input type="hidden" name="seller" th:value="${@rq.getUser().getUsername()}">
-            <hr>
-            <section>
-                <span>장소명 : </span><span th:text="${place.getName()}"></span>
-            </section>
-            <hr>
-            <fieldset>
-                <legend>type</legend>
-                <div th:each="entry : ${reservationTypes}">
-                    <label th:for="${entry.key}">[[${entry.value}]]</label>
-                    <input type="radio" th:id="${entry.key}" th:value="${entry.key}" name="type">
-                </div>
-            </fieldset>
-            <button type="submit">옵션생성</button>
-        </form>
-    </div>
+<html layout:decorate="~{global/usrLayout}">
 
-</main>
+<head>
+    <title>업체 - 새로운 예약 생성</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <main>
+        <h2>새로운 예약 생성</h2>
+        <div>
+            <form method="POST" th:action id="reservationForm">
+                <label>판매자명 : [[${@rq.getUser().getUsername()}]]</label>
+                <input type="hidden" name="seller" th:value="${@rq.getUser().getUsername()}">
+                <hr>
+                <section>
+                    <span>장소명 : </span><span th:text="${place.getName()}"></span>
+                </section>
+                <hr>
+                <fieldset>
+                    <legend>type</legend>
+                    <div th:each="entry : ${reservationTypes}">
+                        <label th:for="${entry.key}">[[${entry.value}]]</label>
+                        <input type="radio" th:id="${entry.key}" th:value="${entry.key}" name="type">
+                    </div>
+                </fieldset>
+                <button type="submit">옵션생성</button>
+            </form>
+        </div>
+
+    </main>
+</div>
+
+</body>
+
+</html>

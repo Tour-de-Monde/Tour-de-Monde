@@ -4,15 +4,9 @@ import com.ll.tourdemonde.global.app.AppConfig;
 import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.member.entity.Member;
-import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
-import com.ll.tourdemonde.payment.checkReservation.service.CheckReservationService;
+import com.ll.tourdemonde.payment.order.dto.OrderReqDto;
 import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.payment.order.service.OrderService;
-import com.ll.tourdemonde.place.entity.Place;
-import com.ll.tourdemonde.place.service.PlaceService;
-import com.ll.tourdemonde.reservation.entity.ReservationOption;
-import com.ll.tourdemonde.reservation.entity.ReservationType;
-import com.ll.tourdemonde.reservation.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
@@ -38,37 +32,11 @@ import java.util.Base64;
 public class OrderController {
     private final Rq rq;
     private final OrderService orderService;
-    private final CheckReservationService checkReservationService;
-    private final ReservationService reservationService;
-    private final PlaceService  placeService;
 
     // 주문 현황 페이지
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public String showDetail(@PathVariable long id, Model model) {
-        // TODO id로 Order를 찾으면 안되고 CheckReservation을 찾아야 하네
-        CheckReservation checkReservation = checkReservationService.findById(id).orElse(null);
-
-        if (checkReservation == null) {
-            throw new GlobalException("400-1", "존재하지 않는 예약입니다.");
-        }
-
-        Member member = rq.getMember();
-
-        if (!orderService.memberCheckReservation(member, checkReservation)) {
-            throw new GlobalException("403", "권한이 없습니다.");
-        }
-
-        model.addAttribute("checkReservation", checkReservation);
-
-        return "domain/payment/order/detail";
-    }
-
-/*
-    @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String showDetail(@PathVariable long id, Model model) {
-        // TODO id로 Order를 찾으면 안되고 CheckReservation을 찾아야 하네
         Order order = orderService.findById(id).orElse(null);
 
         if (order == null) {
@@ -77,6 +45,7 @@ public class OrderController {
 
         Member member = rq.getMember();
 
+        // 주문 상세페이지는 구매자만 볼 수 있습니다.
         if (!orderService.memberCanSee(member, order)) {
             throw new GlobalException("403", "권한이 없습니다.");
         }
@@ -85,7 +54,23 @@ public class OrderController {
 
         return "domain/payment/order/detail";
     }
-*/
+
+    @ResponseBody
+    @PostMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<String> payByToss(@PathVariable long id, @RequestBody OrderReqDto orderReqDto) {
+        Order order = orderService.findById(id).orElse(null);
+
+        if (order == null) {
+            throw new GlobalException("400-1", "존재하지 않는 주문입니다.");
+        }
+
+        Member member = rq.getMember();
+
+        orderService.addColumnToMember(member, orderReqDto);
+
+        return ResponseEntity.ok("사용자 정보 저장 완료");
+    }
 
     // 성공, 실패 코드 토스페이먼츠에서 제공한 코드를 따라가자.
     @GetMapping("/success")
@@ -97,7 +82,8 @@ public class OrderController {
     @GetMapping("/fail")
     @PreAuthorize("isAuthenticated()")
     public String showFail(String failCode, String failMessage) {
-        rq.setAttribute("code", failCode); // model.addAttribute()써도 되고 rq.setAttribute() 써도 된다.
+
+        rq.setAttribute("code", failCode);
         rq.setAttribute("message", failMessage);
 
         return "domain/payment/order/fail";
@@ -174,45 +160,4 @@ public class OrderController {
         return ResponseEntity.status(code).body(jsonObject);
     }
 
-
-    // 주문 현황 페이지 - 희영: 예약 기능 완성을 위한 임시 엔드포인트
-    @GetMapping("/{placeId}/{reservationId}/{optionId}")
-    @PreAuthorize("isAuthenticated()")
-    public String showDetail(
-            @PathVariable("placeId") long placeId,
-            @PathVariable("reservationId") long reservationId,
-            @PathVariable("optionId") long optionId,
-            Model model) {
-        // order생성 및 조회에 필요한 정보 불러오기
-        Member buyer = rq.getMember(); // 사용자
-        Place place = placeService.findById(placeId); //예약 장소
-        ReservationType type = reservationService.findById(reservationId).getType();//예약 종류
-        ReservationOption option = reservationService.findOptionById(reservationId,optionId); //예약 옵션
-
-        // 새로운 order 생성
-        Order order = orderService.createNewOrderOrFind(buyer, option);
-
-        model.addAttribute("order", order);
-        model.addAttribute("place", place);
-        model.addAttribute("reservationType", type);
-        return "domain/payment/order/detail";
-    }
-
-    @PostMapping("/{orderId}")
-    @PreAuthorize("isAuthenticated()")
-    public String completeReservation(
-            @PathVariable("orderId") Long orderId,
-            Model model) {
-        // 결제를 하지않고(캐쉬 차감 x) 결재완료
-        Order order = orderService.payByChash(orderId);
-
-        model.addAttribute("order", order);
-        return "domain/payment/order/complete";
-    }
-
-    @PostMapping("/cancle/{orderId}")
-    @PreAuthorize("isAuthenticated()")
-    public String cancleOrder(){
-        return "현재 미구현";
-    }
 }

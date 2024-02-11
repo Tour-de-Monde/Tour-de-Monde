@@ -78,4 +78,10 @@ custom:
   tossPayments:
     widget:
       clientKey: test_ck_0RnYX2w532wDqZARKgegVNeyqApQ
+<<<<<<< HEAD
       secretKey: ON_SECRET
+=======
+      secretKey: ON_SECRET
+  order:
+    cancelableSeconds: 3600
+>>>>>>> main

@@ -78,7 +78,7 @@ class TourDeMondeApplicationTests {
         );
 
 //		post2.addPlace(place1);
-	}
+    }
 
     @Test
     public void 게시물리스트테스트() {
@@ -104,7 +104,7 @@ class TourDeMondeApplicationTests {
 
         Optional<Post> post = postRepository.findById(1L);
 
-        if (post.isEmpty()) {
+        if (post.isEmpty()){
             System.out.println("게시물이 존재하지 않습니다.");
         } else {
             Post post2 = post.get();
@@ -112,7 +112,3 @@ class TourDeMondeApplicationTests {
         }
     }
 }
-
-
-
-

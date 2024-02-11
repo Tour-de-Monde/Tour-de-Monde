@@ -37,6 +37,7 @@ public class ReservationController {
     // 샘플페이지 Todo 차후 삭제 예정
     @GetMapping("")
     public String reservateItem() {
+//        reservationService.createNewReservation(place, reservationDto);
         return "domain/reservation/reservationExample";
     }
 

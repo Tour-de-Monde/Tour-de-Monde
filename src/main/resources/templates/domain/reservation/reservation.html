@@ -1,105 +1,122 @@
-<main>
-    <section>
-        <div>장소</div>
-        <span th:text="${place != null ? place.getName() : '장소를 찾을 수 없습니다.'}"></span>
-        <a th:if="${place != null}" th:href="|/reserve/manage/${place.id}|">관리페이지</a>
+<html layout:decorate="~{global/usrLayout}">
 
-        <div>
-            <label>
-                <span>시작일</span>
-                <input type="date" id="startDate">
-            </label>
-            <label>
-                <span>종료일</span>
-                <input type="date" id="endDate">
-            </label>
-            <button onclick="onlySearch()">검색</button>
-        </div>
-        <hr>
-        <!--예약이 없을 경우 생성-->
-        <section th:if="${options == null}">
-            <div>예약을 생성해주세요.</div>
-        </section>
-        <!--예약가능 리스트 보여주기-->
-        <section th:if="${options != null}">
-            <div th:each="option : ${options}">
-                <article>
-                    <div>
-                        <span th:text="${option.getReservation().type}"></span>
-                    </div>
-                    <div>
-                        <span>예약일 : </span><span th:text="${option.startDate}"></span>
-                        <span th:if="${option.reservation.type == 'ACCOMMODATE'}"
-                              th:text="|'~' ${option.endDate}|"></span>
-                    </div>
-                    <div>
-                        <span>예약시간 : </span><span th:text="${option.time}"></span><span
-                            th:if="${option.occupied}">예약됨</span>
-                    </div>
-                    <div>
-                        <span>가격 : </span><span th:text="${option.price}"></span><span>원</span>
-                    </div>
-                    <a th:if="${!option.occupied}"
-                       th:href="|/order/${place.id}/${option.getReservation().id}/${option.id}|">예약하기</a>
-                </article>
+<head>
+    <title>업체 - 예약 정보</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <main>
+        <section>
+            <div>장소</div>
+            <span th:text="${place != null ? place.getName() : '장소를 찾을 수 없습니다.'}"></span>
+            <a th:if="${place != null}" th:href="|/reserve/manage/${place.id}|">관리페이지</a>
+
+            <div>
+                <label>
+                    <span>시작일</span>
+                    <input type="date" id="startDate">
+                </label>
+                <label>
+                    <span>종료일</span>
+                    <input type="date" id="endDate">
+                </label>
+                <button onclick="onlySearch()">검색</button>
             </div>
-            <span th:each="num : ${#numbers.sequence(1,options.totalPages)}">
+            <hr>
+            <!--예약이 없을 경우 생성-->
+            <section th:if="${options == null}">
+                <div>예약을 생성해주세요.</div>
+            </section>
+            <!--예약가능 리스트 보여주기-->
+            <section th:if="${options != null}">
+                <div th:each="option : ${options}">
+                    <article>
+                        <div>
+                            <span th:text="${option.getReservation().type}"></span>
+                        </div>
+                        <div>
+                            <span>예약일 : </span><span th:text="${option.startDate}"></span>
+                            <span th:if="${option.reservation.type == 'ACCOMMODATE'}"
+                                  th:text="|'~' ${option.endDate}|"></span>
+                        </div>
+                        <div>
+                            <span>예약시간 : </span><span th:text="${option.time}"></span><span
+                                th:if="${option.occupied}">예약됨</span>
+                        </div>
+                        <div>
+                            <span>가격 : </span><span th:text="${option.price}"></span><span>원</span>
+                        </div>
+                        <a th:if="${!option.occupied}"
+                           th:href="|/order/${place.id}/${option.getReservation().id}/${option.id}|">예약하기</a>
+                    </article>
+                </div>
+                <span th:each="num : ${#numbers.sequence(1,options.totalPages)}">
                 <a th:href="'javascript: pageMove(' + ${num} + ');'" th:text="${num}"></a>
             </span>
+            </section>
         </section>
-    </section>
-</main>
-<script>
-    function makeSearchParam() {
-        const startDate = document.getElementById("startDate").value;
-        const endDate = document.getElementById("endDate").value;
+    </main>
+    <script>
+        function makeSearchParam() {
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
 
-        console.log(startDate);
-        console.log(endDate);
+            console.log(startDate);
+            console.log(endDate);
 
-        const searchParams = new URLSearchParams({
-                startDate: startDate,
-                endDate: endDate
-            }
-        );
+            const searchParams = new URLSearchParams({
+                    startDate: startDate,
+                    endDate: endDate
+                }
+            );
 
-        return searchParams.toString()
-    }
-
-    function sendQuery(queryString) {
-        const currentURL = window.location.href.split("\?").at(0);
-
-        console.log(currentURL);
-
-        window.location.href = currentURL + "?" + queryString;
-    }
-
-    function onlySearch() {
-        sendQuery(makeSearchParam());
-    }
-
-    function pageMove(num) {
-        const currentURL = window.location.href.split("\?")[0];
-        const params = new URLSearchParams(window.location.search);
-
-        params.delete("page");
-        params.set("page", num);
-
-        const queryString = params.toString();
-
-        window.location.href = currentURL + (queryString ? "?" + queryString : "");
-    }
-
-    window.onload =  function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const startDate = urlParams.get("startDate");
-        const endDate = urlParams.get("endDate");
-
-        if (startDate) {
-            document.getElementById("startDate").value = startDate;
+            return searchParams.toString()
         }
 
-        if (endDate){
-        document.getElementById("endDate").value = endDate;}
-    }
-</script>
+        function sendQuery(queryString) {
+            const currentURL = window.location.href.split("\?").at(0);
+
+            console.log(currentURL);
+
+            window.location.href = currentURL + "?" + queryString;
+        }
+
+        function onlySearch() {
+            sendQuery(makeSearchParam());
+        }
+
+        function pageMove(num) {
+            const currentURL = window.location.href.split("\?")[0];
+            const params = new URLSearchParams(window.location.search);
+
+            params.delete("page");
+            params.set("page", num);
+
+            const queryString = params.toString();
+
+            window.location.href = currentURL + (queryString ? "?" + queryString : "");
+        }
+
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const startDate = urlParams.get("startDate");
+            const endDate = urlParams.get("endDate");
+
+            if (startDate) {
+                document.getElementById("startDate").value = startDate;
+            }
+
+            if (endDate) {
+                document.getElementById("endDate").value = endDate;
+            }
+        }
+    </script>
+
+</div>
+
+</body>
+
+</html>

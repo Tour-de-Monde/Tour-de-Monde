@@ -49,4 +49,27 @@ public class AppConfig {
     public void setTossPaymentsWidgetSecretKey(String tossPaymentsWidgetSecretKey) {
         this.tossPaymentsWidgetSecretKey = tossPaymentsWidgetSecretKey;
     }
+
+    @Getter
+    private static int orderCancelableSeconds;
+
+    @Value("${custom.order.cancelableSeconds}")
+    public void setOrderCancelableSeconds(int orderCancelableSeconds) {
+        AppConfig.orderCancelableSeconds = orderCancelableSeconds;
+    }
+
+    private static String activeProfile;
+
+    @Value("${spring.profiles.active}")
+    public void setActiveProfile(String value) {
+        activeProfile = value;
+    }
+
+    public static boolean isProd() {
+        return activeProfile.equals("prod");
+    }
+
+    public static boolean isNotProd() {
+        return !isProd();
+    }
 }
