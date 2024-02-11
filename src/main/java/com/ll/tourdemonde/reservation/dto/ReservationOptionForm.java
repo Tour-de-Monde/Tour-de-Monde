@@ -15,7 +15,9 @@ public class ReservationOptionForm {
     private String time;
 
     @NotNull
-    private Long price;
+    private Long adultPrice;
+
+    private Long childrenPrice;
 
     public boolean hasEndDate() {
         if (endDate == null) {

@@ -47,10 +47,24 @@
                                 th:if="${option.occupied}">예약됨</span>
                         </div>
                         <div>
-                            <span>가격 : </span><span th:text="${option.price}"></span><span>원</span>
+                            <div>가격</div>
+                            <div>
+                                <span>성인 : </span><span th:text="${option.adultPrice}"></span><span>원</span>
+                            </div>
+                            <div>
+                                <span>어린이 : </span><span th:text="${option.childrenPrice}"></span><span>원</span>
+                            </div>
                         </div>
-                        <a th:if="${!option.occupied}"
-                           th:href="|/order/${place.id}/${option.getReservation().id}/${option.id}|">예약하기</a>
+                        <form method="POST" th:action="|/reservation/${option.id}/check|" th:if="${!option.occupied}">
+                            <label>
+                                <span>성인 : </span><input type="number" name="adultCount" ><span>명</span>
+                            </label>
+                            <label>
+                                <span>어린이 : </span><input type="number" name="childrenCount" ><span>명</span>
+                            </label>
+
+                            <button type="submit">예약하기</button>
+                        </form>
                     </article>
                 </div>
                 <span th:each="num : ${#numbers.sequence(1,options.totalPages)}">

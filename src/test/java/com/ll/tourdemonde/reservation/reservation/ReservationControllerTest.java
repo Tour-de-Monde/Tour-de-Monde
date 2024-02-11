@@ -172,7 +172,7 @@ public class ReservationControllerTest {
                         .param("reservationId", String.valueOf(1L))
                         .param("startDate", LocalDate.now().toString())
                         .param("time", "11:00")
-                        .param("price", "1000000")
+                        .param("adultPrice", "1000000")
                         .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
@@ -184,7 +184,7 @@ public class ReservationControllerTest {
         ReservationOption reservationOption = reservationService.findById(1L)
                 .getOptions().get(0);
 
-        assertThat(reservationOption.getPrice())
+        assertThat(reservationOption.getAdultPrice())
                 .isEqualTo(1000000);
     }
 

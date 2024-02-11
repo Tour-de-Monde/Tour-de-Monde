@@ -45,7 +45,8 @@ public class Reservation extends BaseTime { // 판매자가 예약을 생성한�
                 .startDate(Ut.stringToLocalDateTime(form.getStartDate()))
                 .endDate(Ut.stringToLocalDateTime(form.getEndDate()))
                 .time(Ut.stringToLocalTime(form.getTime()))
-                .price(form.getPrice())
+                .adultPrice(form.getAdultPrice())
+                .childrenPrice(form.getChildrenPrice())
                 .build();
         options.add(option);
     }

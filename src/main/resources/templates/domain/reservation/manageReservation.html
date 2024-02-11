@@ -34,7 +34,8 @@
                     <div>시작 날짜 : [[${option.startDate}]]</div>
                     <div>끝 날짜 : [[${option.endDate}]]</div>
                     <div>시간 : [[${option.time}]]</div>
-                    <div>가격 : [[${option.price}]]</div>
+                    <div>성인 가격 : [[${option.adultPrice}]]</div>
+                    <div>성인 가격 : [[${option.childrenPrice}]]</div>
                     <a th:href="|/reserve/modify/${reservation.id}/detail/${option.id}|">옵션설정</a>
                     <a method="DELETE" th:href="|/reserve/delete/${reservation.id}/${option.id}|">옵션 삭제</a>
                 </div>

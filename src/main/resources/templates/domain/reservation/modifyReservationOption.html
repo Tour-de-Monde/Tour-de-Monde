@@ -30,10 +30,16 @@
                            th:value="${option.time}">
                 </label>
                 <label>
-                    <div>예약 금액 변경</div>
-                    <input type="text" name="price" placeholder="예약금액을 입력해주세요."
+                    <div>성인 예약 금액 변경</div>
+                    <input type="text" name="price" placeholder="성인 예약금액을 입력해주세요."
                            required
-                           th:value="${option.price}">
+                           th:value="${option.adultPrice}">
+                </label>
+                <label>
+                    <div>어린이 예약 금액 변경</div>
+                    <input type="text" name="price" placeholder="어린이 예약금액을 입력해주세요."
+                           required
+                           th:value="${option.childrenPrice}">
                 </label>
             </form>
         </div>

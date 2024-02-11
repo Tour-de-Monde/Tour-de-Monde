@@ -24,4 +24,8 @@ public class CheckReservation extends BaseEntity { // 회원의 예약 저장 �
     @ManyToOne
     @JoinColumn(name = "reservation_option_id")
     private ReservationOption reservationOption; // 예약한 사용자의 상세 옵션
+
+    private Long adultCount;
+
+    private Long childrenCount;
 }

@@ -121,7 +121,8 @@ public class ReservationService {
                         Ut.stringToLocalDateTime(form.getStartDate()),
                         Ut.stringToLocalDateTime(form.getEndDate()),
                         LocalTime.parse(form.getTime()),
-                        form.getPrice()
+                        form.getAdultPrice(),
+                        form.getChildrenPrice()
                 );
     }
 

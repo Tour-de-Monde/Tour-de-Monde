@@ -31,14 +31,16 @@ public class ReservationOption extends BaseTime {
     @NotNull
     private LocalTime time; // 예약시간 옵션
 
-    @NotNull
-    private Long price; //옵션의 가격
+    private Long adultPrice; // 성인 예약자 가격
+
+    private Long childrenPrice; // 어린이 예약자 가격
 
     @Builder.Default
     private boolean occupied = false; //예약여부 확인
 
     // 예약의 옵션 내용을 변경
-    public ReservationOption modifyValues(LocalDateTime startDate, LocalDateTime endDate, LocalTime time, Long price) {
+    public ReservationOption modifyValues(LocalDateTime startDate, LocalDateTime endDate, LocalTime time,
+                                          Long adultPrice, Long childrenPrice) {
         if(!this.startDate.equals(startDate)){
             this.startDate = startDate;
         }
@@ -51,8 +53,12 @@ public class ReservationOption extends BaseTime {
             this.time = time;
         }
 
-        if (!this.price.equals(price)) {
-            this.price = price;
+        if (!this.adultPrice.equals(adultPrice)) {
+            this.adultPrice = adultPrice;
+        }
+
+        if (!this.childrenPrice.equals(childrenPrice)) {
+            this.childrenPrice = childrenPrice;
         }
         return this;
     }
