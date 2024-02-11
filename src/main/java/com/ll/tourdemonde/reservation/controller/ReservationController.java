@@ -1,8 +1,9 @@
 package com.ll.tourdemonde.reservation.controller;
 
+import com.ll.tourdemonde.global.exception.GlobalException;
+import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.global.util.Ut;
-import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.service.PlaceService;
 import com.ll.tourdemonde.reservation.dto.ReservationCreateForm;
@@ -11,7 +12,6 @@ import com.ll.tourdemonde.reservation.entity.Reservation;
 import com.ll.tourdemonde.reservation.entity.ReservationOption;
 import com.ll.tourdemonde.reservation.entity.ReservationType;
 import com.ll.tourdemonde.reservation.service.ReservationService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +33,7 @@ public class ReservationController {
 
     private final ReservationService reservationService;
     private final PlaceService placeService;
-    private final MemberService memberService;
-
-    // 샘플페이지 Todo 차후 삭제 예정
-    @GetMapping("")
-    public String reservateItem() {
-//        reservationService.createNewReservation(place, reservationDto);
-        return "domain/reservation/reservationExample";
-    }
+    private final Rq rq;
 
     //장소별 예약내역 조회
     @GetMapping("/{placeId}")
@@ -47,23 +41,20 @@ public class ReservationController {
                                            @RequestParam(name = "page", defaultValue = "1") int page,
                                            @RequestParam(name = "startDate", required = false) String startDate,
                                            @RequestParam(name = "endDate", required = false) String endDate,
-                                           Model model,
-                                           HttpServletRequest request
+                                           Model model
     ) {
-        //ToDo 순환참조의 위험이 있으니 차후 가져오는 데이터를 개선하도록 한다.
-//        try {
         Place place = placeService.findById(placeId);
 
         // startDate와 endDate 기본값 설정
         LocalDateTime startDateConverted;
         if (startDate == null || startDate.isBlank()) {
-            startDateConverted = LocalDateTime.now();
+            startDateConverted = LocalDate.now().atTime(0, 0);
         } else {
             startDateConverted = Ut.stringToLocalDateTime(startDate);
         }
         LocalDateTime endDateConverted;
         if (endDate == null || endDate.isBlank()) {
-            endDateConverted = LocalDateTime.now();
+            endDateConverted = LocalDate.now().atTime(0, 0);
         } else {
             endDateConverted = Ut.stringToLocalDateTime(endDate);
         }
@@ -77,29 +68,23 @@ public class ReservationController {
         model.addAttribute("place", place);
         model.addAttribute("options", options);
         return "domain/reservation/reservation";
-//        } catch (Exception e) {
-//            throw new RuntimeException();
-//        }
     }
 
     //관리자 페이지
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/manage/{placeId}")
     public String manageReservation(@PathVariable("placeId") Long placeId,
-                                    Model model,
-                                    HttpServletRequest request) {
-        String preUrl = request.getHeader("Referer");
+                                    Model model) {
         // Todo 장소에 대한 소유주인지 확인하는 기능 추가 필요 240201, 장소에 member추가 및 등록 기능 필요
-
-        try {
-            Place place = placeService.findById(placeId);
-            RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
-
-            model.addAttribute("place", place);
-            model.addAttribute("reservationList", listRsData.getData());
-        } catch (Exception e){
-            return "redirect:" + preUrl;
+        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
+            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
         }
+
+        Place place = placeService.findById(placeId);
+        RsData<List<Reservation>> listRsData = reservationService.findAllByPlace(place);
+
+        model.addAttribute("place", place);
+        model.addAttribute("reservationList", listRsData.getData());
 
         return "domain/reservation/manageReservation";
     }
@@ -109,20 +94,20 @@ public class ReservationController {
     @GetMapping("/{placeId}/create")
     public String createNewReservation(@PathVariable("placeId") Long placeId,
                                        Model model) {
-        try{
-            // 장소 가져오기
-            Place place = placeService.findById(placeId);
-
-            // ReservationType의 enum과 value를 Map으로 변환
-            Map<String, String> reservationTypes = ReservationType.getMapValues();
-
-            model.addAttribute("place", place);
-            // 타입선택을 위해 모델에 추가
-            model.addAttribute("reservationTypes", reservationTypes);
-            return "domain/reservation/createNewReservation";
-        } catch (Exception e) {
-            return "redirect:/";
+        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
+            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
         }
+
+        // 장소 가져오기
+        Place place = placeService.findById(placeId);
+
+        // ReservationType의 enum과 value를 Map으로 변환
+        Map<String, String> reservationTypes = ReservationType.getMapValues();
+
+        model.addAttribute("place", place);
+        // 타입선택을 위해 모델에 추가
+        model.addAttribute("reservationTypes", reservationTypes);
+        return "domain/reservation/createNewReservation";
     }
 
     // 예약 생성 페이지 POST
@@ -133,14 +118,19 @@ public class ReservationController {
             @Valid ReservationCreateForm form,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "domain/reservation/createNewReservation";
+            throw new RuntimeException("잘못된 값을 입력했습니다.");
         }
+
+        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
+            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
+        }
+
         try {
             Place place = placeService.findById(placeId);
-            Reservation reservation = reservationService.createNewReservation(place, form);
-            return "redirect:/reserve/create/%d/detail".formatted(reservation.getId());
+            RsData<Reservation> rsData = reservationService.createNewReservation(place, form);
+            return rq.redirect("/reserve/create/%d/detail".formatted(rsData.getData().getId()),rsData.getMsg());
         } catch (Exception e) {
-            return "redirect:/";
+            return rq.redirect("/", e.getMessage());
         }
     }
 
@@ -150,6 +140,10 @@ public class ReservationController {
     public String createNewReservationOption(
             @PathVariable("reservationId") Long reservationId,
             Model model) {
+        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
+            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
+        }
+
         Reservation reservation = reservationService.findById(reservationId);
         model.addAttribute("reservation", reservation);
         return "domain/reservation/createNewReservationOption";
@@ -159,14 +153,24 @@ public class ReservationController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{reservationId}/detail")
     public String createNewReservationOption(
-            @PathVariable("reservationId") Long id,
+            @PathVariable("reservationId") Long reservationId,
             @Valid ReservationOptionForm form,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "redirect:/reserve";
+            throw new RuntimeException("잘못된 값을 입력했습니다.");
         }
-        Reservation reservation = reservationService.createNewReservationOption(form);
-        return "redirect:/reserve/manage/%d".formatted(reservation.getPlace().getId());
+
+        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
+            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
+        }
+
+        RsData<Reservation> reservationRsData = reservationService.createNewReservationOption(reservationId, form);
+
+        try{
+            return rq.redirect("/reserve/manage/%d".formatted(reservationRsData.getData().getPlace().getId()), reservationRsData.getMsg());
+        } catch(Exception e) {
+            return rq.redirect("/", e.getMessage());
+        }
     }
 
     // 예약 수정페이지 GET
@@ -174,12 +178,18 @@ public class ReservationController {
     @GetMapping("/modify/{reservationId}")
     public String modifyReservation(@PathVariable("reservationId") Long id,
                                     Model model) {
+
+        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
+            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
+        }
+
         Reservation reservation = reservationService.findById(id);
         Map<String, String> reservationTypes = ReservationType.getMapValues();
 
         model.addAttribute("reservation", reservation);
         model.addAttribute("reservationTypes", reservationTypes);
         return "domain/reservation/modifyReservation";
+
     }
 
     // 예약 수정페이지 PUT
@@ -187,25 +197,26 @@ public class ReservationController {
     @PutMapping("/modify/{reservationId}")
     public String modifyReservation(@PathVariable("reservationId") Long reservationId,
                                     @Valid ReservationCreateForm form,
-                                    BindingResult bindingResult,
-                                    HttpServletRequest request,
-                                    Model model) {
+                                    BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException("잘못된 값을 입력했습니다.");
         }
 
-        Reservation reservation = reservationService.findById(reservationId);
-        Long placeId = reservation.getPlace().getId();
-
-        RsData<Reservation> reservationRsData = reservationService.modifyReservation(reservation, form);
-
-        if (reservationRsData.isFail()) {
-//            String preURL = request.getHeader("Referer");
-            return "redirect:/reserve/modify/%d".formatted(reservationId);
+        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
+            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
         }
 
-        // 관리페이지로 이동
-        return "redirect:/reserve/manage/%d".formatted(placeId);
+        try {
+            Reservation reservation = reservationService.findById(reservationId);
+            Long placeId = reservation.getPlace().getId();
+
+            RsData<Reservation> reservationRsData = reservationService.modifyReservation(reservation, form);
+
+            // 관리페이지로 이동
+            return rq.redirect("/reserve/manage/%d".formatted(placeId), reservationRsData.getMsg());
+        } catch(Exception e){
+            return rq.redirect("/", e.getMessage());
+        }
     }
 
     // 예약 옵션 수정페이지 GET
@@ -214,6 +225,10 @@ public class ReservationController {
     public String modifyOption(Model model,
                                @PathVariable("reservationId") Long reservationId,
                                @PathVariable("optionId") Long optionId) {
+
+        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
+            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
+        }
 
         ReservationOption option = reservationService.findOptionById(reservationId, optionId);
         Reservation reservation = reservationService.findById(option.getReservation().getId());
@@ -234,53 +249,65 @@ public class ReservationController {
             @PathVariable("reservationId") Long reservationId,
             @PathVariable("optionId") Long optionId,
             @Valid ReservationOptionForm form,
-            BindingResult bindingResult,
-            HttpServletRequest request,
-            Model model) {
+            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            String preURL = request.getHeader("Referer");
-            return "redirect:" + preURL;
+            throw new RuntimeException("잘못된 값을 입력했습니다.");
         }
-        ReservationOption option = reservationService.modifyReservationOption(reservationId, optionId, form);
 
-        // move ManagePage
-        Reservation reservation = reservationService.findById(reservationId);
-        Long placeId = reservation.getPlace().getId();
+        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
+            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
+        }
 
-        // 관리페이지로 이동
-        return "redirect:/reserve/manage/%d".formatted(placeId);
+        try {
+            ReservationOption option = reservationService.modifyReservationOption(reservationId, optionId, form);
+
+            // move ManagePage
+            Reservation reservation = reservationService.findById(reservationId);
+            Long placeId = reservation.getPlace().getId();
+
+            // 관리페이지로 이동
+            return "redirect:/reserve/manage/%d".formatted(placeId);
+        } catch(Exception e){
+            return rq.redirect("/",e.getMessage());
+        }
     }
 
     // 예약 DELETE
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{reservationId}")
-    public String deleteReservation(@PathVariable("reservationId") Long reservationId,
-                                    Model model) {
+    public String deleteReservation(@PathVariable("reservationId") Long reservationId) {
         // move ManagePage
         Reservation reservation = reservationService.findById(reservationId);
         Long placeId = reservation.getPlace().getId();
 
-        // 예약 삭제
-        reservationService.deleteReservation(reservationId);
+        try {
+            // 예약 삭제
+            reservationService.deleteReservation(reservationId);
 
-        // 관리페이지로 이동
-        return "redirect:/reserve/manage/%d".formatted(placeId);
+            // 관리페이지로 이동
+            return rq.redirect("/reserve/manage/%d".formatted(placeId),"삭제 성공");
+        }catch(Exception e){
+            return  rq.redirect("/reserve/manage/%d".formatted(placeId),"삭제 실패");
+        }
     }
 
     // 예약 옵션 DELETE
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{reservationId}/detail/{optionId}")
     public String deleteReservationOption(@PathVariable("reservationId") Long reservationId,
-                                          @PathVariable("optionId") Long optionId,
-                                          Model model) {
+                                          @PathVariable("optionId") Long optionId) {
         // move ManagePage
         Reservation reservation = reservationService.findById(reservationId);
         Long placeId = reservation.getPlace().getId();
 
-        // 예약 옵션 삭제
-        reservationService.deleteOption(reservation, optionId);
+        try {
+            // 예약 옵션 삭제
+            reservationService.deleteOption(reservation, optionId);
 
-        // 관리페이지로 이동
-        return "redirect:/reserve/manage/%d".formatted(placeId);
+            // 관리페이지로 이동
+            return rq.redirect("/reserve/manage/%d".formatted(placeId), "성공");
+        }catch(Exception e){
+            return rq.redirect("/reserve/manage/%d".formatted(placeId), "실패");
+        }
     }
 }

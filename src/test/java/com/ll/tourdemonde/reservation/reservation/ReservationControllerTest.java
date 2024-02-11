@@ -58,12 +58,17 @@ public class ReservationControllerTest {
         return customUserDetailsService.loadUserByUsername("user1");
     }
 
+    public UserDetails getAdminDetails() {
+        return customUserDetailsService.loadUserByUsername("admin");
+    }
+
     @Test
     @Rollback(value = false)
     public void T00testInit() {
         IntStream.range(1, 4).mapToObj(i -> new PlaceDto("장소" + i, "33.1, 37.1" + i))
                 .forEach(placeService::save);
         memberService.createMember("user1", "1234", "user@user.com", "user1", null, "000-0000-0000", "user1");
+        memberService.createMember("admin", "1234", "admin@user.com", "admin", null, "000-0000-0000", "admin");
     }
 
     @Test

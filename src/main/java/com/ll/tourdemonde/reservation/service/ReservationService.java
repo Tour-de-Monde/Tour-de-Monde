@@ -1,5 +1,6 @@
 package com.ll.tourdemonde.reservation.service;
 
+import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.global.util.Ut;
@@ -35,15 +36,21 @@ public class ReservationService {
 
     // 새로운 예약 생성
     @Transactional
-    public Reservation createNewReservation(Place place, ReservationCreateForm form) {
+    public RsData<Reservation> createNewReservation(Place place, ReservationCreateForm form) {
+        try{
         Member seller = memberService.findByUsername(form.getSeller())
                 .orElseThrow(()-> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
+
         Reservation reservation = Reservation.builder()
                 .place(place)
                 .seller(seller)
                 .type(form.getType())
                 .build();
-        return reservationRepository.save(reservation);
+        Reservation data = reservationRepository.save(reservation);
+        return new RsData<>("S-success", "예약 생성 성공", data);
+        } catch (Exception e){
+            throw new GlobalException("F-fail", "예약을 생성하지 못했습니다.");
+        }
     }
 
     // Id로 예약 찾기
@@ -54,15 +61,20 @@ public class ReservationService {
 
     // 새로운 예약 옵션 생성
     @Transactional
-    public Reservation createNewReservationOption(ReservationOptionForm form) {
-        Reservation reservation = findById(form.getReservationId());
+    public RsData<Reservation> createNewReservationOption(Long reservationId, ReservationOptionForm form) {
+        try {
+            Reservation reservation = findById(reservationId);
 
-        // endDate가 없으면 시작일로 설정
-        form.initEndDateIfNotExists();
+            // endDate가 없으면 시작일로 설정
+            form.initEndDateIfNotExists();
 
-        reservation.addOption(form);
-        reservationRepository.save(reservation);
-        return reservation;
+            reservation.addOption(form);
+            Reservation reservation1 = reservationRepository.save(reservation);
+
+            return new RsData<>("S-success", "예약옵션 생성 성공", reservation1);
+        } catch(Exception e){
+            throw new GlobalException("F-fail", "예약옵션 생성 실패");
+        }
     }
 
 
@@ -82,10 +94,10 @@ public class ReservationService {
     @Transactional
     public RsData<Reservation> modifyReservation(Reservation reservation, ReservationCreateForm form) {
         // 셀러와 수정한 사람이 동일인인지 확인
-        Member seller = memberService.findByUsername(form.getSeller())
-                .orElseThrow(()-> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
-        if (!reservation.getSeller().equals(seller)) {
-            return new RsData<>("f-modify", "권한이 없는 사용자입니다.", null);
+        Member modifier = rq.getMember();
+
+        if (!reservation.getSeller().equals(modifier) || !modifier.isAdmin()) {
+            throw new GlobalException("F-NoAuthentication", "권한이 없는 사용자입니다.");
         }
 
         reservation.setType(form.getType());
@@ -108,11 +120,19 @@ public class ReservationService {
     //예약 옵션 수정
     @Transactional
     public ReservationOption modifyReservationOption(Long reservationId, Long optionId, ReservationOptionForm form) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 입력입니다."));
+
+        Member modifier = rq.getMember();
+
+        if (!reservation.getSeller().equals(modifier) || !modifier.isAdmin()) {
+            throw new GlobalException("F-NoAuthentication", "권한이 없는 사용자입니다.");
+        }
+
         // endDate 초기화
         form.initEndDateIfNotExists();
 
-        return reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 입력입니다."))
+        return reservation
                 .getOptions().stream()
                 .filter(opt -> opt.getId().equals(optionId))
                 .findFirst()
@@ -124,6 +144,7 @@ public class ReservationService {
                         form.getAdultPrice(),
                         form.getChildrenPrice()
                 );
+
     }
 
     // 예약 삭제
@@ -131,6 +152,11 @@ public class ReservationService {
     public void deleteReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다."));
+        Member modifier = rq.getMember();
+
+        if (!reservation.getSeller().equals(modifier) || !modifier.isAdmin()) {
+            throw new GlobalException("F-NoAuthentication", "권한이 없는 사용자입니다.");
+        }
 
         reservationRepository.delete(reservation);
     }
@@ -138,6 +164,12 @@ public class ReservationService {
     // 예약 옵션 삭제
     @Transactional
     public void deleteOption(Reservation reservation, Long optionId) {
+        Member modifier = rq.getMember();
+
+        if (!reservation.getSeller().equals(modifier) || !modifier.isAdmin()) {
+            throw new GlobalException("F-NoAuthentication", "권한이 없는 사용자입니다.");
+        }
+
         reservation.removeOption(optionId);
     }
 
