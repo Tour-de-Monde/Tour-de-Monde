@@ -1,4 +1,3 @@
-package com.ll.tourdemonde.post.controller;
 
 
 import com.ll.tourdemonde.comment.dto.CommentCreateForm;
@@ -70,6 +69,7 @@ public class PostController {
             model.addAttribute("kw", kw);
             return "post/post_list";
         }
+    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")
