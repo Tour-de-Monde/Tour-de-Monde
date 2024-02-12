@@ -24,4 +24,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "   or c.content like %:kw% "
             + "   or m2.username like %:kw% ")
     Page<Post> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
+
+
+    Page<Post> findAllByCategory(@Param("category") String category, Pageable pageable);
 }

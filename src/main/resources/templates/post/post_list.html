@@ -14,6 +14,19 @@
             <button type="button" id="btn_search" class="btn btn-info mx-2">검색</button>
         </div>
 
+        <div class="flex justify-center items-center space-x-20">
+            <form action="/post/list" method="get">
+                <button class="btn btn-info" type="submit" name="category" value="서울">서울</button>
+                <button class="btn btn-info" type="submit" name="category" value="경기">경기</button>
+                <button class="btn btn-info" type="submit" name="category" value="인천">인천</button>
+                <button class="btn btn-info" type="submit" name="category" value="강원">강원</button>
+                <button class="btn btn-info" type="submit" name="category" value="경상">경상</button>
+                <button class="btn btn-info" type="submit" name="category" value="충청">충청</button>
+                <button class="btn btn-info" type="submit" name="category" value="전라">전라</button>
+                <button class="btn btn-info" type="submit" name="category" value="제주">제주</button>
+            </form>
+        </div>
+
 
         <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl">
             <th:block th:each="post : ${paging}">

@@ -49,12 +49,25 @@ public class PostController {
     }
 
     @GetMapping("/list")
-    public String showPostList(Model model, @RequestParam(value="page", defaultValue="0") int page,
+    public String showPostList(Model model,
+                               @RequestParam(value = "category", required = false) String category,
+                               @RequestParam(value = "page", defaultValue = "0") int page,
                                @RequestParam(value = "kw", defaultValue = "") String kw) {
-        Page<Post> paging = postService.getPostList(page, kw);
-        model.addAttribute("paging", paging);
-        model.addAttribute("kw", kw);
-        return "post/post_list";
+        Page<Post> paging;
+
+        if (category != null && !category.isEmpty()) {
+            // 카테고리가 선택된 경우 해당 카테고리의 게시물을 페이징하여 가져오기
+            paging = postService.getPostsByCategory(category, page);
+            model.addAttribute("paging", paging);
+            model.addAttribute("category", category);
+            return "post/post_list";
+        } else {
+            // 카테고리가 선택되지 않은 경우 기존 코드로 모든 게시물을 페이징하여 가져오기
+            paging = postService.getPostList(page, kw);
+            model.addAttribute("paging", paging);
+            model.addAttribute("kw", kw);
+            return "post/post_list";
+        }
     }
 
     @PreAuthorize("isAuthenticated()")

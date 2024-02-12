@@ -89,4 +89,11 @@ public class PostService {
             throw new EntityNotFoundException("해당 게시물이 존재하지 않습니다.");
         }
     }
+
+    public Page<Post> getPostsByCategory(String category, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 12, Sort.by(sorts));
+        return postRepository.findAllByCategory(category, pageable);
+    }
 }
