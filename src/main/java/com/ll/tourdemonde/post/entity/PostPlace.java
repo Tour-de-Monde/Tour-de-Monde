@@ -22,7 +22,7 @@ public class PostPlace extends BaseTime {
     @ManyToOne(fetch = LAZY)
     private Place place;
 
-    @OneToOne(mappedBy = "postPlace", cascade = REMOVE)
+    @OneToOne(mappedBy = "postPlace", cascade = {PERSIST, REMOVE})
     @Setter
     private PostPlacePlaceReview postPlacePlaceReview;
 }
