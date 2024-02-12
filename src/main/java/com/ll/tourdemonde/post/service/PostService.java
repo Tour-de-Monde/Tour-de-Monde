@@ -89,7 +89,6 @@ public class PostService {
             throw new EntityNotFoundException("해당 게시물이 존재하지 않습니다.");
         }
     }
-<<<<<<< HEAD
 
     public Page<Post> getPostsByCategory(String category, int page) {
         List<Sort.Order> sorts = new ArrayList<>();
@@ -102,6 +101,3 @@ public class PostService {
         postRepository.delete(post);
     }
 }
-=======
-}
->>>>>>> cd5d619 (Feat: index 페이지 프론트 엔드 작업)
