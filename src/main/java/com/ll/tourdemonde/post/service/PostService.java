@@ -57,7 +57,7 @@ public class PostService {
     public Page<Post> getPostList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 15, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 12, Sort.by(sorts));
         return postRepository.findAllByKeyword(kw, pageable);
     }
 
@@ -88,5 +88,5 @@ public class PostService {
         } else {
             throw new EntityNotFoundException("해당 게시물이 존재하지 않습니다.");
         }
-    }g
+    }
 }
