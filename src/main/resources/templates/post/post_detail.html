@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorate="~{global/usrlayout}">
+<html layout:decorate="~{global/usrlayout}" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>게시물 상세 정보</title>
@@ -25,9 +25,13 @@
         </ul>
     </div>
     <div>
-        <a href="javascript:void(0);" class="recommend" th:data-uri="@{|/post/vote/${post.id}|}"> 추천
+        <a href="javascript:void(0);" class="recommend" th:attr="data-uri=@{/post/vote/{postId}(postId=${post.id})}"> 추천
             <span th:text="${#lists.size(post.voter)}"></span>
         </a>
+        <a href="javascript:void(0);" th:attr="data-uri=@{/post/delete/{postId}(postId=${post.id})}"
+           class="delete" sec:authorize="isAuthenticated()"
+           th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}"
+           th:text="삭제"></a>
     </div>
     <h5 th:text="|${#lists.size(post.commentList)}개의 답변이 있습니다.|"></h5>
     <!-- 답변 반복 시작 -->
@@ -45,11 +49,11 @@
                     <a th:href="@{|/comment/modify/${comment.id}|}" sec:authorize="isAuthenticated()"
                        th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
                        th:text="수정"></a>
+                    <a href="javascript:void(0);" th:attr="data-uri=@{|/comment/delete/${comment.id}|}"
+                       class="delete" sec:authorize="isAuthenticated()"
+                       th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+                       th:text="삭제"></a>
                 </div>
-                <a href="javascript:void(0);" th:data-uri="@{|/comment/delete/${comment.id}|}"
-                   class="delete" sec:authorize="isAuthenticated()"
-                   th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
-                   th:text="삭제"></a>
             </div>
         </div>
     </div>
@@ -58,15 +62,18 @@
         <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
         <input type="submit" value="답변등록">
     </form>
+    <div>
+        <a th:href="@{/post/list}">게시물 목록으로 돌아가기</a>
+    </div>
 </div>
-<a th:href="@{/post/list}">게시물 목록으로 돌아가기</a>
 </body>
-<script>
+<script layout:fragment="script" type='text/javascript'>
+    /*<![CDATA[*/
     const recommend_elements = document.getElementsByClassName("recommend");
     Array.from(recommend_elements).forEach(function(element) {
         element.addEventListener('click', function() {
             if(confirm("정말로 추천하시겠습니까?")) {
-                location.href = this.dataset.uri;
+                location.href = this.getAttribute('data-uri');
             };
         });
     });
@@ -75,9 +82,10 @@
     Array.from(delete_elements).forEach(function(element) {
         element.addEventListener('click', function() {
             if(confirm("정말로 삭제하시겠습니까?")) {
-                location.href = this.dataset.uri;
+                location.href = this.getAttribute('data-uri');
             };
         });
     });
+    /*]]>*/
 </script>
 </html>

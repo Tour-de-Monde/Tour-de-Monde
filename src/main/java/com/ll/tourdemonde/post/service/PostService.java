@@ -96,4 +96,8 @@ public class PostService {
         Pageable pageable = PageRequest.of(page, 12, Sort.by(sorts));
         return postRepository.findAllByCategory(category, pageable);
     }
+
+    public void deletePost(Post post) {
+        postRepository.delete(post);
+    }
 }
