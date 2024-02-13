@@ -3,6 +3,7 @@ package com.ll.tourdemonde.payment.order.controller;
 import com.ll.tourdemonde.global.app.AppConfig;
 import com.ll.tourdemonde.global.exception.GlobalException;
 import com.ll.tourdemonde.global.rq.Rq;
+import com.ll.tourdemonde.global.util.Ut;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.payment.order.dto.OrderReqDto;
 import com.ll.tourdemonde.payment.order.entity.Order;
@@ -11,6 +12,10 @@ import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -24,7 +29,9 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 @Controller
 @RequestMapping("/order")
@@ -33,10 +40,35 @@ public class OrderController {
     private final Rq rq;
     private final OrderService orderService;
 
+    // 주문 취소
+    @DeleteMapping("/{id}/cancel")
+    public String cancel(@PathVariable("id") long id, String redirectUrl) {
+        Order order = orderService.findById(id).orElse(null);
+
+        if (order == null) {
+            throw new GlobalException("400-1", "존재하지 않는 주문입니다.");
+        }
+
+        Member member = rq.getMember();
+
+        // 주문 상세페이지는 구매자만 볼 수 있습니다.
+        if (!orderService.memberCanSee(member, order)) {
+            throw new GlobalException("403", "권한이 없습니다.");
+        }
+
+        orderService.cancel(order);
+
+        if (Ut.str.isBlank(redirectUrl)) {
+            redirectUrl = "/order/" + order.getId();
+        }
+
+        return rq.redirect(redirectUrl, "주문이 취소되었습니다.");
+    }
+
     // 주문 현황 페이지
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String showDetail(@PathVariable long id, Model model) {
+    public String showDetail(@PathVariable("id") long id, Model model) {
         Order order = orderService.findById(id).orElse(null);
 
         if (order == null) {
@@ -55,10 +87,30 @@ public class OrderController {
         return "domain/payment/order/detail";
     }
 
+    // 사용자 주문 전체 내역
+    @GetMapping("/myList")
+    @PreAuthorize("isAuthenticated()")
+    public String showMyOrderList(
+            @RequestParam(defaultValue = "1") int page,
+            Boolean payStatus,
+            Boolean cancelStatus,
+            Boolean refundStatus,
+            Model model) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page - 1, 50, Sort.by(sorts));
+
+        Page<Order> orderPage = orderService.search(rq.getMember(), payStatus, cancelStatus, refundStatus, pageable);
+
+        model.addAttribute("orderPage", orderPage);
+
+        return "domain/payment/order/myList";
+    }
+
     @ResponseBody
     @PostMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> payByToss(@PathVariable long id, @RequestBody OrderReqDto orderReqDto) {
+    public ResponseEntity<String> payByToss(@PathVariable("id") long id, @RequestBody OrderReqDto orderReqDto) {
         Order order = orderService.findById(id).orElse(null);
 
         if (order == null) {

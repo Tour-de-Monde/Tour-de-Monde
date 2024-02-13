@@ -22,14 +22,13 @@
 
     <h1>결제정보</h1>
 
-<!--    TODO 취소 더 생각해보기-->
-    <!--<a
+    <a
             th:if="${order.cancelable}"
             onclick="return confirm('정말로 취소하시겠습니까?');"
             method="DELETE"
             th:href="|${order.id}/cancel?redirectUrl=${@rq.encodedCurrentUrl}|"
             class="btn btn-sm btn-secondary"
-    >주문취소</a>-->
+    >주문취소</a>
 
     <button onclick="history.back();" class="btn btn-primary btn-sm">뒤로가기</button>
 
@@ -125,10 +124,9 @@
 
                 form.customerMobilePhone.value = form.customerMobilePhone.value.trim();
 
-                if (form.customerMobilePhone.value.length === 0) {
-                    toastWarning("고객 휴대전화번호를 입력해주세요.");
+                if (form.customerMobilePhone.value.length === 0 || form.customerMobilePhone.value.includes('-') || form.customerMobilePhone.value.length !== 11) {
+                    toastWarning("고객 휴대전화번호를 입력해주세요.<br>(- 제외) (숫자 11자리로만 입력해주세요.)");
                     form.customerMobilePhone.focus();
-
                     return;
                 }
 

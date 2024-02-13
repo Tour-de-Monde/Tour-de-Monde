@@ -8,6 +8,8 @@ import com.ll.tourdemonde.payment.order.dto.OrderReqDto;
 import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.payment.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,5 +72,31 @@ public class OrderService {
         member.setMemberName(member.getMemberName() != null ? member.getMemberName() : reqDto.getCustomerName());
         member.setEmail(member.getEmail() != null ? member.getEmail() : reqDto.getCustomerEmail());
         member.setPhoneNumber(member.getPhoneNumber() != null ? member.getPhoneNumber() : reqDto.getCustomerMobilePhone());
+    }
+
+    public Page<Order> search(Member buyer, Boolean payStatus, Boolean cancelStatus, Boolean refundStatus, Pageable pageable) {
+        return orderRepository.search(buyer, payStatus, cancelStatus, refundStatus, pageable);
+    }
+
+    @Transactional
+    public void cancel(Order order) {
+        if (!order.isCancelable())
+            throw new GlobalException("400-4", "취소할 수 없는 주문입니다.");
+
+        order.setCancelDone();
+
+        if (order.isPayDone())
+            refund(order);
+    }
+
+    @Transactional
+    public void refund(Order order) {
+        long payPrice = order.getPrice();
+
+        cashService.addCash(order.getBuyer(), payPrice * -1, CashLog.EventType.환불__예치금_주문결제, order);
+
+        order.setRefundDone();
+
+        order.getCheckReservation().getReservationOption().setOccupied(false);
     }
 }

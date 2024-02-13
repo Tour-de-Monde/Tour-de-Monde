@@ -22,22 +22,72 @@
         const urlParams = getUrlParams(location.href);
     </script>
     <title>Tour_de_Monde</title>
+
+    <!-- DaisyUI 스타일시트 및 Tailwind CSS 불러오기 -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 사용자 정의 스타일 -->
+    <style>
+        /* 우리 프로젝트 기본 UI : 흰색 배경, 프로젝트 전체 색 B4C0FF */
+
+        /* 배경색 추가 */
+        .background-color {
+            background-color: #f3f4f6;
+        }
+
+        /* 부모 요소 정렬 */
+        /* 화면에서 가장 중앙으로 정렬 */
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 화면에서 제일 오른쪽으로 정렬 */
+        .flex-right {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-left: auto; /* 화면에서 제일 오른쪽으로 이동 */
+        }
+
+        /* 로고 이미지 크기 조정 */
+        .logo img {
+            max-width: 300px;
+            max-height: 150px;
+        }
+    </style>
 </head>
 <body class="p-5">
+<div class="container-fluid">
+    <!-- 로고 이미지 -->
+    <div class="flex-center logo">
+        <a href="/post/list">
+            <img th:src="@{/images/Tour-de-Monde-logo-black.png}" alt="Tour de Monde 로고">
+        </a>
+    </div>
 
+    <div class="flex-right">
+        <div th:if="${@rq.login}" class="flex items-center gap-2">
+            <img class="w-10 rounded-full" th:src="${@rq.profileImgUrl}">
+            <a href="/member/me">
+                <span th:text="${@rq.member.nickname}"></span>님 환영합니다.
+            </a>
+        </div>
+    </div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css"/>
 <script src="https://cdn.tailwindcss.com"></script>
 
-<div th:if="${@rq.login}" class="flex items-center gap-2">
-<!--    <img class="w-10 rounded-full" th:src="${@rq.profileImgUrl}">-->
-    <a href="/member/me">
-        <span th:text="${@rq.member.nickname}"></span>님 환영합니다.
-    </a>
-</div>
+</div> <!-- End of container -->
 
 <th:block layout:fragment="header"></th:block>
 
 <th:block layout:fragment="content"></th:block>
+
+<th:block layout:fragment="script"></th:block>
 
 <script>
     // history.back 에 의해서 돌아온 경우에 자바스크립트가 실행이 안될 수 도 잇다.
