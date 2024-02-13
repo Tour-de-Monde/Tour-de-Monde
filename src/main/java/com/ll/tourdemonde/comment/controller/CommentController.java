@@ -70,6 +70,7 @@ public class CommentController {
         commentService.modifyComment(comment, commentCreateForm.getContent());
         return String.format("redirect:/post/detail/%s", comment.getPost().getId());
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String deleteComment(Principal principal, @PathVariable("id") Long id) {

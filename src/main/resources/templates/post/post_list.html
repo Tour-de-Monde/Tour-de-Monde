@@ -1,53 +1,99 @@
+<!DOCTYPE html>
 <html layout:decorate="~{global/usrlayout}">
+<div class="flex flex-col items-center justify-center h-screen">
 
-<a class="btn btn-link" href="/post/list">홈</a>
-<style>
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr); /* 5개의 동일한 크기의 컬럼 */
-        grid-gap: 10px; /* 각 게시물 사이의 간격 */
-    }
+    <a class="btn btn-link" href="/post/list">홈</a>
 
-    .grid-item {
-        border: 1px solid #ddd; /* 경계선 스타일 */
-        padding: 5px; /* 내부 패딩 */
-        text-align: center; /* 텍스트 가운데 정렬 */
-    }
+    <div layout:fragment="content" class="grid-container grid gap-6 justify-center">
 
-    .grid-item img {
-        max-width: 50%; /* 이미지 최대 너비 설정 */
-        height: auto; /* 이미지 높이 자동 조절 */
-    }
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.tailwindcss.com"></script>
 
-    .grid-item a {
-        text-decoration: none; /* 링크 밑줄 제거 */
-        color: inherit; /* 링크 색상 상속 */
-        display: block; /* 블록 레벨 링크 */
-    }
-</style>
+        <div class="flex justify-center items-center">
+            <input type="text" id="search_kw" th:value="${kw}" class="input input-bordered input-info w-1/2">
+            <button type="button" id="btn_search" class="btn btn-info mx-2">검색</button>
+        </div>
+
+        <div class="flex justify-center items-center space-x-20">
+            <form action="/post/list" method="get">
+                <button class="btn btn-info" type="submit" name="category" value=>전체</button>
+                <button class="btn btn-info" type="submit" name="category" value="서울">서울</button>
+                <button class="btn btn-info" type="submit" name="category" value="경기">경기</button>
+                <button class="btn btn-info" type="submit" name="category" value="인천">인천</button>
+                <button class="btn btn-info" type="submit" name="category" value="강원">강원</button>
+                <button class="btn btn-info" type="submit" name="category" value="경상">경상</button>
+                <button class="btn btn-info" type="submit" name="category" value="충청">충청</button>
+                <button class="btn btn-info" type="submit" name="category" value="전라">전라</button>
+                <button class="btn btn-info" type="submit" name="category" value="제주">제주</button>
+            </form>
+        </div>
 
 
-<div layout:fragment="content" class="grid-container">
+        <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl">
+            <th:block th:each="post : ${paging}">
+                <a th:href="@{/post/detail/{id}(id=${post.id})}" class="grid-item border p-3 max-w-md rounded-lg flex flex-col items-start justify-start hover:shadow-md hover:border-gray-300 transition duration-300">
+                    <img th:src="@{/images/card-image.png}" alt="Card Image" class="max-w-full h-auto">
+                    <h5 th:text="${post.title}" class="mt-2 text-lg font-semibold leading-tight"></h5>
+                    <div class="flex justify-between w-full mt-2">
+                        <div class="flex items-center">
+                            <h5 th:text="${post.author.getUsername()}" class="text-sm"></h5>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fa-regular fa-heart"></i>
+                            <h5 th:text="${post.voter.size()}" class="text-sm mt-4"></h5>
+                        </div>
+                    </div>
+                </a>
+            </th:block>
+        </div>
 
-    <body class="p-5">
+        <div class="flex justify-center items-center">
+            <a th:href="@{/post/create}" class="btn btn-info">게시글 등록</a>
+        </div>
 
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css"/>
-    <script src="https://cdn.tailwindcss.com"></script>
+        <div class="join flex justify-center" th:if="${!paging.isEmpty()}">
+            <ul class="flex">
+                <li th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                    <button class="join-item btn" type="button" th:if="${paging.hasPrevious}" th:data-page="${paging.number-1}" onclick="changePage(this.dataset.page)">
+                        <span>이전</span>
+                    </button>
+                </li>
+                <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}" th:classappend="${page == paging.number} ? 'active'">
+                    <button type="button" th:text="${page+1}" th:data-page="${page}" onclick="changePage(this.dataset.page)" th:class="${page == paging.number ? 'join-item btn btn-md btn-active' : 'join-item btn'}"></button>
+                </li>
+                <li th:classappend="${!paging.hasNext} ? 'disabled'">
+                    <button class="join-item btn" type="button" th:if="${paging.hasNext}" th:data-page="${paging.number+1}" onclick="changePage(this.dataset.page)">
+                        <span>다음</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
 
-    <h2>게시물 목록</h2>
+        <form th:action="@{/post/list}" method="get" id="searchForm">
+            <input type="hidden" id="kw" name="kw" th:value="${kw}">
+            <input type="hidden" id="page" name="page" th:value="${paging.number}">
+        </form>
 
-    <div class="grid-container">
-        <th:block th:each="post : ${postList}">
-            <a th:href="@{/post/detail/{id}(id=${post.id})}" class="grid-item">
-                <img th:src="@{/images/card-image.png}" alt="Card Image">
-                <h5 th:text="${post.title}">게시물 제목</h5>
-                <h5 th:text="${post.author.getUsername()}">작성자</h5>
+        <script layout:fragment="script" type='text/javascript'>
+            const page_elements = document.getElementsByClassName("page-link");
+            Array.from(page_elements).forEach(function (element) {
+                element.addEventListener('click', function () {
+                    document.getElementById('page').value = this.dataset.page;
+                    document.getElementById('searchForm').submit();
+                });
+            });
+            const btn_search = document.getElementById("btn_search");
+            btn_search.addEventListener('click', function () {
+                document.getElementById('kw').value = document.getElementById('search_kw').value;
+                document.getElementById('page').value = 0; // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+                document.getElementById('searchForm').submit();
+            });
 
-                <h5 th:text="${post.view}">조회수</h5>
-
-            </a>
-        </th:block>
+            function changePage(page) {
+                document.getElementById('page').value = page;
+                document.getElementById('searchForm').submit();
+            }
+        </script>
     </div>
-    </body>
 </div>
 </html>
