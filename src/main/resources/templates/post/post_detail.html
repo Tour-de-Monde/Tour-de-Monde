@@ -13,7 +13,7 @@
         <ul>
             <div th:each="postPlace : ${post.postPlaces}">
                 <div>
-                    <h3 th:text="${'장소 이름: ' + postPlace.place.name}">장소 이름</h3>
+                    <h3 th:text="${'장소 이름: ' + postPlace.place.name}">장소 이름</h3><a th:href="|/reserve/${postPlace.place.id}|">예약하러 가기</a>
                     <p th:text="${'좌표: ' + postPlace.place.coordinate}">좌표</p>
                     <div th:if="${postPlace.postPlacePlaceReview != null}">
                         <p th:text="${'평점: ' + postPlace.postPlacePlaceReview.placeReview.rating}">평점</p>
