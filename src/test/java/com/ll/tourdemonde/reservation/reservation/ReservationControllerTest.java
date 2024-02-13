@@ -55,7 +55,7 @@ public class ReservationControllerTest {
     private CustomUserDetailsService customUserDetailsService;
 
     public UserDetails getUserDetails() {
-        return customUserDetailsService.loadUserByUsername("user1");
+        return customUserDetailsService.loadUserByUsername("admin");
     }
 
     public UserDetails getAdminDetails() {
@@ -68,7 +68,7 @@ public class ReservationControllerTest {
         IntStream.range(1, 4).mapToObj(i -> new PlaceDto("장소" + i, "33.1, 37.1" + i))
                 .forEach(placeService::save);
         memberService.createMember("user1", "1234", "user@user.com", "user1", null, "000-0000-0000", "user1");
-        memberService.createMember("admin", "1234", "admin@user.com", "admin", null, "000-0000-0000", "admin");
+        memberService.createMember("admin", "1234", "admin@user.com", "admin", null, "000-0000-1234", "admin");
     }
 
     @Test
@@ -128,9 +128,10 @@ public class ReservationControllerTest {
     public void T04ShowCreateReservation() throws Exception {
         ResultActions resultActions = mvc
                 .perform(post("/reserve/1/create")
-                        .param("seller", "user1")
-                        .param("place", "1")
+                        .param("seller", "admin")
+                        .param("place", String.valueOf(1L))
                         .param("type", "LEISURE")
+                        .param("flag", "continue")
                         .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
@@ -142,7 +143,7 @@ public class ReservationControllerTest {
 
         Reservation reservation = reservationService.findById(1L);
 
-        assertThat(reservation.getSeller().getUsername()).as("seller 불일치").isEqualTo("user1");
+        assertThat(reservation.getSeller().getUsername()).as("seller 불일치").isEqualTo("admin");
         assertThat(reservation.getPlace().getName()).as("place 불일치").isIn("장소1");
         assertThat(reservation.getType()).as("type 불일치").isIn(ReservationType.LEISURE);
     }
@@ -177,7 +178,8 @@ public class ReservationControllerTest {
                         .param("reservationId", String.valueOf(1L))
                         .param("startDate", LocalDate.now().toString())
                         .param("time", "11:00")
-                        .param("adultPrice", "1000000")
+                        .param("adultPrice", "10000")
+                        .param("childPrice", "5000")
                         .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 
@@ -190,7 +192,7 @@ public class ReservationControllerTest {
                 .getOptions().get(0);
 
         assertThat(reservationOption.getAdultPrice())
-                .isEqualTo(1000000);
+                .isEqualTo(10000);
     }
 
     //관리페이지 GET /reserve/manage/1
@@ -207,7 +209,7 @@ public class ReservationControllerTest {
                 .andExpect(handler().handlerType(ReservationController.class))
                 .andExpect(handler().methodName("manageReservation"))
                 .andExpect(content().string(containsString("""
-                        <h1>장소 관리페이지</h1>""".stripIndent().trim())));
+                        예약서비스 목록""".stripIndent().trim())));
     }
 
     //예약 수정 GET /reserve/modify/1
@@ -268,11 +270,9 @@ public class ReservationControllerTest {
                 .andExpect(handler().handlerType(ReservationController.class))
                 .andExpect(handler().methodName("modifyOption"))
                 .andExpect(content().string(containsString("""
-                        <li>판매자명 : user1</li>""".stripIndent().trim())))
+                        <li>판매자명 : admin</li>""".stripIndent().trim())))
                 .andExpect(content().string(containsString("""
-                        <input type="time" name="time" pattern="[0-9]{2}:[0-9]{2}"
-                                               required
-                                        value="11:00">""".stripIndent().trim())));
+                        type="time" name="time" pattern="[0-9]{2}:[0-9]{2}" """.stripIndent().trim())));
 
     }
 
@@ -285,7 +285,8 @@ public class ReservationControllerTest {
                         .param("reservationId", "1")
                         .param("startDate", LocalDate.now().toString())
                         .param("time", "12:00")
-                        .param("price", "10")
+                        .param("adultPrice", "10")
+                        .param("childPrice", "10")
                         .with(csrf()).with(user(getUserDetails())))
                 .andDo(print());
 

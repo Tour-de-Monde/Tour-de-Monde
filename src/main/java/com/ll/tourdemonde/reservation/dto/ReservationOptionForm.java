@@ -3,9 +3,11 @@ package com.ll.tourdemonde.reservation.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ReservationOptionForm {
     private Long reservationId;
 
