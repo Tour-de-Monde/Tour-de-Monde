@@ -59,7 +59,7 @@ public class CommentController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String modifyComment(@Valid CommentCreateForm commentCreateForm, BindingResult bindingResult,
-                               @PathVariable("id") Long id, Principal principal) {
+                                @PathVariable("id") Long id, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "comment/comment_modify";
         }
