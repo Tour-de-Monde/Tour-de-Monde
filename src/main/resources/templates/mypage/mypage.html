@@ -1,24 +1,5 @@
 <html layout:decorate="~{global/usrlayout}">
 
-<head>
-    <style>/*
-        .tabs {
-            display: flex;
-            width: 80%;
-        }
-
-        .tab {
-            flex: 1;
-            text-align: center;
-            width: calc(80% / 3); //탭 요소를 가로 폭을 세 등분
-        }
-
-        .tab-content {
-            flex: 1;
-        }*/
-    </style>
-</head>
-
 <body>
 <div layout:fragment="content">
     <div class="grid place-items-center">
@@ -31,8 +12,8 @@
         </p>
 
         <div class="w-4/5 mx-auto">
-        <div role="tablist" class="tabs tabs-lifted">
-            <input type="radio" name="my_tabs_2" role="tab" class="tab w-1/3 text-center" aria-label="내가 쓴 글" checked />
+        <div role="tablist" class="tabs tabs-lifted grid grid-cols-3">
+            <input type="radio" name="my_tabs_2" role="tab" class="tab text-center" aria-label="내가 쓴 글" checked />
             <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
                 <div class="overflow-x-auto">
                     <table class="table">
@@ -46,8 +27,8 @@
                         </thead>
                         <tbody>
                         <!-- row -->
-                        <tr th:each="post : ${myPostList}">
-                            <td th:text="${post.id}"></td>
+                        <tr th:each="post,loop : ${myPostList}">
+                            <td th:text="${loop.count}"></td>
                             <td>
                                 <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
                             </td>
@@ -58,22 +39,54 @@
                 </div>
             </div>
 
-            <input type="radio" name="my_tabs_2" role="tab" class="tab w-1/3 text-center" aria-label="좋아요 누른 글" />
+            <input type="radio" name="my_tabs_2" role="tab" class="tab text-center" aria-label="좋아요 누른 글" />
             <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
-                <ul th:each="post : ${votePostList}">
-                    <li>
-                        <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
-                    </li>
-                </ul>
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <!-- head -->
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>제목</th>
+                            <th>조회수</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- row -->
+                        <tr th:each="post, loop : ${votePostList}">
+                            <td th:text="${loop.count}"></td>
+                            <td>
+                                <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                            </td>
+                            <td th:text="${post.view}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <input type="radio" name="my_tabs_2" role="tab" class="tab w-1/3 text-center" aria-label="예약 내역" />
+            <input type="radio" name="my_tabs_2" role="tab" class="tab text-center" aria-label="예약 내역" />
             <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
-                <ul th:each="order : ${myOrderList}">
-                    <li>
-                        <a th:href="@{|/order/${order.id}|}" th:text="${order.title}"></a>
-                    </li>
-                </ul>
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <!-- head -->
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>예약 장소</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- row -->
+                        <tr th:each="order, loop : ${myOrderList}">
+                            <td th:text="${loop.count}"></td>
+                            <td>
+                                <a th:href="@{|/order/${order.id}|}" th:text="${order.getPlaceName()}"></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
