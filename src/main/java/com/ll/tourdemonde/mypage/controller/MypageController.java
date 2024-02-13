@@ -4,6 +4,7 @@ import com.ll.tourdemonde.member.dto.MemberCreateForm;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.mypage.service.MypageService;
+import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.post.entity.Post;
 import com.ll.tourdemonde.post.service.PostService;
 import jakarta.validation.Valid;
@@ -29,7 +30,6 @@ public class MypageController {
 
     private final MypageService mypageService;
     private final MemberService memberService;
-    private final PostService postService;
 
     @GetMapping("/mypage")
     public String mypage(Principal principal, Model model){
@@ -38,9 +38,11 @@ public class MypageController {
 
         List<Post> myPostList = mypageService.myPostList(username);
         List<Post> votePostList = mypageService.votePostList(username);
+        List<Order> myOrderList = mypageService.myOrderList(username);
 
         model.addAttribute("myPostList", myPostList); //현재 로그인한 사용자가 작성한 글 리스트 전달
         model.addAttribute("votePostList", votePostList); //현재 로그인한 사용자가 좋아요 한 글 리스트 전달
+        model.addAttribute("myOrderList", myOrderList); //현재 로그인한 사용자의 예약 리스트 전달
 
         return "mypage/mypage";
     }
@@ -53,7 +55,7 @@ public class MypageController {
     //회원가입
     @PostMapping("/membershipInfo")
     public String signup(@Valid MemberCreateForm memberCreateForm, BindingResult bindingResult) {
-        int verificationCode;
+        //int verificationCode; 회원가입 인증 번호
 
         if (bindingResult.hasErrors()) {
             return "domain/member/signUp";
