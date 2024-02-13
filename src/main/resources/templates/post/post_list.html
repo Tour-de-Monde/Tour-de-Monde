@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html layout:decorate="~{global/usrlayout}" xmlns:layout="http://www.w3.org/1999/xhtml">
-
+<html layout:decorate="~{global/usrLayout}">
 <div class="flex flex-col items-center justify-center h-screen">
 
     <a class="btn btn-link" href="/post/list">홈</a>
@@ -28,7 +26,6 @@
                 <button class="btn btn-info" type="submit" name="category" value="제주">제주</button>
             </form>
         </div>
-
 
         <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl">
             <th:block th:each="post : ${paging}">
