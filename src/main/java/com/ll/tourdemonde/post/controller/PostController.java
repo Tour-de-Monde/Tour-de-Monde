@@ -39,7 +39,7 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String createPost(@Valid @ModelAttribute PostCreateForm postCreateForm, BindingResult bindingResult, Principal principal) {
+    public String createPost(@Valid @ModelAttribute PostCreateForm postCreateForm, BindingResult bindingResult, Principal principal, Model model) {
         Member member = memberService.getMember(principal.getName());
         if (bindingResult.hasErrors()) {
             return "post/post_create";

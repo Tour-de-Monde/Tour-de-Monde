@@ -70,14 +70,15 @@ public class CommentController {
         commentService.modifyComment(comment, commentCreateForm.getContent());
         return String.format("redirect:/post/detail/%s", comment.getPost().getId());
     }
+
     @PreAuthorize("isAuthenticated()")
-        @GetMapping("/delete/{id}")
-        public String deleteComment(Principal principal, @PathVariable("id") Long id) {
-            Comment comment = commentService.getComment(id);
-            if (!comment.getAuthor().getUsername().equals(principal.getName())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-            }
-            commentService.deleteComment(comment);
+    @GetMapping("/delete/{id}")
+    public String deleteComment(Principal principal, @PathVariable("id") Long id) {
+        Comment comment = commentService.getComment(id);
+        if (!comment.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+        }
+        commentService.deleteComment(comment);
         return String.format("redirect:/post/detail/%s", comment.getPost().getId());
     }
 }
