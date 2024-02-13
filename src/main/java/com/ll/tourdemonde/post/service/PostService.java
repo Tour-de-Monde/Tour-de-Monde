@@ -11,9 +11,14 @@ import com.ll.tourdemonde.post.entity.Post;
 import com.ll.tourdemonde.post.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +38,7 @@ public class PostService {
                 .title(form.getTitle())
                 .category(form.getCategory())
                 .author(author)
+                .view(0L)
                 .build();
 
         // post ~~ place
@@ -48,8 +54,11 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public List<Post> showPostList() {
-        return postRepository.findAll();
+    public Page<Post> getPostList(int page, String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 12, Sort.by(sorts));
+        return postRepository.findAllByKeyword(kw, pageable);
     }
 
     public Post getPostWithViewCount(Long id) {
@@ -79,5 +88,16 @@ public class PostService {
         } else {
             throw new EntityNotFoundException("해당 게시물이 존재하지 않습니다.");
         }
+    }
+
+    public Page<Post> getPostsByCategory(String category, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 12, Sort.by(sorts));
+        return postRepository.findAllByCategory(category, pageable);
+    }
+
+    public void deletePost(Post post) {
+        postRepository.delete(post);
     }
 }

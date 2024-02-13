@@ -20,7 +20,6 @@ public class CheckReservationController {
     private final Rq rq;
 
     // 예약하기 버튼 눌렀을 때 엔드포인트
-
     @PostMapping("/reservation/{reservationOpId}/check")
     @PreAuthorize("isAuthenticated()")
     public String checkReservation(@PathVariable("reservationOpId") Long reservationOpId,
@@ -29,7 +28,6 @@ public class CheckReservationController {
         if(bindingResult.hasErrors()){
             return rq.historyBack("잘못된 입력입니다.");
         }
-
         Member buyer = rq.getMember();
 
         Order order = checkReservationService.checkReservation(reservationOpId, buyer, dto);

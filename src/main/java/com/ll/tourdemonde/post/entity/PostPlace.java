@@ -2,14 +2,11 @@ package com.ll.tourdemonde.post.entity;
 
 
 import com.ll.tourdemonde.place.entity.Place;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
@@ -25,7 +22,7 @@ public class PostPlace extends BaseTime {
     @ManyToOne(fetch = LAZY)
     private Place place;
 
-    @OneToOne(mappedBy = "postPlace", cascade = PERSIST)
+    @OneToOne(mappedBy = "postPlace", cascade = {PERSIST, REMOVE})
     @Setter
     private PostPlacePlaceReview postPlacePlaceReview;
 }

@@ -10,14 +10,16 @@ import com.ll.tourdemonde.post.entity.Post;
 import com.ll.tourdemonde.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class PostController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String createPost(@Valid @ModelAttribute PostCreateForm postCreateForm, BindingResult bindingResult, Principal principal) {
+    public String createPost(@Valid @ModelAttribute PostCreateForm postCreateForm, BindingResult bindingResult, Principal principal, Model model) {
         Member member = memberService.getMember(principal.getName());
         if (bindingResult.hasErrors()) {
             return "post/post_create";
@@ -49,10 +51,25 @@ public class PostController {
     }
 
     @GetMapping("/list")
-    public String showPostList(Model model) {
-        List<Post> postList = postService.showPostList();
-        model.addAttribute("postList", postList);
-        return "post/post_list";
+    public String showPostList(Model model,
+                               @RequestParam(value = "category", required = false) String category,
+                               @RequestParam(value = "page", defaultValue = "0") int page,
+                               @RequestParam(value = "kw", defaultValue = "") String kw) {
+        Page<Post> paging;
+
+        if (category != null && !category.isEmpty()) {
+            // 카테고리가 선택된 경우 해당 카테고리의 게시물을 페이징하여 가져오기
+            paging = postService.getPostsByCategory(category, page);
+            model.addAttribute("paging", paging);
+            model.addAttribute("category", category);
+            return "post/post_list";
+        } else {
+            // 카테고리가 선택되지 않은 경우 기존 코드로 모든 게시물을 페이징하여 가져오기
+            paging = postService.getPostList(page, kw);
+            model.addAttribute("paging", paging);
+            model.addAttribute("kw", kw);
+            return "post/post_list";
+        }
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -70,5 +87,16 @@ public class PostController {
         Member member = memberService.getMember(principal.getName());
         postService.vote(post, member);
         return String.format("redirect:/post/detail/%s", id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete/{id}")
+    public String deletePost(Principal principal, @PathVariable("id") Long id) {
+        Post post = postService.getPost(id);
+        if (!post.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+        }
+        postService.deletePost(post);
+        return "redirect:/";
     }
 }
