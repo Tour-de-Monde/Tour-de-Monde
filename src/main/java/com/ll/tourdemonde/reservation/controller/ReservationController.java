@@ -128,7 +128,12 @@ public class ReservationController {
         try {
             Place place = placeService.findById(placeId);
             RsData<Reservation> rsData = reservationService.createNewReservation(place, form);
-            return rq.redirect("/reserve/create/%d/detail".formatted(rsData.getData().getId()),rsData.getMsg());
+
+            if (form.getFlag().equals("continue")) {
+                return rq.redirect("/reserve/create/%d/detail".formatted(rsData.getData().getId()), rsData.getMsg());
+            } else {
+                return rq.redirect("/reserve/manage/%d".formatted(placeId), rsData.getMsg());
+            }
         } catch (Exception e) {
             return rq.redirect("/", e.getMessage());
         }
@@ -166,9 +171,9 @@ public class ReservationController {
 
         RsData<Reservation> reservationRsData = reservationService.createNewReservationOption(reservationId, form);
 
-        try{
+        try {
             return rq.redirect("/reserve/manage/%d".formatted(reservationRsData.getData().getPlace().getId()), reservationRsData.getMsg());
-        } catch(Exception e) {
+        } catch (Exception e) {
             return rq.redirect("/", e.getMessage());
         }
     }
@@ -214,7 +219,7 @@ public class ReservationController {
 
             // 관리페이지로 이동
             return rq.redirect("/reserve/manage/%d".formatted(placeId), reservationRsData.getMsg());
-        } catch(Exception e){
+        } catch (Exception e) {
             return rq.redirect("/", e.getMessage());
         }
     }
@@ -267,8 +272,8 @@ public class ReservationController {
 
             // 관리페이지로 이동
             return "redirect:/reserve/manage/%d".formatted(placeId);
-        } catch(Exception e){
-            return rq.redirect("/",e.getMessage());
+        } catch (Exception e) {
+            return rq.redirect("/", e.getMessage());
         }
     }
 
@@ -285,9 +290,9 @@ public class ReservationController {
             reservationService.deleteReservation(reservationId);
 
             // 관리페이지로 이동
-            return rq.redirect("/reserve/manage/%d".formatted(placeId),"삭제 성공");
-        }catch(Exception e){
-            return  rq.redirect("/reserve/manage/%d".formatted(placeId),"삭제 실패");
+            return rq.redirect("/reserve/manage/%d".formatted(placeId), "삭제 성공");
+        } catch (Exception e) {
+            return rq.redirect("/reserve/manage/%d".formatted(placeId), "삭제 실패");
         }
     }
 
@@ -306,7 +311,7 @@ public class ReservationController {
 
             // 관리페이지로 이동
             return rq.redirect("/reserve/manage/%d".formatted(placeId), "성공");
-        }catch(Exception e){
+        } catch (Exception e) {
             return rq.redirect("/reserve/manage/%d".formatted(placeId), "실패");
         }
     }

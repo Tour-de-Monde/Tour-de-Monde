@@ -8,4 +8,5 @@ public class ReservationCreateForm {
     private String seller;
     private Long place;
     private ReservationType type;
+    private String flag;
 }

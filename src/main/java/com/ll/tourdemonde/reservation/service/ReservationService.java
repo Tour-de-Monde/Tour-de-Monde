@@ -65,6 +65,8 @@ public class ReservationService {
         try {
             Reservation reservation = findById(reservationId);
 
+            checkAuthoritiesOfReservation(reservation);
+
             // endDate가 없으면 시작일로 설정
             form.initEndDateIfNotExists();
 
@@ -94,11 +96,7 @@ public class ReservationService {
     @Transactional
     public RsData<Reservation> modifyReservation(Reservation reservation, ReservationCreateForm form) {
         // 셀러와 수정한 사람이 동일인인지 확인
-        Member modifier = rq.getMember();
-
-        if (!reservation.getSeller().equals(modifier) || !modifier.isAdmin()) {
-            throw new GlobalException("F-NoAuthentication", "권한이 없는 사용자입니다.");
-        }
+        checkAuthoritiesOfReservation(reservation);
 
         reservation.setType(form.getType());
 
@@ -123,11 +121,7 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 입력입니다."));
 
-        Member modifier = rq.getMember();
-
-        if (!reservation.getSeller().equals(modifier) || !modifier.isAdmin()) {
-            throw new GlobalException("F-NoAuthentication", "권한이 없는 사용자입니다.");
-        }
+        checkAuthoritiesOfReservation(reservation);
 
         // endDate 초기화
         form.initEndDateIfNotExists();
@@ -152,11 +146,7 @@ public class ReservationService {
     public void deleteReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다."));
-        Member modifier = rq.getMember();
-
-        if (!reservation.getSeller().equals(modifier) || !modifier.isAdmin()) {
-            throw new GlobalException("F-NoAuthentication", "권한이 없는 사용자입니다.");
-        }
+        checkAuthoritiesOfReservation(reservation);
 
         reservationRepository.delete(reservation);
     }
@@ -164,11 +154,7 @@ public class ReservationService {
     // 예약 옵션 삭제
     @Transactional
     public void deleteOption(Reservation reservation, Long optionId) {
-        Member modifier = rq.getMember();
-
-        if (!reservation.getSeller().equals(modifier) || !modifier.isAdmin()) {
-            throw new GlobalException("F-NoAuthentication", "권한이 없는 사용자입니다.");
-        }
+        checkAuthoritiesOfReservation(reservation);
 
         reservation.removeOption(optionId);
     }
@@ -191,4 +177,11 @@ public class ReservationService {
         return new RsData<>("S-", "성공", optionPage);
     }
 
+    private void checkAuthoritiesOfReservation(Reservation reservation) throws GlobalException{
+        Member modifier = rq.getMember();
+
+        if (!reservation.getSeller().equals(modifier) && !modifier.isAdmin()) {
+            throw new GlobalException("F-NoAuthentication", "권한이 없는 사용자입니다.");
+        }
+    }
 }
