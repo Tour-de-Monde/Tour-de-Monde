@@ -1,4 +1,49 @@
-<!DOCTYPE html>
+<html layout:decorate="~{global/usrlayout}">
+
+<body>
+<div layout:fragment="content">
+
+    <div class="title">
+        <h1>마이페이지</h1>
+    </div>
+    <h3>회원정보 수정</h3>
+
+    <div class="grid place-items-center h-screen">
+
+        <div role="tablist" class="tabs tabs-lifted">
+            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="내가 쓴 글" checked />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                <ul th:each="post : ${myPostList}">
+                    <li>
+                        <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                    </li>
+                </ul>
+            </div>
+
+            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="좋아요 누른 글" />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                <ul th:each="post : ${votePostList}">
+                    <li>
+                        <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                    </li>
+                </ul>
+            </div>
+
+            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="예약 내역" />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+
+
+
+
+<!--<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -48,6 +93,7 @@
         }
     </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -94,5 +140,8 @@
 
     })
 </script>
+
 </body>
+
 </html>
+-->

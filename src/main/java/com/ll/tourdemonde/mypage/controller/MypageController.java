@@ -22,7 +22,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
-@RequestMapping("/mypage")
+@RequestMapping("/member")
 @RequiredArgsConstructor
 @Controller
 public class MypageController {
@@ -31,7 +31,7 @@ public class MypageController {
     private final MemberService memberService;
     private final PostService postService;
 
-    @GetMapping
+    @GetMapping("/mypage")
     public String mypage(Principal principal, Model model){
         Optional<Member> member = this.memberService.findByUsername(principal.getName());
         String username = memberService.findUsername(member.get());

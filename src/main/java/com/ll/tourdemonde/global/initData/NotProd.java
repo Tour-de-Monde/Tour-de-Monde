@@ -1,5 +1,5 @@
 package com.ll.tourdemonde.global.initData;
-
+/*
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.payment.checkReservation.service.CheckReservationService;
@@ -25,7 +25,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
-
 @Profile("dev")
 @Configuration
 @RequiredArgsConstructor
@@ -99,4 +98,4 @@ public class NotProd {
 //        orderService.payByTossPayments(order1, 100_000L);
         orderService.payByTossPayments(order2, 50_000L);
     }
-}
+}*/
