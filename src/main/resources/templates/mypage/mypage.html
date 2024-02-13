@@ -1,5 +1,103 @@
 <html layout:decorate="~{global/usrlayout}">
+<<<<<<< HEAD
 
+=======
+
+<body>
+<div layout:fragment="content">
+
+    <div class="title">
+        <h1>마이페이지</h1>
+    </div>
+    <h3>회원정보 수정</h3>
+
+    <div class="grid place-items-center h-screen">
+
+        <div role="tablist" class="tabs tabs-lifted">
+            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="내가 쓴 글" checked />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                <ul th:each="post : ${myPostList}">
+                    <li>
+                        <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                    </li>
+                </ul>
+            </div>
+
+            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="좋아요 누른 글" />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                <ul th:each="post : ${votePostList}">
+                    <li>
+                        <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                    </li>
+                </ul>
+            </div>
+
+            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="예약 내역" />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>tab</title>
+    <style>
+        body{
+            margin-top: 300px;
+            line-height: 1.6;
+        }
+
+        .container{
+            width: 80%;
+            margin: 0 auto;
+        }
+
+
+        ul.tabs{
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+            display: flex;
+        }
+
+        ul.tabs li{
+            background: none;
+            color: #222;
+            display: inline-block;
+            padding: 10px 15px;
+            cursor: pointer;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        ul.tabs li.current{
+            background: #ededed;
+            color: #222;
+        }
+
+        .tab-content{
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+        .tab-content.current{
+            display: inherit;
+        }
+    </style>
+</head>
+
+>>>>>>> ce746f1 (feat : 마이페이지 수정)
 <body>
 <div layout:fragment="content">
     <div class="grid place-items-center">
@@ -93,6 +191,30 @@
     </div>
 </div>
 
+<<<<<<< HEAD
 </body>
 
 </html>
+=======
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script>
+    $(document).ready(function(){
+
+        $('ul.tabs li').click(function(){
+            var tab_id = $(this).attr('data-tab');
+
+            $('ul.tabs li').removeClass('current');
+            $('.tab-content').removeClass('current');
+
+            $(this).addClass('current');
+            $("#"+tab_id).addClass('current');
+        })
+
+    })
+</script>
+
+</body>
+
+</html>
+-->
+>>>>>>> ce746f1 (feat : 마이페이지 수정)

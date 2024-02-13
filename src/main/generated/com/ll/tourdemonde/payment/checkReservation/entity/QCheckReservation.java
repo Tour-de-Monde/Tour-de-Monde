@@ -24,10 +24,13 @@ public class QCheckReservation extends EntityPathBase<CheckReservation> {
 
     public final com.ll.tourdemonde.global.jpa.QBaseEntity _super = new com.ll.tourdemonde.global.jpa.QBaseEntity(this);
 
+<<<<<<< HEAD
     public final NumberPath<Long> adultCount = createNumber("adultCount", Long.class);
 
     public final NumberPath<Long> childrenCount = createNumber("childrenCount", Long.class);
 
+=======
+>>>>>>> ce746f1 (feat : 마이페이지 수정)
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
 
