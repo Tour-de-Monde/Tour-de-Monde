@@ -44,3 +44,4 @@ c:/
 application-secret.yml
 TdM_dev.mv.db
 TdM_dev.trace.db
+/src/main/generated

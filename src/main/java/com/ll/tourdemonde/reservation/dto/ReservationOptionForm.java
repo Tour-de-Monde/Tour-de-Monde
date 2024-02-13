@@ -3,9 +3,11 @@ package com.ll.tourdemonde.reservation.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ReservationOptionForm {
     private Long reservationId;
 
@@ -17,7 +19,9 @@ public class ReservationOptionForm {
     private String time;
 
     @NotNull
-    private Long price;
+    private Long adultPrice;
+
+    private Long childrenPrice;
 
     public boolean hasEndDate() {
         if (endDate == null) {
@@ -26,10 +30,9 @@ public class ReservationOptionForm {
         return !endDate.isBlank();
     }
 
-    public ReservationOptionForm initEndDateIfNotExists() {
+    public void initEndDateIfNotExists(){
         if (!hasEndDate()) {
             this.endDate = startDate;
         }
-        return this;
     }
 }

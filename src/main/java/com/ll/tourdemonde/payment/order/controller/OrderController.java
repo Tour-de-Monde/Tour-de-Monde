@@ -134,6 +134,7 @@ public class OrderController {
     @GetMapping("/fail")
     @PreAuthorize("isAuthenticated()")
     public String showFail(String failCode, String failMessage) {
+
         rq.setAttribute("code", failCode);
         rq.setAttribute("message", failMessage);
 
@@ -210,4 +211,5 @@ public class OrderController {
 
         return ResponseEntity.status(code).body(jsonObject);
     }
+
 }

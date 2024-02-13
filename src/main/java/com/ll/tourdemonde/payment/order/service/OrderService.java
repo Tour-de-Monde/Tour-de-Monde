@@ -46,7 +46,7 @@ public class OrderService {
         }
 
         // 예약에 적힌 가격이랑 pgPayPrice 가격이랑 같은지 확인
-        if (order.getCheckReservation().getReservationOption().getPrice() != pgPayPrice)
+        if (order.getPrice() != pgPayPrice)
             throw new GlobalException("400-2", "예약하신 금액과 등록된 결제 금액이 일치하지 않습니다.");
     }
 

@@ -5,9 +5,11 @@ import com.ll.tourdemonde.global.jpa.BaseEntity;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.payment.checkReservation.entity.CheckReservation;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
@@ -26,6 +28,9 @@ public class Order extends BaseEntity { // 회원의 예약 저장
     @OneToOne
     @JoinColumn(name = "check_reservation_id")
     private CheckReservation checkReservation; // 하나의 주문에 1개의 예약
+
+    @NotNull
+    private Long price; // 총 결제액
 
     private LocalDateTime payDate; // 결제일
     private LocalDateTime cancelDate; // 취소일
@@ -61,10 +66,7 @@ public class Order extends BaseEntity { // 회원의 예약 저장
         return this.getCheckReservation().getReservationOption().getReservation().getPlace().getName();
     }
 
-    // 예약한 장소의 가격
-    public Long getPrice() {
-        return this.getCheckReservation().getReservationOption().getPrice();
-    }
+    // 예약한 장소의 가격 Getter로 변경
 
     public boolean isCancelable() {
         if (cancelDate != null) return false;

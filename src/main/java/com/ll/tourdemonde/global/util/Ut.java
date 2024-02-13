@@ -37,6 +37,13 @@ public class Ut {
         return date.atTime(time);
     }
 
+    public static LocalTime stringToLocalTime(String string){
+        // 포멧터 설정
+        DateTimeFormatter hourMinuteFormat = DateTimeFormatter.ofPattern("HH:mm");
+        // localTime으로 파싱 및 리턴
+        return LocalTime.parse(string, hourMinuteFormat);
+    }
+
     public static class date {
         private date() {
         }

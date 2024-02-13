@@ -9,29 +9,45 @@
 <div layout:fragment="content">
 
     <main>
-        <h2>새로운 예약 생성</h2>
-        <div>
-            <form method="POST" th:action id="reservationForm">
-                <label>판매자명 : [[${@rq.getUser().getUsername()}]]</label>
+        <h2 class="text-xl font-bold">새로운 예약 생성</h2>
+        <div class="card bg-base-100 shadow-xl">
+            <form class="card-body" method="POST" th:action id="reservationForm">
+                <section class="card-title">
+                    <div>
+                        <span>장소명 : </span><span th:text="${place.getName()}"></span>
+                    </div>
+                </section>
+                <div>판매자명 : [[${@rq.getUser().getUsername()}]]</div>
                 <input type="hidden" name="seller" th:value="${@rq.getUser().getUsername()}">
                 <hr>
-                <section>
-                    <span>장소명 : </span><span th:text="${place.getName()}"></span>
-                </section>
-                <hr>
                 <fieldset>
-                    <legend>type</legend>
-                    <div th:each="entry : ${reservationTypes}">
-                        <label th:for="${entry.key}">[[${entry.value}]]</label>
-                        <input type="radio" th:id="${entry.key}" th:value="${entry.key}" name="type">
+                    <legend class="text-lg font-bold">Type</legend>
+                    <div class="form-control w-96 m-4" th:each="entry : ${reservationTypes}">
+                        <label th:for="${entry.key}" class="label cursor-pointer">
+                            <span class="label-text">[[${entry.value}]]</span>
+                            <input type="radio" th:id="${entry.key}" th:value="${entry.key}" name="type"
+                                   class="radio checked:bg-blue-500">
+                        </label>
                     </div>
                 </fieldset>
-                <button type="submit">옵션생성</button>
+
+                <input type="hidden" id="buttonClicked" name="flag" value="">
+
+                <div class="flex justify-end">
+                    <button class="btn btn-primary m-2" type="submit" id="complete" onclick="setClicked('complete')"> 새로운 예약 생성</button>
+                    <button class="btn btn-primary m-2" type="submit" id="continue" onclick="setClicked('complete')">생성 후 옵션 생성</button>
+                    <a class="btn btn-primary m-2" th:href="|/reserve/manage/${place.id}|">관리페이지</a>
+                </div>
             </form>
         </div>
 
     </main>
 </div>
+<script>
+    function setClicked(buttonId) {
+        document.getElementById('buttonClicked').value = buttonId;
+    }
+</script>
 
 </body>
 

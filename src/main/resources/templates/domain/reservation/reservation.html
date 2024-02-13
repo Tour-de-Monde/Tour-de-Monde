@@ -26,61 +26,123 @@
                     <span class="text-gray-700">종료일</span>
                     <input type="date" id="endDate" class="form-input mt-1 block w-full" placeholder="종료일을 선택하세요">
                 </label>
-                <button onclick="makeSearchParam()" class="btn btn-primary">검색</button>
+                <button onclick="onlySearch()" class="btn btn-primary">검색</button>
             </div>
             <hr class="my-8 border-gray-300">
-
+            <!--예약이 없을 경우 생성-->
+            <section th:if="${options == null}">
+                <div>예약을 생성해주세요.</div>
+            </section>
             <!--예약가능 리스트 보여주기-->
-            <section th:if="${reservationList != null}">
-                <div th:each="reservation : ${reservationList}" class="mb-4">
-                    <div th:if="${!reservation.getOptions().isEmpty()}">
-                        <div th:each="option : ${reservation.getOptions()}" class="mb-2">
-                            <div class="font-bold mb-1" th:text="${reservation.getType()}"></div>
-                            <div class="flex items-center">
-                                <span class="mr-2">예약시간 :</span>
-                                <span th:text="${option.time}"></span>
-                                <span th:if="${option.occupied}" class="text-red-500 ml-2">예약됨</span>
+            <section th:if="${options != null}">
+                <div th:each="option : ${options}" class="mb-2">
+                    <article>
+                        <div>
+                            <span class="font-bold mb-1" th:text="${option.getReservation().type}"></span>
+                        </div>
+                        <div class="flex items-center">
+                            <span>예약일 : </span><span th:text="${option.startDate}"></span>
+                            <span th:if="${option.reservation.type == 'ACCOMMODATE'}"
+                                  th:text="|'~' ${option.endDate}|"></span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">예약시간 : </span><span th:text="${option.time}"></span>
+                            <span class="badge badge-neutral" th:if="${option.occupied}">예약됨</span>
+                        </div>
+                        <div>
+                            <div class="mr-2">가격</div>
+                            <div>
+                                <span class="mr-2">성인 : </span><span th:text="${option.adultPrice}"></span><span
+                                    class="ml-1">원</span>
                             </div>
                             <div>
-                                <span class="mr-2">가격 :</span>
-                                <span th:text="${option.price}"></span><span class="ml-1">원</span>
+                                <span class="mr-2">어린이 : </span><span th:text="${option.childrenPrice}"></span><span
+                                    class="ml-1">원</span>
                             </div>
-                            <button class="btn btn-primary mt-2">예약하기</button>
                         </div>
-                    </div>
+                        <form method="POST" th:action="|/reservation/${option.id}/check|"
+                              th:if="${!option.occupied}">
+                            <label>
+                                <span>성인 : </span><input type="number" name="adultCount"><span>명</span>
+                            </label>
+                            <label>
+                                <span>어린이 : </span><input type="number" name="childrenCount"><span>명</span>
+                            </label>
+
+                            <button class="btn btn-primary mt-2" type="submit">예약하기</button>
+                        </form>
+                    </article>
                 </div>
-            </section>
-            <section th:if="${reservationList == null}">
-                <div>예약을 생성해주세요.</div>
+                <div class="flex justify-center">
+                <span th:each="num : ${#numbers.sequence(1,options.totalPages)}">
+                <a th:href="'javascript: pageMove(' + ${num} + ');'" th:text="${num}"></a>
+                </span>
+                </div>
+                </span>
             </section>
         </section>
     </main>
 
-</div>
+    <script>
+        // 검색기능
+        function onlySearch() {
+            sendQuery(makeSearchParam());
+        }
 
-<script>
-    function makeSearchParam() {
-        const startDate = document.getElementById("startDate").value;
-        const endDate = document.getElementById("endDate").value;
+        function makeSearchParam() {
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
 
-        console.log(startDate);
-        console.log(endDate);
 
-        const searchParams = new URLSearchParams({
-                startDate: startDate,
-                endDate: endDate
+            console.log(startDate);
+            console.log(endDate);
+
+            const searchParams = new URLSearchParams({
+                    startDate: startDate,
+                    endDate: endDate
+                }
+            );
+
+            return searchParams.toString()
+        }
+
+        function sendQuery(queryString) {
+            const currentURL = window.location.href.split("\?").at(0);
+
+            console.log(currentURL);
+
+            window.location.href = currentURL + "?" + queryString;
+        }
+
+        // 페이지네이션으로 페이지 이동시 사용
+        function pageMove(num) {
+            const currentURL = window.location.href.split("\?")[0];
+            const params = new URLSearchParams(window.location.search);
+
+            params.delete("page");
+            params.set("page", num);
+
+            const queryString = params.toString();
+
+            window.location.href = currentURL + (queryString ? "?" + queryString : "");
+        }
+
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const startDate = urlParams.get("startDate");
+            const endDate = urlParams.get("endDate");
+
+            if (startDate) {
+                document.getElementById("startDate").value = startDate;
             }
-        );
 
-        const queryString = searchParams.toString();
+            if (endDate) {
+                document.getElementById("endDate").value = endDate;
+            }
+        }
+    </script>
 
-        const currentURL = window.location.href.split("\?").at(0);
-
-        console.log(currentURL);
-
-        window.location.href = currentURL + "?" + queryString;
-    }
-</script>
+</div>
 
 </body>
 

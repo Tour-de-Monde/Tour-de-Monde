@@ -3,6 +3,7 @@ package com.ll.tourdemonde.global.initData;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.payment.checkReservation.service.CheckReservationService;
+import com.ll.tourdemonde.payment.order.dto.OrderReservationReqDto;
 import com.ll.tourdemonde.payment.order.entity.Order;
 import com.ll.tourdemonde.payment.order.service.OrderService;
 import com.ll.tourdemonde.place.dto.PlaceDto;
@@ -68,17 +69,17 @@ public class NotProd {
         Place place4 = placeRepository.findById(4L).get();
 
         // 업체 등록
-        Reservation company1 = reservationService.createNewReservation(place1, new ReservationCreateForm(admin.getUsername(), place1.getId(), ReservationType.RESTAURANT));
-        Reservation company2 = reservationService.createNewReservation(place2, new ReservationCreateForm(admin.getUsername(), place2.getId(), ReservationType.ACCOMMODATE));
-        Reservation company3 = reservationService.createNewReservation(place3, new ReservationCreateForm(admin.getUsername(), place3.getId(), ReservationType.LEISURE));
+        Reservation company1 = reservationService.createNewReservation(place1, new ReservationCreateForm(admin.getUsername(), place1.getId(), ReservationType.RESTAURANT, "continue")).getData();
+        Reservation company2 = reservationService.createNewReservation(place2, new ReservationCreateForm(admin.getUsername(), place2.getId(), ReservationType.ACCOMMODATE,"continue")).getData();
+        Reservation company3 = reservationService.createNewReservation(place3, new ReservationCreateForm(admin.getUsername(), place3.getId(), ReservationType.LEISURE,"continue")).getData();
 
         // 업체 예약 등록
-        reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-04", "2024-02-04", "11:00", 50_000L));
-        reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-05", "2024-02-06", "11:00", 60_000L));
-        reservationService.createNewReservationOption(new ReservationOptionForm(company1.getId(), "2024-02-06", "2024-02-06", "11:00", 70_000L));
+        reservationService.createNewReservationOption(company1.getId(), new ReservationOptionForm(company1.getId(), "2024-02-04", "2024-02-04", "11:00", 50_000L, 3_000L));
+        reservationService.createNewReservationOption(company1.getId(), new ReservationOptionForm(company1.getId(), "2024-02-05", "2024-02-06", "11:00", 60_000L,3_000L));
+        reservationService.createNewReservationOption(company1.getId(), new ReservationOptionForm(company1.getId(), "2024-02-06", "2024-02-06", "11:00", 70_000L,3_000L));
 
-        reservationService.createNewReservationOption(new ReservationOptionForm(company2.getId(), "2024-02-03", "2024-02-03", "11:00", 80_000L));
-        reservationService.createNewReservationOption(new ReservationOptionForm(company2.getId(), "2024-02-04", "2024-02-05", "11:00", 90_000L));
+        reservationService.createNewReservationOption(company2.getId(), new ReservationOptionForm(company2.getId(), "2024-02-03", "2024-02-03", "11:00", 80_000L,3_000L));
+        reservationService.createNewReservationOption(company2.getId(), new ReservationOptionForm(company2.getId(), "2024-02-04", "2024-02-05", "11:00", 90_000L,3_000L));
 
         ReservationOption reservationOption1 = reservationOptionRepository.findById(1L).get();
         ReservationOption reservationOption2 = reservationOptionRepository.findById(2L).get();
@@ -87,9 +88,12 @@ public class NotProd {
         ReservationOption reservationOption4 = reservationOptionRepository.findById(4L).get();
         ReservationOption reservationOption5 = reservationOptionRepository.findById(5L).get();
 
+        OrderReservationReqDto dto = new OrderReservationReqDto();
+        dto.setAdultCount(1L);
+        dto.setChildrenCount(1L);
         // 사용자 예약 등록 - Order, CheckReservation 저장
-        Order order1 = checkReservationService.checkReservation(reservationOption1.getId(), member1);
-        Order order2 = checkReservationService.checkReservation(reservationOption4.getId(), member2);
+        Order order1 = checkReservationService.checkReservation(reservationOption1.getId(), member1, dto);
+        Order order2 = checkReservationService.checkReservation(reservationOption4.getId(), member2, dto);
 
         // 토스페이먼츠 결제
 //        orderService.payByTossPayments(order1, 100_000L);

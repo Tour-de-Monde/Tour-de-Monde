@@ -16,6 +16,7 @@ public class CashService {
 
     // 캐시 로그 저장
     @Transactional
+
     public CashLog addCash(Member member, long price, CashLog.EventType eventType, Order order) {
         CashLog cashLog = CashLog.builder()
                 .member(member)
