@@ -27,7 +27,6 @@
             </form>
         </div>
 
-
         <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl">
             <th:block th:each="post : ${paging}">
                 <a th:href="@{/post/detail/{id}(id=${post.id})}" class="grid-item border p-3 max-w-md rounded-lg flex flex-col items-start justify-start hover:shadow-md hover:border-gray-300 transition duration-300">
