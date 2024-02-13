@@ -44,17 +44,12 @@ public class MypageService {
         List<Post> postList = postRepository.findAll();
         Optional<Member> member = memberRepository.findByUsername(username);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 9f2bb3c (feat : 마이페이지 좋아요 누른 글 리스트 구현)
         List<Post> votePostList = postList.stream()
                 .filter(post -> post.getVoter().stream().anyMatch(v -> v.equals(member.get())))
                 .collect(Collectors.toList());
 
         return votePostList;
     }
-<<<<<<< HEAD
 
     //현재 로그인한 사용자의 예약 리스트 반환
     public List<Order> myOrderList(String username) {
@@ -69,6 +64,3 @@ public class MypageService {
         return myOrderList;
     }
 }
-=======
-}
->>>>>>> 9f2bb3c (feat : 마이페이지 좋아요 누른 글 리스트 구현)

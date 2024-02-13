@@ -26,6 +26,7 @@ public class QReservationOption extends EntityPathBase<ReservationOption> {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 5aeccfb (feat : 마이페이지 권한 없을 시 리다이렉트)
     public final NumberPath<Long> adultPrice = createNumber("adultPrice", Long.class);
@@ -37,6 +38,8 @@ public class QReservationOption extends EntityPathBase<ReservationOption> {
 >>>>>>> ce746f1 (feat : 마이페이지 수정)
 =======
 >>>>>>> 5aeccfb (feat : 마이페이지 권한 없을 시 리다이렉트)
+=======
+>>>>>>> c260145 (feat : 마이페이지 수정)
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
 
@@ -52,16 +55,22 @@ public class QReservationOption extends EntityPathBase<ReservationOption> {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     public final NumberPath<Long> price = createNumber("price", Long.class);
 
 >>>>>>> ce746f1 (feat : 마이페이지 수정)
 =======
 >>>>>>> 5aeccfb (feat : 마이페이지 권한 없을 시 리다이렉트)
+=======
+    public final NumberPath<Long> price = createNumber("price", Long.class);
+
+>>>>>>> c260145 (feat : 마이페이지 수정)
     public final QReservation reservation;
 
     public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     public final TimePath<java.time.LocalTime> time = createTime("time", java.time.LocalTime.class);
@@ -71,6 +80,9 @@ public class QReservationOption extends EntityPathBase<ReservationOption> {
 =======
     public final TimePath<java.time.LocalTime> time = createTime("time", java.time.LocalTime.class);
 >>>>>>> 5aeccfb (feat : 마이페이지 권한 없을 시 리다이렉트)
+=======
+    public final StringPath time = createString("time");
+>>>>>>> c260145 (feat : 마이페이지 수정)
 
     public QReservationOption(String variable) {
         this(ReservationOption.class, forVariable(variable), INITS);

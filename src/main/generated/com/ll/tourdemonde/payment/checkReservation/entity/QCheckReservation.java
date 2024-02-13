@@ -26,6 +26,7 @@ public class QCheckReservation extends EntityPathBase<CheckReservation> {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 5aeccfb (feat : 마이페이지 권한 없을 시 리다이렉트)
     public final NumberPath<Long> adultCount = createNumber("adultCount", Long.class);
@@ -37,6 +38,8 @@ public class QCheckReservation extends EntityPathBase<CheckReservation> {
 >>>>>>> ce746f1 (feat : 마이페이지 수정)
 =======
 >>>>>>> 5aeccfb (feat : 마이페이지 권한 없을 시 리다이렉트)
+=======
+>>>>>>> c260145 (feat : 마이페이지 수정)
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
 

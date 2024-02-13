@@ -32,7 +32,10 @@ public class MypageController {
     private final MypageService mypageService;
     private final MemberService memberService;
 
+<<<<<<< HEAD
     @PreAuthorize("isAuthenticated()")
+=======
+>>>>>>> c260145 (feat : 마이페이지 수정)
     @GetMapping("/mypage")
     public String mypage(Principal principal, Model model){
         Optional<Member> member = this.memberService.findByUsername(principal.getName());

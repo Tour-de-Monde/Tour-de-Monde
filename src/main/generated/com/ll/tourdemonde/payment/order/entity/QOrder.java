@@ -43,6 +43,7 @@ public class QOrder extends EntityPathBase<Order> {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     public final NumberPath<Long> price = createNumber("price", Long.class);
 
 =======
@@ -51,6 +52,8 @@ public class QOrder extends EntityPathBase<Order> {
     public final NumberPath<Long> price = createNumber("price", Long.class);
 
 >>>>>>> 5aeccfb (feat : 마이페이지 권한 없을 시 리다이렉트)
+=======
+>>>>>>> c260145 (feat : 마이페이지 수정)
     public final DateTimePath<java.time.LocalDateTime> refundDate = createDateTime("refundDate", java.time.LocalDateTime.class);
 
     public QOrder(String variable) {
