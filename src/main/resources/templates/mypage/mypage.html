@@ -1,27 +1,65 @@
 <html layout:decorate="~{global/usrlayout}">
 
+<head>
+    <style>/*
+        .tabs {
+            display: flex;
+            width: 80%;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            width: calc(80% / 3); //탭 요소를 가로 폭을 세 등분
+        }
+
+        .tab-content {
+            flex: 1;
+        }*/
+    </style>
+</head>
+
 <body>
 <div layout:fragment="content">
+    <div class="grid place-items-center">
+        <div class="image-container">
+            <img class="rounded-full" th:src="${@rq.profileImgUrl}" style="width: 100px;">
+        </div>
+        <span th:text="${@rq.member.nickname}" style="font-size: 20px; font-weight: bold;"></span>
+        <p>
+            <a class="btn btn-link" href="/member/changeInfo">회원정보 수정</a>
+        </p>
 
-    <div class="title">
-        <h1>마이페이지</h1>
-    </div>
-    <h3>회원정보 수정</h3>
-
-    <div class="grid place-items-center h-screen">
-
+        <div class="w-4/5 mx-auto">
         <div role="tablist" class="tabs tabs-lifted">
-            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="내가 쓴 글" checked />
-            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-                <ul th:each="post : ${myPostList}">
-                    <li>
-                        <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
-                    </li>
-                </ul>
+            <input type="radio" name="my_tabs_2" role="tab" class="tab w-1/3 text-center" aria-label="내가 쓴 글" checked />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <!-- head -->
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>제목</th>
+                            <th>조회수</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- row -->
+                        <tr th:each="post : ${myPostList}">
+                            <td th:text="${post.id}"></td>
+                            <td>
+                                <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                            </td>
+                            <td th:text="${post.view}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="좋아요 누른 글" />
-            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+            <input type="radio" name="my_tabs_2" role="tab" class="tab w-1/3 text-center" aria-label="좋아요 누른 글" />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
                 <ul th:each="post : ${votePostList}">
                     <li>
                         <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
@@ -29,8 +67,8 @@
                 </ul>
             </div>
 
-            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="예약 내역" />
-            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+            <input type="radio" name="my_tabs_2" role="tab" class="tab w-1/3 text-center" aria-label="예약 내역" />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
                 <ul th:each="order : ${myOrderList}">
                     <li>
                         <a th:href="@{|/order/${order.id}|}" th:text="${order.title}"></a>
@@ -39,113 +77,9 @@
             </div>
         </div>
     </div>
-</div>
-</body>
-
-</html>
-
-
-
-
-<!--<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>tab</title>
-    <style>
-        body{
-            margin-top: 300px;
-            line-height: 1.6;
-        }
-
-        .container{
-            width: 80%;
-            margin: 0 auto;
-        }
-
-
-        ul.tabs{
-            margin: 0px;
-            padding: 0px;
-            list-style: none;
-            display: flex;
-        }
-
-        ul.tabs li{
-            background: none;
-            color: #222;
-            display: inline-block;
-            padding: 10px 15px;
-            cursor: pointer;
-            text-align: center;
-            flex-grow: 1;
-        }
-
-        ul.tabs li.current{
-            background: #ededed;
-            color: #222;
-        }
-
-        .tab-content{
-            display: none;
-            background: #ededed;
-            padding: 15px;
-        }
-
-        .tab-content.current{
-            display: inherit;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container">
-    <div class="title">
-        <h1>마이페이지</h1>
-    </div>
-    <h3>회원정보 수정</h3>
-    <ul class="tabs">
-        <li class="tab-link current" data-tab="tab-1">내가 쓴 글</li>
-        <li class="tab-link" data-tab="tab-2">좋아요 누른 글</li>
-        <li class="tab-link" data-tab="tab-3">예약 내역</li>
-    </ul>
-    <div id="tab-1" class="tab-content current">
-        <ul th:each="post : ${myPostList}">
-            <li>
-                <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
-            </li>
-        </ul>
-    </div>
-    <div id="tab-2" class="tab-content">
-        <ul th:each="post : ${votePostList}">
-            <li>
-                <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
-            </li>
-        </ul>
-    </div>
-    <div id="tab-3" class="tab-content">
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script>
-    $(document).ready(function(){
-
-        $('ul.tabs li').click(function(){
-            var tab_id = $(this).attr('data-tab');
-
-            $('ul.tabs li').removeClass('current');
-            $('.tab-content').removeClass('current');
-
-            $(this).addClass('current');
-            $("#"+tab_id).addClass('current');
-        })
-
-    })
-</script>
 
 </body>
 
 </html>
--->

@@ -11,7 +11,7 @@
             <h4>회원정보 수정</h4>
         </div>
     </div>
-    <form th:action="@{/member/signup}" th:object="${memberCreateForm}" method="post">
+    <form th:action="@{/member/changeInfo}" th:object="${memberCreateForm}" method="post">
         <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
             <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
         </div>
@@ -43,7 +43,7 @@
             <label for="phoneNumber" class="form-label">휴대폰 번호</label>
             <input type="tel" placeholder="010-1234-5678" th:field="*{phoneNumber}" class="form-control">
         </div>
-        <button type="submit" class="btn btn-primary">회원가입</button>
+        <button type="submit" class="btn btn-primary">회원정보 수정</button>
     </form>
 
     <script>
