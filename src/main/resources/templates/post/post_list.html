@@ -1,10 +1,8 @@
 <html layout:decorate="~{global/usrlayout}">
+
 <div class="flex flex-col items-center justify-center h-screen">
-
     <a class="btn btn-link" href="/post/list">홈</a>
-
     <div layout:fragment="content" class="grid-container grid gap-6 justify-center">
-
         <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css" />
         <script src="https://cdn.tailwindcss.com"></script>
 
@@ -26,7 +24,6 @@
                 <button class="btn btn-info" type="submit" name="category" value="제주">제주</button>
             </form>
         </div>
-
 
         <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl">
             <th:block th:each="post : ${paging}">
