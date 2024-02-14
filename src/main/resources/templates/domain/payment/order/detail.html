@@ -65,8 +65,8 @@
             </div>
 
             <div>
-                <label>고객 휴대전화번호(- 포함)</label>
-                <input type="text" name="customerMobilePhone" placeholder="010-1234-1234" class="input input-bordered"
+                <label>고객 휴대전화번호(- 제외)</label>
+                <input type="text" name="customerMobilePhone" placeholder="01012341234" class="input input-bordered"
                        th:value="${order.buyer.phoneNumber}">
             </div>
 
@@ -124,8 +124,8 @@
 
                 form.customerMobilePhone.value = form.customerMobilePhone.value.trim();
 
-                if (form.customerMobilePhone.value.length === 0 || !form.customerMobilePhone.value.includes('-') || form.customerMobilePhone.value.length !== 11) {
-                    toastWarning("고객 휴대전화번호를 입력해주세요.<br>(- 포함) (숫자 11자리로만 입력해주세요.)");
+                if (form.customerMobilePhone.value.length === 0 || form.customerMobilePhone.value.includes('-') || form.customerMobilePhone.value.length !== 11) {
+                    toastWarning("고객 휴대전화번호를 입력해주세요.<br>(- 제외, 숫자 11자리로만 입력해주세요.)");
                     form.customerMobilePhone.focus();
                     return;
                 }
