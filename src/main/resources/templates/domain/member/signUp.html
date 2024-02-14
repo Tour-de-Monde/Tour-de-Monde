@@ -7,7 +7,7 @@
 <body>
 <div layout:fragment="content">
     <div class="my-3 border-bottom">
-        <div>
+        <div class="flex justify-center">
             <h4>회원가입</h4>
         </div>
     </div>
@@ -15,43 +15,65 @@
         <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
             <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
         </div>
-        <div class="mb-3">
-            <label for="username" class="form-label">아이디</label>
-            <input type="text" th:field="*{username}" class="form-control">
+        <div class="mb-8">
+            <div class="flex justify-center">
+                <input type="text" placeholder="아이디" th:field="*{username}"
+                       class="border border-blue-500 px-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-1/2">
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">비밀번호</label>
-            <input type="password" th:field="*{password}" class="form-control">
+        <div class="mb-8">
+            <div class="flex justify-center">
+                <input type="password" placeholder="비밀번호" th:field="*{password}"
+                       class="border border-blue-500 px-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-1/2">
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="passwordConfirm" class="form-label">비밀번호 확인</label>
-            <input type="password" th:field="*{passwordConfirm}" class="form-control">
+        <div class="mb-8">
+            <div class="flex justify-center">
+                <input type="password" placeholder="비밀번호 확인" th:field="*{passwordConfirm}"
+                       class="border border-blue-500 px-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-1/2">
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">이메일</label>
-            <input type="email" th:field="*{email}" class="form-control">
+        <div class="mb-8">
+            <div class="flex justify-center">
+                <input type="email" placeholder="이메일" th:field="*{email}"
+                       class="border border-blue-500 px-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-1/2">
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="memberName" class="form-label">이름</label>
-            <input type="text" placeholder="실명 입력" th:field="*{memberName}" class="form-control">
+        <div class="mb-8">
+            <div class="flex justify-center">
+                <input type="text" placeholder="이름" th:field="*{memberName}"
+                       class="border border-blue-500 px-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-1/2">
+            </div>
         </div>
-        <div>
-            <label for="nickname" class="form-label">닉네임</label>
-            <input type="text" placeholder="닉네임 입력" th:field="*{nickname}" class="form-control">
+        <div class="mb-8">
+            <div class="flex justify-center">
+                <input type="text" placeholder="닉네임" th:field="*{nickname}"
+                       class="border border-blue-500 px-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-1/2">
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="birthDate" class="form-label">생년월일</label>
-            <input type="date" th:field="*{birthDate}" class="form-control">
+        <div class="mb-8">
+            <div class="flex justify-center">
+                <input type="date" placeholder="생년월일" th:field="*{birthDate}"
+                       class="border border-blue-500 px-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-1/2">
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="phoneNumber" class="form-label">휴대폰 번호</label>
-            <input type="tel" placeholder="010-1234-5678" th:field="*{phoneNumber}" class="form-control">
+        <div class="mb-8">
+            <div class="flex justify-center">
+                <input type="tel" placeholder="휴대폰 번호" th:field="*{phoneNumber}"
+                       class="border border-blue-500 px-3 py-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-1/2">
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">회원가입</button>
+
+        <div class="mb-8">
+            <div class="flex justify-center">
+                <button type="submit" class="btn btn-primary border border-blue-500 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent block w-1/2 hover:bg-blue-400">회원가입</button>
+            </div>
+        </div>
+
+
     </form>
 
-    <script>
-
+    <script src="https:cdn.tailwindcss.com/3.4.1">
     </script>
 </div>
 </body>
