@@ -20,11 +20,11 @@
             <div class="mt-4">
                 <label class="block mb-2">
                     <span class="text-gray-700">시작일</span>
-                    <input type="date" id="startDate" class="form-input mt-1 block w-full" placeholder="시작일을 선택하세요">
+                    <input type="date" id="startDate" class="form-input mt-1 block w-30" placeholder="시작일을 선택하세요">
                 </label>
                 <label class="block mb-2">
                     <span class="text-gray-700">종료일</span>
-                    <input type="date" id="endDate" class="form-input mt-1 block w-full" placeholder="종료일을 선택하세요">
+                    <input type="date" id="endDate" class="form-input mt-1 block w-30" placeholder="종료일을 선택하세요">
                 </label>
                 <button onclick="onlySearch()" class="btn btn-primary">검색</button>
             </div>
@@ -35,50 +35,52 @@
             </section>
             <!--예약가능 리스트 보여주기-->
             <section th:if="${options != null}">
-                <div th:each="option : ${options}" class="mb-2">
+                <div th:each="option : ${options}" class="mb-8 p-4 border rounded-lg">
                     <article>
                         <div>
-                            <span class="font-bold mb-1" th:text="${option.getReservation().type}"></span>
+                            <span class="font-bold mb-1 text-xl" th:text="${option.getReservation().type}"></span>
                         </div>
-                        <div class="flex items-center">
-                            <span>예약일 : </span><span th:text="${option.startDate}"></span>
+                        <div class="flex items-center mt-2">
+                            <span class="mr-2 text-gray-600">예약일 :</span><span th:text="${option.startDate}"></span>
                             <span th:if="${option.reservation.type == 'ACCOMMODATE'}"
-                                  th:text="|'~' ${option.endDate}|"></span>
+                                  th:text="| ~ ${option.endDate} |"></span>
                         </div>
-                        <div class="flex items-center">
-                            <span class="mr-2">예약시간 : </span><span th:text="${option.time}"></span>
-                            <span class="badge badge-neutral" th:if="${option.occupied}">예약됨</span>
+                        <div class="flex items-center mt-2">
+                            <span class="mr-2 text-gray-600">예약시간 :</span><span th:text="${option.time}"></span>
+                            <span class="badge badge-neutral ml-4" th:if="${option.occupied}">예약됨</span>
                         </div>
-                        <div>
-                            <div class="mr-2">가격</div>
+                        <div class="mt-4">
                             <div>
-                                <span class="mr-2">성인 : </span><span th:text="${option.adultPrice}"></span><span
-                                    class="ml-1">원</span>
+                                <span class="mr-2 text-gray-600">가격</span>
                             </div>
-                            <div>
-                                <span class="mr-2">어린이 : </span><span th:text="${option.childrenPrice}"></span><span
-                                    class="ml-1">원</span>
+                            <div class="flex">
+                                <div class="mr-4">
+                                    <span class="text-gray-600">성인 :</span><span th:text="${option.adultPrice}"></span><span class="ml-1">원</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-600">어린이 :</span><span th:text="${option.childrenPrice}"></span><span class="ml-1">원</span>
+                                </div>
                             </div>
                         </div>
                         <form method="POST" th:action="|/reservation/${option.id}/check|"
                               th:if="${!option.occupied}">
-                            <label>
-                                <span>성인 : </span><input type="number" name="adultCount"><span>명</span>
-                            </label>
-                            <label>
-                                <span>어린이 : </span><input type="number" name="childrenCount"><span>명</span>
-                            </label>
-
-                            <button class="btn btn-primary mt-2" type="submit">예약하기</button>
+                            <div class="flex items-center mt-4">
+                                <label class="mr-4">
+                                    <span class="text-gray-600">성인 :</span><input type="number" name="adultCount" class="form-input ml-2"><span class="ml-1">명</span>
+                                </label>
+                                <label>
+                                    <span class="text-gray-600">어린이 :</span><input type="number" name="childrenCount" class="form-input ml-2"><span class="ml-1">명</span>
+                                </label>
+                            </div>
+                            <button class="btn btn-primary mt-4" type="submit">예약하기</button>
                         </form>
                     </article>
                 </div>
                 <div class="flex justify-center">
-                <span th:each="num : ${#numbers.sequence(1,options.totalPages)}">
-                <a th:href="'javascript: pageMove(' + ${num} + ');'" th:text="${num}"></a>
-                </span>
+                    <span th:each="num : ${#numbers.sequence(1,options.totalPages)}">
+                        <a th:href="'javascript: pageMove(' + ${num} + ');'" th:text="${num}" class="mx-2 text-blue-500"></a>
+                    </span>
                 </div>
-                </span>
             </section>
         </section>
     </main>
@@ -93,10 +95,6 @@
             const startDate = document.getElementById("startDate").value;
             const endDate = document.getElementById("endDate").value;
 
-
-            console.log(startDate);
-            console.log(endDate);
-
             const searchParams = new URLSearchParams({
                     startDate: startDate,
                     endDate: endDate
@@ -108,8 +106,6 @@
 
         function sendQuery(queryString) {
             const currentURL = window.location.href.split("\?").at(0);
-
-            console.log(currentURL);
 
             window.location.href = currentURL + "?" + queryString;
         }
