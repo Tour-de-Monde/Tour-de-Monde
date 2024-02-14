@@ -1,5 +1,6 @@
 package com.ll.tourdemonde.post.repository;
 
+import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.post.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "   or c.content like %:kw% "
             + "   or m2.username like %:kw% ")
     Page<Post> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
-
 
     Page<Post> findAllByCategory(@Param("category") String category, Pageable pageable);
 }

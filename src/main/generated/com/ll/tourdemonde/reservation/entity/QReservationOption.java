@@ -24,6 +24,10 @@ public class QReservationOption extends EntityPathBase<ReservationOption> {
 
     public final com.ll.tourdemonde.post.entity.QBaseTime _super = new com.ll.tourdemonde.post.entity.QBaseTime(this);
 
+    public final NumberPath<Long> adultPrice = createNumber("adultPrice", Long.class);
+
+    public final NumberPath<Long> childrenPrice = createNumber("childrenPrice", Long.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
 
@@ -37,13 +41,11 @@ public class QReservationOption extends EntityPathBase<ReservationOption> {
 
     public final BooleanPath occupied = createBoolean("occupied");
 
-    public final NumberPath<Long> price = createNumber("price", Long.class);
-
     public final QReservation reservation;
 
     public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
 
-    public final StringPath time = createString("time");
+    public final TimePath<java.time.LocalTime> time = createTime("time", java.time.LocalTime.class);
 
     public QReservationOption(String variable) {
         this(ReservationOption.class, forVariable(variable), INITS);

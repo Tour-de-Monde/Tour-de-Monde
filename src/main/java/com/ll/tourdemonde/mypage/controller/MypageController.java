@@ -10,6 +10,7 @@ import com.ll.tourdemonde.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,7 @@ public class MypageController {
     private final MypageService mypageService;
     private final MemberService memberService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")
     public String mypage(Principal principal, Model model){
         Optional<Member> member = this.memberService.findByUsername(principal.getName());
@@ -46,46 +48,4 @@ public class MypageController {
 
         return "mypage/mypage";
     }
-
-    @GetMapping("/membershipInfo")
-    public String signup(MemberCreateForm memberCreateForm) {
-        return "domain/member/signUp";
-    }
-
-    //회원가입
-    @PostMapping("/membershipInfo")
-    public String signup(@Valid MemberCreateForm memberCreateForm, BindingResult bindingResult) {
-        //int verificationCode; 회원가입 인증 번호
-
-        if (bindingResult.hasErrors()) {
-            return "domain/member/signUp";
-        }
-
-        //패스워드와 패스워드 확인이 일치하지 않는 경우
-        if (!memberCreateForm.getPassword().equals(memberCreateForm.getPasswordConfirm())) {
-            bindingResult.rejectValue("passwordConfirm", "passwordNotConfirm",
-                    "패스워드 확인이 일치하지 않습니다.");
-            return "domain/member/signUp";
-        }
-
-        // 아이디 또는 휴대폰 번호 중복 시 예외 처리
-        try {
-            memberService.createMember(memberCreateForm.getUsername(), memberCreateForm.getPassword(),
-                    memberCreateForm.getEmail(), memberCreateForm.getMemberName(),
-                    memberCreateForm.getBirthDate(), memberCreateForm.getPhoneNumber(), memberCreateForm.getNickname());
-        } catch (DataIntegrityViolationException e) {
-            e.printStackTrace();
-            bindingResult.reject("signupFailed", "이미 가입된 사용자입니다.");
-
-            return "domain/member/signUp";
-        } catch (Exception e) {
-            e.printStackTrace();
-            bindingResult.reject("signupFailed", e.getMessage());
-
-            return "domain/member/signUp";
-        }
-
-        return "redirect:/";
-    }
-
 }
