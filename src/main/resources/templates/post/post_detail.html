@@ -1,74 +1,96 @@
+<!DOCTYPE html>
 <html layout:decorate="~{global/usrLayout}">
 <head>
     <meta charset="UTF-8">
     <title>게시물 상세 정보</title>
 </head>
-<body>
-<div class="container" layout:fragment="content">
-    <h1 th:text="${post.title}">게시물 제목</h1>
-    <p th:text="${'카테고리: ' + post.category}">카테고리</p>
+<body class="bg-gray-100">
+<div class="container mx-auto px-4" layout:fragment="content">
+    <div class="container mx-auto py-8">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold mb-4 text-center" th:text="${post.title}">게시물 제목</h1>
+            <p class="text-gray-600 mb-4 text-center" th:text="${'카테고리: ' + post.category}">카테고리</p>
 
-    <div th:if="${!post.postPlaces.empty}">
-        <h2>장소 목록</h2>
-        <ul>
-            <div th:each="postPlace : ${post.postPlaces}">
-                <div>
 
-                    <h3 th:text="${'장소 이름: ' + postPlace.place.name}">장소 이름</h3><a th:href="|/reserve/${postPlace.place.id}|">예약하러 가기</a>
-                    <p th:text="${'주소: ' + postPlace.place.coordinate}">주소</p>
-                    <div th:if="${postPlace.postPlacePlaceReview != null}">
-                        <p th:text="${'평점: ' + postPlace.postPlacePlaceReview.placeReview.rating}">평점</p>
-                        <p th:text="${'리뷰 내용: ' + postPlace.postPlacePlaceReview.placeReview.review}">리뷰 내용</p>
+            <div th:if="${!post.postPlaces.empty}">
+                <h2 class="text-xl font-semibold mb-2 text-center">장소 목록</h2>
+                <div th:each="postPlace, postPlaceIndex : ${post.postPlaces}">
+                    <div class="mt-4 border-t pt-4" th:if="${postPlaceIndex.index != 0}"></div>
+                    <div class="mt-4 text-center">
+                        <h3 class="font-semibold" th:text="${'장소 이름: ' + postPlace.place.name}">장소 이름</h3>
+                        <p class="text-gray-600" th:text="${'좌표: ' + postPlace.place.coordinate}">좌표</p>
+                        <div th:if="${postPlace.postPlacePlaceReview != null}">
+                            <p class="text-gray-600" th:text="${'평점: ' + postPlace.postPlacePlaceReview.placeReview.rating}">평점</p>
+                            <p class="text-gray-600" th:text="${'리뷰 내용: ' + postPlace.postPlacePlaceReview.placeReview.review}">리뷰 내용</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </ul>
-    </div>
-    <div>
-        <a href="javascript:void(0);" class="recommend" th:attr="data-uri=@{/post/vote/{postId}(postId=${post.id})}"> 추천
-            <span th:text="${#lists.size(post.voter)}"></span>
-        </a>
-        <a href="javascript:void(0);" th:attr="data-uri=@{/post/delete/{postId}(postId=${post.id})}"
-           class="delete" sec:authorize="isAuthenticated()"
-           th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}"
-           th:text="삭제"></a>
-    </div>
-    <h5 th:text="|${#lists.size(post.commentList)}개의 답변이 있습니다.|"></h5>
-    <!-- 답변 반복 시작 -->
-    <div th:each="comment : ${post.commentList}">
-        <div>
-            <div th:text="${comment.content}"></div>
-            <div>
-                <div>
-                    <div>
-                        <span th:if="${comment.author != null}" th:text="${comment.author.username}"></span>
-                    </div>
-                    <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
-                </div>
-                <div>
-                    <a th:href="@{|/comment/modify/${comment.id}|}" sec:authorize="isAuthenticated()"
-                       th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
-                       th:text="수정"></a>
-                    <a href="javascript:void(0);" th:attr="data-uri=@{|/comment/delete/${comment.id}|}"
-                       class="delete" sec:authorize="isAuthenticated()"
-                       th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+
+            <div class="flex justify-between items-center mt-8">
+                <div class="space-x-2 text-center">
+                    <!-- 수정된 부분: 버튼 클릭 이벤트 핸들러 함수 추가 -->
+                    <a href="javascript:void(0);" class="btn btn-blue recommend" th:attr="data-uri=@{/post/vote/{postId}(postId=${post.id})}">
+                        추천 <span class="text-sm" th:text="${#lists.size(post.voter)}"></span>
+                    </a>
+                    <a href="javascript:void(0);" class="btn btn-red delete" th:attr="data-uri=@{/post/delete/{postId}(postId=${post.id})}"
+                       sec:authorize="isAuthenticated()"
+                       th:if="${post.author != null and #authentication.getPrincipal().getUsername() == post.author.username}"
                        th:text="삭제"></a>
                 </div>
             </div>
+
+            <div class="mt-8 text-center">
+                <h5 class="text-sm text-gray-600" th:text="|${#lists.size(post.commentList)}개의 답변이 있습니다.|"></h5>
+                <div th:each="comment : ${post.commentList}" class="mt-4">
+                    <div class="bg-gray-100 rounded-lg p-4 border border-gray-300">
+                        <div class="text-gray-800 text-left" th:text="${comment.content}"></div>
+                        <div class="flex justify-between items-center mt-2">
+                            <div>
+                                <span class="text-sm font-semibold" th:if="${comment.author != null}" th:text="${comment.author.username}"></span>
+                            </div>
+                            <div class="text-sm text-gray-600" th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                        </div>
+                        <div class="mt-2">
+                            <a th:href="@{|/comment/modify/${comment.id}|}" sec:authorize="isAuthenticated()"
+                               th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+                               class="text-blue-500">수정</a>
+                            <a href="javascript:void(0);" th:attr="data-uri=@{|/comment/delete/${comment.id}|}"
+                               class="text-red-500 ml-2 delete" sec:authorize="isAuthenticated()"
+                               th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+                               th:text="삭제"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 댓글 입력 폼 -->
+            <div class="mt-8 text-center">
+                <!-- 로그인한 사용자에게만 댓글 입력 창 표시 -->
+                <div th:if="${#authorization.expression('isAuthenticated()')}">
+                    <form th:action="@{|/comment/create/${post.id}|}" th:object="${commentCreateForm}" method="post" class="mt-8 bg-white rounded-lg shadow-lg p-8">
+                        <textarea th:if="${#authorization.expression('isAuthenticated()')}" th:field="*{content}" class="form-textarea w-full" rows="10" placeholder="댓글을 입력하세요"></textarea>
+                        <input type="submit" value="답변등록" class="btn btn-blue mt-4">
+                    </form>
+                </div>
+                <!-- 로그인하지 않은 사용자에게는 안내 메시지 표시 -->
+                <div th:unless="${#authorization.expression('isAuthenticated()')}">
+                    <p>댓글을 작성하려면 로그인이 필요합니다.</p>
+                    <a class="btn btn-blue mt-4"  href="/member/signin">로그인</a>
+                    <a class="btn btn-blue mt-4" href="/member/signup">회원가입</a>
+                </div>
+            </div>
+
+            <!-- 게시물 목록으로 돌아가기 링크 -->
+            <div class="text-center mt-8">
+                <a th:href="@{/post/list}" class="text-blue-500">게시물 목록으로 돌아가기</a>
+            </div>
         </div>
-    </div>
-    <form th:action="@{|/comment/create/${post.id}|}" th:object="${commentCreateForm}" method="post">
-        <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
-        <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
-        <input type="submit" value="답변등록">
-    </form>
-    <div>
-        <a th:href="@{/post/list}">게시물 목록으로 돌아가기</a>
     </div>
 </div>
 </body>
 <script layout:fragment="script" type='text/javascript'>
-    /*<![CDATA[*/
+    /* 스크립트 내용 생략 */
     const recommend_elements = document.getElementsByClassName("recommend");
     Array.from(recommend_elements).forEach(function(element) {
         element.addEventListener('click', function() {
@@ -86,6 +108,5 @@
             };
         });
     });
-    /*]]>*/
 </script>
 </html>
