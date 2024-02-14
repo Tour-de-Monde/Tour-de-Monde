@@ -35,20 +35,10 @@
     <ul class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <li class="card bg-base-100 shadow-xl" th:each="order : ${orderPage.content}">
             <div class="card-body">
-                <h2 class="card-title flex justify-between items-center">
-                    <span th:text="${order.id}"></span>
-                    <span>:</span>
-                    <span th:text="${order.placeName}"></span>
-                </h2>
+                <h2 class="card-title flex justify-between items-center">[[${order.id}]] : [[${order.placeName}]]</h2>
                 <div>
-                    <div class="flex justify-between items-center">
-                        <span>코드:</span>
-                        <span th:text="${order.code}"></span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span>결제금액:</span>
-                        <span th:text="${order.price}"></span>
-                    </div>
+                    <div class="flex justify-between items-center">코드: [[${order.code}]]</div>
+                    <div class="flex justify-between items-center">결제금액: [[${order.price}]] 원</div>
                     <div>결제상태: [[${order.forPrintPayStatus}]]</div>
                     <div>취소상태: [[${order.forPrintCancelStatus}]]</div>
                     <div>환불상태: [[${order.forPrintRefundStatus}]]</div>
