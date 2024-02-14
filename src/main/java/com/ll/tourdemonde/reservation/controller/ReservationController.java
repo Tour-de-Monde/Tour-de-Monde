@@ -145,9 +145,9 @@ public class ReservationController {
     public String createNewReservationOption(
             @PathVariable("reservationId") Long reservationId,
             Model model) {
-        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
-            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
-        }
+
+        // 예약에 대한 권한 확인
+        reservationService.checkAuthoritiesOfReservation(reservationId);
 
         Reservation reservation = reservationService.findById(reservationId);
         model.addAttribute("reservation", reservation);
@@ -164,14 +164,12 @@ public class ReservationController {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException("잘못된 값을 입력했습니다.");
         }
-
-        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
-            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
-        }
+        try {
+        // 예약에 대한 권한 확인
+        reservationService.checkAuthoritiesOfReservation(reservationId);
 
         RsData<Reservation> reservationRsData = reservationService.createNewReservationOption(reservationId, form);
 
-        try {
             return rq.redirect("/reserve/manage/%d".formatted(reservationRsData.getData().getPlace().getId()), reservationRsData.getMsg());
         } catch (Exception e) {
             return rq.redirect("/", e.getMessage());
@@ -181,14 +179,12 @@ public class ReservationController {
     // 예약 수정페이지 GET
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{reservationId}")
-    public String modifyReservation(@PathVariable("reservationId") Long id,
+    public String modifyReservation(@PathVariable("reservationId") Long reservationId,
                                     Model model) {
+//권한 확인
+        reservationService.checkAuthoritiesOfReservation(reservationId);
 
-        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
-            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
-        }
-
-        Reservation reservation = reservationService.findById(id);
+        Reservation reservation = reservationService.findById(reservationId);
         Map<String, String> reservationTypes = ReservationType.getMapValues();
 
         model.addAttribute("reservation", reservation);
@@ -206,12 +202,10 @@ public class ReservationController {
         if (bindingResult.hasErrors()) {
             throw new RuntimeException("잘못된 값을 입력했습니다.");
         }
-
-        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
-            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
-        }
-
         try {
+        //권한 확인
+        reservationService.checkAuthoritiesOfReservation(reservationId);
+
             Reservation reservation = reservationService.findById(reservationId);
             Long placeId = reservation.getPlace().getId();
 
@@ -231,9 +225,8 @@ public class ReservationController {
                                @PathVariable("reservationId") Long reservationId,
                                @PathVariable("optionId") Long optionId) {
 
-        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
-            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
-        }
+        //권한 확인
+        reservationService.checkAuthoritiesOfReservation(reservationId);
 
         ReservationOption option = reservationService.findOptionById(reservationId, optionId);
         Reservation reservation = reservationService.findById(option.getReservation().getId());
@@ -259,11 +252,10 @@ public class ReservationController {
             throw new RuntimeException("잘못된 값을 입력했습니다.");
         }
 
-        if (!rq.getMember().isAdmin()) { // 관리자인지 확인
-            throw new GlobalException("F-NoAdmin", "관리자가 아닙니다.");
-        }
-
         try {
+            //권한 확인
+            reservationService.checkAuthoritiesOfReservation(reservationId);
+
             ReservationOption option = reservationService.modifyReservationOption(reservationId, optionId, form);
 
             // move ManagePage
@@ -286,6 +278,9 @@ public class ReservationController {
         Long placeId = reservation.getPlace().getId();
 
         try {
+            //권한 확인
+            reservationService.checkAuthoritiesOfReservation(reservationId);
+
             // 예약 삭제
             reservationService.deleteReservation(reservationId);
 
@@ -306,6 +301,9 @@ public class ReservationController {
         Long placeId = reservation.getPlace().getId();
 
         try {
+            //권한 확인
+            reservationService.checkAuthoritiesOfReservation(reservationId);
+
             // 예약 옵션 삭제
             reservationService.deleteOption(reservation, optionId);
 
