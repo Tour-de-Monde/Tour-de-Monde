@@ -30,7 +30,6 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String createPost(PostCreateForm postCreateForm) {
-
         return "post/post_create";
     }
 
