@@ -14,8 +14,6 @@ public class RsData<T> { // Rs는 보고서라는 뜻
 
 
     public static <T> RsData<T> of(String resultCode, String msg, T data) {
-        int statusCode = Integer.parseInt(resultCode.split("-", 2)[0]);
-
         return new RsData<>(resultCode, msg, data);
     }
 
