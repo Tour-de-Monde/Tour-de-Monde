@@ -25,12 +25,18 @@ public class QReservationOption extends EntityPathBase<ReservationOption> {
     public final com.ll.tourdemonde.post.entity.QBaseTime _super = new com.ll.tourdemonde.post.entity.QBaseTime(this);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5aeccfb (feat : 마이페이지 권한 없을 시 리다이렉트)
     public final NumberPath<Long> adultPrice = createNumber("adultPrice", Long.class);
 
     public final NumberPath<Long> childrenPrice = createNumber("childrenPrice", Long.class);
 
+<<<<<<< HEAD
 =======
 >>>>>>> ce746f1 (feat : 마이페이지 수정)
+=======
+>>>>>>> 5aeccfb (feat : 마이페이지 권한 없을 시 리다이렉트)
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
 
@@ -45,19 +51,26 @@ public class QReservationOption extends EntityPathBase<ReservationOption> {
     public final BooleanPath occupied = createBoolean("occupied");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     public final NumberPath<Long> price = createNumber("price", Long.class);
 
 >>>>>>> ce746f1 (feat : 마이페이지 수정)
+=======
+>>>>>>> 5aeccfb (feat : 마이페이지 권한 없을 시 리다이렉트)
     public final QReservation reservation;
 
     public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     public final TimePath<java.time.LocalTime> time = createTime("time", java.time.LocalTime.class);
 =======
     public final StringPath time = createString("time");
 >>>>>>> ce746f1 (feat : 마이페이지 수정)
+=======
+    public final TimePath<java.time.LocalTime> time = createTime("time", java.time.LocalTime.class);
+>>>>>>> 5aeccfb (feat : 마이페이지 권한 없을 시 리다이렉트)
 
     public QReservationOption(String variable) {
         this(ReservationOption.class, forVariable(variable), INITS);
