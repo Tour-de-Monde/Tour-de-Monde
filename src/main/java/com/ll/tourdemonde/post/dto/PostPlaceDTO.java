@@ -2,6 +2,7 @@ package com.ll.tourdemonde.post.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class PostPlaceDTO {
     @NotEmpty(message="리뷰는 필수항목입니다.")
     private String review;
     @NotNull(message="평점은 필수항목입니다.")
-    private Integer rating;
+    @Size(min = 1, max = 5)
+    private String rating;
 }

@@ -28,7 +28,7 @@ public class Place extends BaseTime {
     @Builder.Default
     List<PlaceReview> placeReviews = new ArrayList<>();
 
-    public PlaceReview addReview(String review, Integer rating, Member author) {
+    public PlaceReview addReview(String review, String rating, Member author) {
         PlaceReview placeReview = PlaceReview.builder()
                 .review(review)
                 .rating(rating)

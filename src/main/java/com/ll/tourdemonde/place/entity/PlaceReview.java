@@ -24,6 +24,6 @@ public class PlaceReview extends BaseTime {
     @ManyToOne(fetch = LAZY)
     private Member author;
 
-    private int rating;
+    private String rating;
     private String review;
 }
