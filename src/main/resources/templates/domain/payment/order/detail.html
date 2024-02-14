@@ -14,65 +14,65 @@
         const toss_clientKey = /*[[ ${@environment.getProperty('custom.tossPayments.widget.clientKey')} ]]*/ null;
     </script>
 
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
 
-<div layout:fragment="content" class="p-5">
+<div layout:fragment="content">
 
-    <h1 class="text-3xl font-bold mb-4">결제정보</h1>
+    <h1>결제정보</h1>
 
-    <a th:if="${order.cancelable}"
-       onclick="return confirm('정말로 취소하시겠습니까?');"
-       method="DELETE"
-       th:href="|${order.id}/cancel?redirectUrl=${@rq.encodedCurrentUrl}|"
-       class="btn btn-sm btn-secondary"
+    <a
+            th:if="${order.cancelable}"
+            onclick="return confirm('정말로 취소하시겠습니까?');"
+            method="DELETE"
+            th:href="|${order.id}/cancel?redirectUrl=${@rq.encodedCurrentUrl}|"
+            class="btn btn-sm btn-secondary"
     >주문취소</a>
 
     <button onclick="history.back();" class="btn btn-primary btn-sm">뒤로가기</button>
 
-    <div class="mt-6">
-        <div class="mb-2">주문번호: [[${order.id}]]</div>
-        <div class="mb-2">주문코드: [[${order.code}]]</div>
-        <div class="mb-2">주문자: [[${order.buyer.username}]]</div>
-        <div class="mb-2">주문상품: [[${order.placeName}]]</div>
-        <div class="mb-2">결제금액: [[${order.price}]]</div>
-        <div class="mb-2">결제상태: [[${order.forPrintPayStatus}]]</div>
-        <div class="mb-2">취소상태: [[${order.forPrintCancelStatus}]]</div>
-        <div class="mb-2">환불상태: [[${order.forPrintRefundStatus}]]</div>
+    <div>
+        <div>주문번호: [[${order.id}]]</div>
+        <div>주문코드: [[${order.code}]]</div>
+        <div>주문자: [[${order.buyer.username}]]</div>
+        <div>주문상품: [[${order.placeName}]]</div>
+        <div>결제금액: [[${order.price}]]</div>
+        <div>결제상태: [[${order.forPrintPayStatus}]]</div>
+        <div>취소상태: [[${order.forPrintCancelStatus}]]</div>
+        <div>환불상태: [[${order.forPrintRefundStatus}]]</div>
     </div>
 
     <th:block th:if="${order.payable}">
 
         <!-- 결제 UI -->
-        <div id="payment-method" class="mt-8"></div>
+        <div id="payment-method"></div>
 
         <!-- 이용약관 UI -->
-        <div id="agreement" class="mt-4"></div>
+        <div id="agreement"></div>
 
         <!-- 결제하기 버튼 -->
         <form method="POST" th:action="|/order/${order.id}|" onsubmit="submitPayForm(this); return false;">
-            <div class="mt-6">
-                <label class="text-gray-700">고객 이메일</label>
-                <input type="email" name="customerEmail" placeholder="customer@email.com"
-                       class="input input-bordered w-full" th:value="${order.buyer.email}">
+            <div>
+                <label>고객 이메일</label>
+                <input type="email" name="customerEmail" placeholder="customer@email.com" class="input input-bordered"
+                       th:value="${order.buyer.email}">
             </div>
 
-            <div class="mt-4">
-                <label class="text-gray-700">고객 이름(실명)</label>
-                <input type="text" name="customerName" placeholder="홍길동" class="input input-bordered w-full"
-                       th:value="${order.buyer.memberName}">
+            <div>
+                <label>고객 이름(실명)</label>
+                <input type="text" name="customerName" placeholder="홍길동" class="input input-bordered" th:value="${order.buyer.memberName}">
             </div>
 
-            <div class="mt-4">
-                <label class="text-gray-700">고객 휴대전화번호(- 포함)</label>
-                <input type="text" name="customerMobilePhone" placeholder="010-1234-1234"
-                       class="input input-bordered w-full" th:value="${order.buyer.phoneNumber}">
+            <div>
+                <label>고객 휴대전화번호(- 포함)</label>
+                <input type="text" name="customerMobilePhone" placeholder="010-1234-1234" class="input input-bordered"
+                       th:value="${order.buyer.phoneNumber}">
             </div>
 
-            <div class="mt-4">
-                <button type="submit" id="payment-button" class="btn btn-primary w-full">결제하기</button>
+            <div>
+                <label>결제하기</label>
+                <button type="submit" id="payment-button" class="btn btn-primary">결제하기</button>
             </div>
         </form>
 
@@ -83,18 +83,24 @@
             const clientKey = toss_clientKey;
             const customerKey = buyerUsername;
             const paymentWidget = PaymentWidget(clientKey, customerKey); // 회원 결제
+            // const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS); // 비회원 결제
 
             // ------  결제 UI 렌더링 ------
+            // @docs https://docs.tosspayments.com/reference/widget-sdk#renderpaymentmethods선택자-결제-금액-옵션
             paymentMethodWidget = paymentWidget.renderPaymentMethods(
                 "#payment-method",
                 {value: amount},
+                // 렌더링하고 싶은 결제 UI의 variantKey
+                // 결제 수단 및 스타일이 다른 멀티 UI를 직접 만들고 싶다면 계약이 필요해요.
+                // @docs https://docs.tosspayments.com/guides/payment-widget/admin#멀티-결제-ui
                 {variantKey: "DEFAULT"}
             );
-
             // ------  이용약관 UI 렌더링 ------
+            // @docs https://docs.tosspayments.com/reference/widget-sdk#renderagreement선택자-옵션
             paymentWidget.renderAgreement("#agreement", {variantKey: "AGREEMENT"});
 
             function submitPayForm(form) {
+
                 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
                 const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 
@@ -103,6 +109,7 @@
                 if (form.customerEmail.value.length === 0) {
                     toastWarning("고객 이메일을 입력해주세요.");
                     form.customerEmail.focus();
+
                     return;
                 }
 
@@ -111,6 +118,7 @@
                 if (form.customerName.value.length === 0) {
                     toastWarning("고객 이름(실명)을 입력해주세요.");
                     form.customerName.focus();
+
                     return;
                 }
 
@@ -132,7 +140,9 @@
                     customerMobilePhone: form.customerMobilePhone.value
                 }
 
-                fetch(`${window.location.origin}/order/${orderId}`, {
+                // 사용자 정보 저장하기 - 비동기 통신
+                // form.submit();
+                fetch(`${window.location.origin}/order/${orderId}`, { // window.location.origin = http://localhost:8080
                     method: "POST",
                     headers: headers,
                     body: JSON.stringify(dataBody),
@@ -144,6 +154,7 @@
                     }
                 ).catch(err => console.log(err));
 
+                // 결제창을 호출하는 메서드 {결제관련 메서드 저장}
                 paymentWidget.requestPayment({
                     orderId: orderCode,
                     orderName: orderName,
@@ -153,6 +164,7 @@
                     customerName: form.customerName.value,
                     customerMobilePhone: form.customerMobilePhone.value,
                 });
+
             }
         </script>
 
