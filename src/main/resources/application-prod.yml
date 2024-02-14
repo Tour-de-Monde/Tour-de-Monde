@@ -29,6 +29,6 @@ custom:
   site:
     baseUrl: "https://www.travel.lv.gy"
   temp:
-    dirPath: /docker_projects/tour_de_monde_1/volume/temp
+    dirPath: /temp
   genFile:
-    dirPath: /docker_projects/tour_de_monde_1/volume/gen
+    dirPath: /gen
