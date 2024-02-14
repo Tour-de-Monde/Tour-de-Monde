@@ -70,8 +70,6 @@ public class PostController {
             return "post/post_list";
         }
     }
-
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")
     public String showPostDetail(Model model, @PathVariable("id") Long id, CommentCreateForm commentCreateForm) {
         Post post = postService.getPostWithViewCount(id);
