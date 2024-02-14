@@ -1,5 +1,6 @@
 package com.ll.tourdemonde.place.service;
 
+import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.place.dto.PlaceDto;
 import com.ll.tourdemonde.place.entity.Place;
 import com.ll.tourdemonde.place.repository.PlaceRepository;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,5 +43,11 @@ public class PlaceService {
                 .build();
 
         return placeRepository.save(place);
+    }
+
+    public RsData<List<Place>> findAllByOrderByNameAscCreateDateAsc() {
+        List<Place> list = placeRepository.findAllByOrderByNameAscCreateDateAsc();
+
+        return new RsData<>("S-200","리스트 가져오기", list);
     }
 }

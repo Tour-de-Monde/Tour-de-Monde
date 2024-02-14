@@ -1,0 +1,25 @@
+<html layout:decorate="~{global/usrLayout}">
+
+<head>
+    <title>장소 예약 목록</title>
+    <!-- DaisyUI 스타일시트 및 Tailwind CSS 불러오기 -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<div layout:fragment="content">
+
+    <th:block th:each="place : ${places}">
+        <div class="card w-96 bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h2 class="card-title" th:text="${place.name}">장소 이름</h2>
+                <p>최고의 서비스로 모십니다.</p>
+                <div class="card-actions justify-end">
+                    <a th:href="|/reserve/${place.id}|" class="btn btn-primary">예약하러 가기</a>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+</html>
