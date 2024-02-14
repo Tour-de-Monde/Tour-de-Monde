@@ -313,4 +313,11 @@ public class ReservationController {
             return rq.redirect("/reserve/manage/%d".formatted(placeId), "실패");
         }
     }
+
+    @GetMapping("/list")
+    public String showPlacesList(Model model){
+        RsData<List<Place>> listRsData = placeService.findAllByOrderByNameAscCreateDateAsc();
+        model.addAttribute("places", listRsData.getData());
+        return "domain/reservation/placeList";
+    }
 }
