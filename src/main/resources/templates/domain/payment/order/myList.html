@@ -9,8 +9,9 @@
 
 <body>
 
-<div layout:fragment="content">
-    <form class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+<div layout:fragment="content" class="p-5">
+
+    <form class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
         <select class="select select-bordered" name="cancelStatus" onchange="$(this).closest('form').submit()"
                 th:value="${param.cancelStatus}">
             <option value="">취소상태 - 전체</option>
@@ -31,34 +32,24 @@
         </select>
     </form>
 
-    <ul class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-2">
+    <ul class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <li class="card bg-base-100 shadow-xl" th:each="order : ${orderPage.content}">
             <div class="card-body">
-                <h2 class="card-title">
-                    <span th:text="${order.id}"></span>
-                    <span>:</span>
-                    <span th:text="${order.placeName}"></span>
-                </h2>
+                <h2 class="card-title flex justify-between items-center">[[${order.id}]] : [[${order.placeName}]]</h2>
                 <div>
-                    <div>
-                        <span>코드:</span>
-                        <span th:text="${order.code}"></span>
-                    </div>
-                    <div>
-                        <span>결제금액:</span>
-                        <span th:text="${order.price}"></span>
-                    </div>
+                    <div class="flex justify-between items-center">코드: [[${order.code}]]</div>
+                    <div class="flex justify-between items-center">결제금액: [[${order.price}]] 원</div>
                     <div>결제상태: [[${order.forPrintPayStatus}]]</div>
                     <div>취소상태: [[${order.forPrintCancelStatus}]]</div>
                     <div>환불상태: [[${order.forPrintRefundStatus}]]</div>
                 </div>
-                <div class="card-actions justify-end">
+                <div class="card-actions flex justify-end mt-2">
                     <a
                             th:if="${order.cancelable}"
                             onclick="return confirm('정말로 취소하시겠습니까?');"
                             method="DELETE"
                             th:href="|${order.id}/cancel?redirectUrl=${@rq.encodedCurrentUrl}|"
-                            class="btn btn-sm btn-secondary"
+                            class="btn btn-sm btn-secondary mr-2"
                     >주문취소</a>
                     <a th:href="|${order.id}|" class="btn btn-sm btn-primary">자세히 보기</a>
                 </div>
@@ -66,7 +57,7 @@
         </li>
     </ul>
 
-    <div class="flex justify-center mt-3">
+    <div class="flex justify-center mt-4">
         <th:block th:with="queryStrBase = ${@rq.getCurrentQueryStringWithoutParam('page')}">
             <th:block th:replace="global/fragments/pagination :: pagination(${orderPage}, ${queryStrBase}, 3)">
 
