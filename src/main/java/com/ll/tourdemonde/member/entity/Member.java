@@ -39,6 +39,7 @@ public class Member extends BaseEntity {
     @Column(unique = true)
     private String phoneNumber;
 
+    @Column(unique = true)
     private String nickname;
 
     @Transient
@@ -57,5 +58,13 @@ public class Member extends BaseEntity {
     public boolean isAdmin() {
         return getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+    }
+
+    public void modifyNickname(Member modifyUser) {
+        this.nickname = modifyUser.getNickname();
+    }
+
+    public void modifyPassword(Member modifyUser) {
+        this.password = modifyUser.getPassword();
     }
 }

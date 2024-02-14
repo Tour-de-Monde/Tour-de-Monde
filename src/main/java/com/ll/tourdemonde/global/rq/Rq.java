@@ -134,4 +134,14 @@ public class Rq {
 
         return url;
     }
+
+    public Member getMemberInfo() {
+        if ( isLogout() ) return null;
+
+        if ( member == null ) {
+            member = entityManager.getReference(Member.class, getUser().getId());
+        }
+
+        return member;
+    }
 }
