@@ -29,6 +29,6 @@ custom:
   site:
     baseUrl: "https://www.travel.lv.gy"
   temp:
-    dirPath: c:/temp/TdM_dev/temp
+    dirPath: /app/TdM_dev/temp
   genFile:
-    dirPath: c:/temp/TdM_dev
+    dirPath: /app/TdM_dev

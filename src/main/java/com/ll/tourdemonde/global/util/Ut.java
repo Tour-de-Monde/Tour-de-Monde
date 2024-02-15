@@ -1,6 +1,7 @@
 package com.ll.tourdemonde.global.util;
 
 import com.ll.tourdemonde.global.app.AppConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.util.URLEncoder;
 import org.apache.tika.Tika;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 public class Ut {
     public static LocalDateTime stringToLocalDateTime(String string) {
         // html input은 String으로 날짜만 반환한다. ex) 2024-01-24
@@ -173,6 +175,7 @@ public class Ut {
                 FileChannel fileChannel = fileOutputStream.getChannel();
                 fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new com.ll.tourdemonde.global.util.Ut.file.DownloadFileFailException();
             }
 
