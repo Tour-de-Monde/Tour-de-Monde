@@ -1,20 +1,24 @@
 package com.ll.tourdemonde.member.controller;
 
+import com.ll.tourdemonde.global.rq.Rq;
 import com.ll.tourdemonde.mail.service.MailService;
 import com.ll.tourdemonde.member.dto.MemberCreateForm;
+import com.ll.tourdemonde.member.dto.ModifyNicknameDto;
+import com.ll.tourdemonde.member.dto.ModifyPasswordDto;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ import java.util.Optional;
 public class MemberController {
     private final MemberService memberService;
     private final MailService mailService;
+    private final Rq rq;
 
     //회원가입
     @GetMapping("/signup")
@@ -128,5 +133,84 @@ public class MemberController {
         memberService.renewPassword(member.get(), newPassword);
 
         return "redirect:/member/signin";
+    }
+
+    //회원정보
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/info")
+    public String userInfo() {
+        return "domain/member/memberInfo";
+    }
+
+    //회원정보 수정
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify")
+    public String userInfoModify(
+            Principal principal,
+            Model model
+    ) {
+        String logInid = principal.getName();
+        Member member = this.memberService.getMember(logInid);
+        model.addAttribute("member", member);
+
+        return "domain/member/modifyMemberInfo";
+    }
+
+    //회원정보 닉네임 중복 체크
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/check-nickname")
+    public String checkNickname(
+            ModifyNicknameDto modifyNicknameDto,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            memberService.checkNickname(modifyNicknameDto);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("nicknameErrorMessage", e.getMessage());
+            return "redirect:/member/modify";
+        }
+
+        return "redirect:/member/modify";
+    }
+
+    //회원정보 닉네임 수정
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/change-nickname")
+    public String changeNickname(
+            ModifyNicknameDto modifyNicknameDto,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            memberService.modifyNickname(rq.getMemberInfo(), modifyNicknameDto);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("nicknameErrorMessage", e.getMessage());
+            return "redirect:/member/modify";
+        }
+
+        return "redirect:/member/modify";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/change-password")
+    public String changePassword(
+            @Valid ModifyPasswordDto modifyPasswordDto,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (bindingResult.hasErrors()) {
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                redirectAttributes.addFlashAttribute(error.getField() + "ErrorMessage", error.getDefaultMessage());
+            }
+            return "redirect:/member/modify";
+        }
+
+        try {
+            memberService.modifyPassword(rq.getMemberInfo(), modifyPasswordDto);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("passwordErrorMessage", e.getMessage());
+            return "redirect:/member/modify";
+        }
+
+        return "redirect:/logout";
     }
 }

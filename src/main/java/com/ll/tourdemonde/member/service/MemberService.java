@@ -5,6 +5,8 @@ import com.ll.tourdemonde.base.genFile.service.GenFileService;
 import com.ll.tourdemonde.global.app.AppConfig;
 import com.ll.tourdemonde.global.rsData.RsData;
 import com.ll.tourdemonde.global.util.Ut;
+import com.ll.tourdemonde.member.dto.ModifyNicknameDto;
+import com.ll.tourdemonde.member.dto.ModifyPasswordDto;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -128,5 +130,41 @@ public class MemberService {
                         member.getModelName(), member.getId(), "common", "profileImg", 1
                 )
                 .map(GenFile::getUrl);
+    }
+
+    public void checkNickname(ModifyNicknameDto modifyNicknameDto) {
+        memberRepository.findByNickname(modifyNicknameDto.getNickname()).ifPresent(
+                user -> {
+                    throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
+                }
+        );
+    }
+
+    @Transactional
+    public void modifyNickname(Member memberInfo, ModifyNicknameDto modifyNicknameDto) {
+        checkNickname(modifyNicknameDto);
+
+        Member modifyUser = Member.builder()
+                .nickname(modifyNicknameDto.getNickname())
+                .build();
+
+        memberInfo.modifyNickname(modifyUser);
+    }
+
+    @Transactional
+    public void modifyPassword(Member memberInfo, ModifyPasswordDto modifyPasswordDto) {
+        if (!passwordEncoder.matches(modifyPasswordDto.getExistingPassword(), memberInfo.getPassword())) {
+            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+        }
+
+        if (!modifyPasswordDto.getNewPassword().equals(modifyPasswordDto.getCheckNewPassword())) {
+            throw new IllegalArgumentException("새 비밀번호가 일치하지 않습니다.");
+        }
+
+        Member changeUser = Member.builder()
+                .password(passwordEncoder.encode(modifyPasswordDto.getNewPassword()))
+                .build();
+
+        memberInfo.modifyPassword(changeUser);
     }
 }
