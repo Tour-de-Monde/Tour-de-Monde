@@ -77,7 +77,7 @@
 
 <hr>
 
-<h3>**💡 해결**</h3>
+<h3>💡 해결</h3>
 
 - 에러가 난 이유
   - 카카오 로그인하는 url을 보면 client_id가 ON_SECRET으로 application-secret.yml에 있는 client_id를 받아오지 못해서 생긴 에러이다.
