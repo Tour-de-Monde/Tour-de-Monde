@@ -44,27 +44,35 @@
 <details>
 <summary>✔️ 배포한 서버에서 소셜 로그인 REST API 키가 맞지 않아 KOE101 에러 발생 - 손경이</summary>
 <div>
+
 <br/>
+
 <img src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fc69962b0-3951-485b-b10a-5bb29576bba8%2Fc11bb9f3-f92b-48f0-b349-5d8adab713dd%2FUntitled.png?table=block&id=3839353a-ff97-4beb-a303-28f7f0788741&spaceId=c69962b0-3951-485b-b10a-5bb29576bba8&width=2000&userId=253c7ac7-ea76-405c-a201-0833bde7deeb&cache=v2" width="400">
+
 <br/>
 
 <h4>💭 첫 번째 시도</h4>
+
 - application-prod.yml에 카카오 관련 정보 넣어봄 → 실패
 
 <h4>💭 두 번째 시도</h4>
+
 - application-prod.yml에 temp 디렉토리가 applicaton.yml과 달라서 똑같이 맞춰주기 → 실패
 - <img src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fc69962b0-3951-485b-b10a-5bb29576bba8%2F779e0986-792f-46fb-8a80-f2d374903f0d%2FUntitled.png?table=block&id=3036a040-0b2d-484b-bd3c-49638c7a52d3&spaceId=c69962b0-3951-485b-b10a-5bb29576bba8&width=770&userId=253c7ac7-ea76-405c-a201-0833bde7deeb&cache=v2" width="200">
 
 <h4>💭 세 번째 시도</h4>
+
 - deploy.yml 코드 변경 - APPLICATION_SECRET_YML에 $ 추가 → 실패
 - run: echo "$APPLICATION_SECRET_YML" > src/main/resources/application-secret.yml
 
 <h4>💭 네 번째 시도</h4>
+
 - 프로젝트 빌드할 때 테스트 코드 빼고 빌드 했었다.
 - Dockerfile 코드 변경 - 소스 코드 복사에서 테스트 추가 → 실패
 - COPY src/main src/main => COPY src src
 
 <h4>💭 다섯 번째 시도</h4>
+
 - 프로젝트 빌드할 때 테스트 코드 빼고 빌드 했었다.
 
 <hr>
