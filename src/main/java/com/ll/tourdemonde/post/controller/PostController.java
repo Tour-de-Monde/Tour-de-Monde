@@ -1,10 +1,14 @@
 package com.ll.tourdemonde.post.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.tourdemonde.comment.dto.CommentCreateForm;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
 import com.ll.tourdemonde.post.dto.PostCreateForm;
+import com.ll.tourdemonde.post.dto.PostDetailPostPlaceDTO;
 import com.ll.tourdemonde.post.entity.Post;
+import com.ll.tourdemonde.post.entity.PostPlace;
 import com.ll.tourdemonde.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +31,7 @@ public class PostController {
 
     private final PostService postService;
     private final MemberService memberService;
+    private final ObjectMapper objectMapper;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
@@ -71,6 +77,20 @@ public class PostController {
     public String showPostDetail(Model model, @PathVariable("id") Long id, CommentCreateForm commentCreateForm) {
         Post post = postService.getPostWithViewCount(id);
         model.addAttribute("post", post);
+
+        try {
+            String laMas = objectMapper.writeValueAsString(post.getPostPlaces()
+                    .stream().map(postPlace -> PostDetailPostPlaceDTO.builder()
+                            .la(postPlace.getPlace().getLa())
+                            .ma(postPlace.getPlace().getMa())
+                            .build())
+                    .toList());
+            model.addAttribute("laMas", laMas);
+        } catch (RuntimeException | JsonProcessingException e) {
+
+        }
+
+
         return "post/post_detail";
     }
 

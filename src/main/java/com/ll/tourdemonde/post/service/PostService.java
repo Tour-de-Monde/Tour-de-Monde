@@ -45,7 +45,9 @@ public class PostService {
         form.getPostPlaces().forEach(postPlaceDTO -> {
             Place place = placeService.findByCoordinateOrCreate(PlaceDto.builder()
                     .name(postPlaceDTO.getPlaceName())
-                    .coordinate(postPlaceDTO.getCoordinate())
+                    .address(postPlaceDTO.getAddress())
+                    .la(postPlaceDTO.getLa())
+                    .ma(postPlaceDTO.getMa())
                     .build());
             PlaceReview placeReview = place.addReview(postPlaceDTO.getReview(), postPlaceDTO.getRating(), author);
             post.addPlace(place, placeReview);
@@ -63,7 +65,7 @@ public class PostService {
 
     public Post getPostWithViewCount(Long id) {
         Optional<Post> opPost = postRepository.findById(id);
-        if (opPost.isPresent()){
+        if (opPost.isPresent()) {
             Post post = opPost.get();
             post.increaseView();
             postRepository.save(post);
@@ -74,11 +76,12 @@ public class PostService {
     }
 
     public void vote(Post post, Member member) {
-        if (post.getVoter().contains(member)){
+        if (post.getVoter().contains(member)) {
             post.getVoter().remove(member);
         } else {
             post.getVoter().add(member);
-        } postRepository.save(post);
+        }
+        postRepository.save(post);
     }
 
     public Post getPost(Long id) {

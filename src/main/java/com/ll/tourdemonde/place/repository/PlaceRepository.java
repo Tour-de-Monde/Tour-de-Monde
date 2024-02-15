@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, Long> {
-    Optional<Place> findByCoordinate(String coordinate);
+    Optional<Place> findByAddress(String address);
 
     List<Place> findAllByOrderByNameAscCreateDateAsc();
 }

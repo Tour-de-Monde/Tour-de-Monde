@@ -1,6 +1,7 @@
 package com.ll.tourdemonde.place.dto;
 
 import com.ll.tourdemonde.place.entity.Place;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,12 +11,14 @@ import lombok.Data;
 @AllArgsConstructor
 public class PlaceDto {
     private String name;
-    private String coordinate;
+    private String address;
+    private Double la;
+    private Double ma;
 
     public Place toEntity() {
         return Place.builder()
                 .name(this.name)
-                .coordinate(this.coordinate)
+                .address(this.address)
                 .build();
     }
 }
