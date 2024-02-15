@@ -18,7 +18,7 @@
                     <div class="mt-4 border-t pt-4" th:if="${postPlaceIndex.index != 0}"></div>
                     <div class="mt-4 text-center">
                         <h3 class="font-semibold" th:text="${'장소 이름: ' + postPlace.place.name}">장소 이름</h3>
-                        <p class="text-gray-600" th:text="${'좌표: ' + postPlace.place.coordinate}">좌표</p>
+                        <p class="text-gray-600" th:text="${'주소: ' + postPlace.place.coordinate}">주소</p>
                         <div th:if="${postPlace.postPlacePlaceReview != null}">
                             <p class="text-gray-600" th:text="${'평점: ' + postPlace.postPlacePlaceReview.placeReview.rating}">평점</p>
                             <p class="text-gray-600" th:text="${'리뷰 내용: ' + postPlace.postPlacePlaceReview.placeReview.review}">리뷰 내용</p>
