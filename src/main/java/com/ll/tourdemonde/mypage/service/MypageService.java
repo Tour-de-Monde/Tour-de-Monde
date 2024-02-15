@@ -29,7 +29,7 @@ public class MypageService {
     //현재 로그인한 사용자가 작성한 글 리스트 반환
     public Page<Post> myPostList(String username, int page){
         Optional<Member> member = memberRepository.findByUsername(username);
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 3);
         return this.postRepository.findAllByAuthor(member.get(), pageable);
     }
     /*public List<Post> myPostList(String username) {

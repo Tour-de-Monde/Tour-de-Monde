@@ -1,4 +1,12 @@
-<html layout:decorate="~{global/usrlayout}">
+<html layout:decorate="~{global/usrLayout}">
+
+<style>
+    .join {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
 
 <body>
 <div layout:fragment="content">
@@ -8,7 +16,7 @@
         </div>
         <span th:text="${@rq.member.nickname}" style="font-size: 20px; font-weight: bold;"></span>
         <p>
-            <a class="btn btn-link" href="/member/info">내 정보</a>
+            <a class="btn btn-link" href="/member/changeInfo">회원정보 수정</a>
         </p>
 
         <div class="w-4/5 mx-auto">
@@ -36,6 +44,21 @@
                             </tr>
                             </tbody>
                         </table>
+                        <!-- 페이징처리 -->
+                        <div class="join" th:if="${!myPostList.isEmpty()}">
+                            <input class="join-item btn btn-square" type="radio" name="options" aria-label="이전"
+                                   th:if="${myPostList.hasPrevious()}" th:data-page="${myPostList.number-1}"
+                                   onclick="navigateToPage(this.getAttribute('data-page'))" />
+
+                            <input th:each="myPostPage: ${#numbers.sequence(0, myPostList.totalPages-1)}"
+                                   class="join-item btn btn-square" type="radio" name="options" th:attr="aria-label=''+(${myPostPage+1})"
+                                   th:data-page="${myPostPage}"
+                                   onclick="navigateToPage(this.getAttribute('data-page'))"/>
+                            <input class="join-item btn btn-square" type="radio" name="options" aria-label="다음"
+                                   th:if="${myPostList.hasNext()}" th:data-page="${myPostList.number+1}"
+                                   onclick="navigateToPage(this.getAttribute('data-page'))" />
+                        </div>
+                        <!-- 페이징처리 -->
                     </div>
                 </div>
 
@@ -94,5 +117,23 @@
 </div>
 
 </body>
+
+<script layout:fragment="script" type='text/javascript'>
+    function navigateToPreviousPage() {
+        var currentPage = myPostList.getNumber();
+        var previousPage = currentPage - 1;
+        location.href = '?myPostPage=' + previousPage;
+    }
+
+    function navigateToNextPage() {
+        var currentPage = myPostList.getNumber();
+        var nextPage = currentPage + 1;
+        location.href = '?myPostPage=' + nextPage;
+    }
+
+    function navigateToPage(page) {
+        location.href = '?myPostPage=' + page;
+    }
+</script>
 
 </html>
