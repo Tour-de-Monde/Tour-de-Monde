@@ -45,18 +45,21 @@
                             </tbody>
                         </table>
                         <!-- 페이징처리 -->
-                        <div class="join" th:if="${!myPostList.isEmpty()}">
-                            <input class="join-item btn btn-square" type="radio" name="options" aria-label="이전"
-                                   th:if="${myPostList.hasPrevious()}" th:data-page="${myPostList.number-1}"
-                                   onclick="navigateToPage(this.getAttribute('data-page'))" />
+                        <div class="flex justify-center" th:if="${!myPostList.isEmpty()}">
+                            <div class="join">
+                                <input class="join-item btn btn-square" type="radio" name="options" aria-label="이전"
+                                       th:if="${myPostList.hasPrevious()}" th:data-page="${myPostList.number-1}"
+                                       onclick="navigateToPage(this.getAttribute('data-page'))" />
 
-                            <input th:each="myPostPage: ${#numbers.sequence(0, myPostList.totalPages-1)}"
-                                   class="join-item btn btn-square" type="radio" name="options" th:attr="aria-label=''+(${myPostPage+1})"
-                                   th:data-page="${myPostPage}"
-                                   onclick="navigateToPage(this.getAttribute('data-page'))"/>
-                            <input class="join-item btn btn-square" type="radio" name="options" aria-label="다음"
-                                   th:if="${myPostList.hasNext()}" th:data-page="${myPostList.number+1}"
-                                   onclick="navigateToPage(this.getAttribute('data-page'))" />
+                                <input th:each="myPostPage: ${#numbers.sequence(0, myPostList.totalPages-1)}"
+                                       class="join-item btn btn-square" type="radio" name="options" th:attr="aria-label=''+(${myPostPage+1})"
+                                       th:data-page="${myPostPage}"
+                                       onclick="navigateToPage(this.getAttribute('data-page'))"/>
+
+                                <input class="join-item btn btn-square" type="radio" name="options" aria-label="다음"
+                                       th:if="${myPostList.hasNext()}" th:data-page="${myPostList.number+1}"
+                                       onclick="navigateToPage(this.getAttribute('data-page'))" />
+                            </div>
                         </div>
                         <!-- 페이징처리 -->
                     </div>
@@ -119,18 +122,6 @@
 </body>
 
 <script layout:fragment="script" type='text/javascript'>
-    function navigateToPreviousPage() {
-        var currentPage = myPostList.getNumber();
-        var previousPage = currentPage - 1;
-        location.href = '?myPostPage=' + previousPage;
-    }
-
-    function navigateToNextPage() {
-        var currentPage = myPostList.getNumber();
-        var nextPage = currentPage + 1;
-        location.href = '?myPostPage=' + nextPage;
-    }
-
     function navigateToPage(page) {
         location.href = '?myPostPage=' + page;
     }
