@@ -27,7 +27,12 @@ public class MypageService {
     private final OrderRepository orderRepository;
 
     //현재 로그인한 사용자가 작성한 글 리스트 반환
-    public List<Post> myPostList(String username) {
+    public Page<Post> myPostList(String username, int page){
+        Optional<Member> member = memberRepository.findByUsername(username);
+        Pageable pageable = PageRequest.of(page, 10);
+        return this.postRepository.findAllByAuthor(member.get(), pageable);
+    }
+    /*public List<Post> myPostList(String username) {
         List<Post> postList = postRepository.findAll();
         Optional<Member> member = memberRepository.findByUsername(username);
         Long id = member.get().getId();
@@ -37,7 +42,7 @@ public class MypageService {
                 .collect(Collectors.toList());
 
         return myPostList;
-    }
+    }*/
 
     //현재 로그인한 사용자가 좋아요 한 글 리스트 반환
     public List<Post> votePostList(String username) {

@@ -10,6 +10,7 @@ import com.ll.tourdemonde.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
@@ -34,11 +36,11 @@ public class MypageController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")
-    public String mypage(Principal principal, Model model){
+    public String mypage(Principal principal, Model model, @RequestParam(value="myPostPage", defaultValue="0") int myPostPage){
         Optional<Member> member = this.memberService.findByUsername(principal.getName());
         String username = memberService.findUsername(member.get());
 
-        List<Post> myPostList = mypageService.myPostList(username);
+        Page<Post> myPostList = mypageService.myPostList(username, myPostPage);
         List<Post> votePostList = mypageService.votePostList(username);
         List<Order> myOrderList = mypageService.myOrderList(username);
 
