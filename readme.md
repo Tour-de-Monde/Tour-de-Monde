@@ -38,7 +38,7 @@
 
 
 ## 📇 ERD
-<a href="https://ibb.co/z6pmQBq"><img src="https://i.ibb.co/Sfb65MF/TdM-prod.png" alt="TdM-prod" border="0"></a>
+<img src="https://i.imgur.com/Jlj2DvV.png" width="600">
 
 ## 💣 트러블 슈팅
 <details>
