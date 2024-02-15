@@ -3,19 +3,20 @@
 <head>
     <title>장소 예약 목록</title>
     <!-- DaisyUI 스타일시트 및 Tailwind CSS 불러오기 -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<div layout:fragment="content">
+<div layout:fragment="content" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 p-5">
 
     <th:block th:each="place : ${places}">
-        <div class="card w-96 bg-base-100 shadow-xl">
+        <div class="card bg-base-100 shadow-xl">
             <div class="card-body">
-                <h2 class="card-title" th:text="${place.name}">장소 이름</h2>
-                <p>최고의 서비스로 모십니다.</p>
-                <div class="card-actions justify-end">
-                    <a th:href="|/reserve/${place.id}|" class="btn btn-primary">예약하러 가기</a>
+                <h2 class="card-title text-xl font-bold mb-2" th:text="${place.name}">장소 이름</h2>
+                <p class="text-gray-600 mb-4">최고의 서비스로 모십니다.</p>
+                <div class="card-actions flex justify-end">
+                    <a th:unless="${@rq.login}" href="/member/signin" class="btn btn-primary">로그인</a>
+                    <a th:if="${@rq.login}" th:href="|/reserve/${place.id}|" class="btn btn-primary">예약하러 가기</a>
                 </div>
             </div>
         </div>

@@ -3,7 +3,6 @@ package com.ll.tourdemonde.post.controller;
 import com.ll.tourdemonde.comment.dto.CommentCreateForm;
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
-import com.ll.tourdemonde.place.service.PlaceService;
 import com.ll.tourdemonde.post.dto.PostCreateForm;
 import com.ll.tourdemonde.post.entity.Post;
 import com.ll.tourdemonde.post.service.PostService;
@@ -27,18 +26,16 @@ public class PostController {
 
     private final PostService postService;
     private final MemberService memberService;
-    private final PlaceService placeService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String createPost(PostCreateForm postCreateForm) {
-
         return "post/post_create";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String createPost(@Valid @ModelAttribute PostCreateForm postCreateForm, BindingResult bindingResult, Principal principal, Model model) {
+    public String createPost(@Valid @ModelAttribute PostCreateForm postCreateForm, BindingResult bindingResult, Principal principal) {
         Member member = memberService.getMember(principal.getName());
         if (bindingResult.hasErrors()) {
             return "post/post_create";
@@ -70,8 +67,6 @@ public class PostController {
             return "post/post_list";
         }
     }
-
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail/{id}")
     public String showPostDetail(Model model, @PathVariable("id") Long id, CommentCreateForm commentCreateForm) {
         Post post = postService.getPostWithViewCount(id);
