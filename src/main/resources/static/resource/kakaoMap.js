@@ -1,5 +1,3 @@
-
-
 var selectedData = {};
 
 function addPlaceInput() {
@@ -7,24 +5,24 @@ function addPlaceInput() {
 
     var index = document.querySelectorAll("#placeList > div").length;
     var newPlaceInput = `<input type="hidden" name="postPlaces[${index}].id" value="${selectedData.id}"/>
-        <div class="bg-gray-100 p-4 rounded-md mb-4">
-            <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700">장소 이름</label>
-                <input type="text" name="postPlaces[${index}].placeName" value="${selectedData.place_name}" placeholder="장소 이름을 입력하세요" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-lg border-gray-300 rounded-md">
-            </div>
-            <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700">주소</label>
-                <input type="text" name="postPlaces[${index}].coordinate" value="${selectedData.address_name}" placeholder="주소를 입력하세요" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-lg border-gray-300 rounded-md">
-            </div>
-            <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700">평점</label>
-                <input type="number" name="postPlaces[${index}].rating" min="1" max="5" placeholder="평점(1~5점)을 입력해주세요" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-lg border-gray-300 rounded-md">
-            </div>
-            <div class="form-group">
-                <label class="block text-sm font-medium text-gray-700">리뷰</label>
-                <textarea name="postPlaces[${index}].review" placeholder="리뷰를 작성해주세요" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm border-gray-300 rounded-md h-60"></textarea>
-            </div>
-        </div>`;
+    <div class="bg-gray-100 p-4 rounded-md mb-4">
+        <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700">장소 이름</label>
+            <input type="text" name="postPlaces[${index}].placeName" value="${selectedData.place_name}" placeholder="장소 이름을 입력하세요" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-lg border-gray-300 rounded-md">
+        </div>
+        <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700">주소</label>
+            <input type="text" name="postPlaces[${index}].coordinate" value="${selectedData.address_name}" placeholder="주소를 입력하세요" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-lg border-gray-300 rounded-md">
+        </div>
+        <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700">평점</label>
+            <input type="number" name="postPlaces[${index}].rating" min="1" max="5" placeholder="평점(1~5점)을 입력해주세요" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-lg border-gray-300 rounded-md">
+        </div>
+        <div class="form-group">
+            <label class="block text-sm font-medium text-gray-700">리뷰</label>
+            <textarea name="postPlaces[${index}].review" placeholder="리뷰를 작성해주세요" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm border-gray-300 rounded-md h-60"></textarea>
+        </div>
+    </div>`;
 
     // 새로운 입력 폼을 마지막에 추가
     document.getElementById("placeList").insertAdjacentHTML('beforeend', newPlaceInput);
@@ -239,3 +237,4 @@ function removeAllChildNods(el) {
 function submitForm() {
     document.getElementById("postForm").submit();
 }
+
