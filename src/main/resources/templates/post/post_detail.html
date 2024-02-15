@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>게시물 상세 정보</title>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1110141fa1f2c03d5f7f689ec5fb2e71&libraries=services"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.6/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
 <div class="container mx-auto px-4" layout:fragment="content">
+    <div id="map" style="width:100%;height:350px;"></div>
     <div class="container mx-auto py-8">
         <div class="bg-white rounded-lg shadow-lg p-8">
             <h1 class="text-3xl font-bold mb-4 text-center" th:text="${post.title}">게시물 제목</h1>
@@ -18,7 +22,7 @@
                     <div class="mt-4 border-t pt-4" th:if="${postPlaceIndex.index != 0}"></div>
                     <div class="mt-4 text-center">
                         <h3 class="font-semibold" th:text="${'장소 이름: ' + postPlace.place.name}">장소 이름</h3>
-                        <p class="text-gray-600" th:text="${'좌표: ' + postPlace.place.coordinate}">좌표</p>
+                        <p class="text-gray-600" th:text="${'주소: ' + postPlace.place.address}">주소</p>
                         <div th:if="${postPlace.postPlacePlaceReview != null}">
                             <p class="text-gray-600" th:text="${'평점: ' + postPlace.postPlacePlaceReview.placeReview.rating}">평점</p>
                             <p class="text-gray-600" th:text="${'리뷰 내용: ' + postPlace.postPlacePlaceReview.placeReview.review}">리뷰 내용</p>
@@ -87,6 +91,68 @@
             </div>
         </div>
     </div>
+    <script th:inline="javascript">
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+        let isFirst = true;
+
+        const laMas = JSON.parse(/*[[${laMas}]]*/ []);
+
+        laMas.forEach((lama, index) => {
+            addSelectedMarker(lama, index);
+        })
+        function addSelectedMarker({la, ma}, index) {
+
+            var imageSrc ="/images/marker_number_red.png", // 마커 이미지 url, 스프라이트 이미지를 씁니다
+                imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+                imgOptions =  {
+                    spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+                    spriteOrigin : new kakao.maps.Point(0, (index*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+                    offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+                },
+                markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+                marker = new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(la, ma), // 마커의 위치
+                    image: markerImage
+                });
+
+            marker.setMap(map)
+
+            var clickPosition = new kakao.maps.LatLng(la, ma)
+
+            if (isFirst) {
+                isFirst = false;
+                // 클릭한 위치를 기준으로 선을 생성하고 지도위에 표시합니다
+                clickLine = new kakao.maps.Polyline({
+                    map: map, // 선을 표시할 지도입니다
+                    path: [clickPosition], // 선을 구성하는 좌표 배열입니다 클릭한 위치를 넣어줍니다
+                    strokeWeight: 5, // 선의 두께입니다
+                    strokeColor: '#db4040', // 선의 색깔입니다
+                    strokeOpacity: 1, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
+                    strokeStyle: 'solid' // 선의 스타일입니다
+                });
+            } else {
+                // 그려지고 있는 선의 좌표 배열을 얻어옵니다
+                var path = clickLine.getPath();
+
+                // 좌표 배열에 클릭한 위치를 추가합니다
+                path.push(clickPosition);
+
+                // 다시 선에 좌표 배열을 설정하여 클릭 위치까지 선을 그리도록 설정합니다
+                clickLine.setPath(path);
+            }
+        }
+
+        // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
+        // marker.setMap(null);
+    </script>
 </div>
 </body>
 <script layout:fragment="script" type='text/javascript'>
@@ -109,4 +175,5 @@
         });
     });
 </script>
+
 </html>

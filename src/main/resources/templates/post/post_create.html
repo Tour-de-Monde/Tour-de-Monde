@@ -111,6 +111,9 @@
 
         var index = document.querySelectorAll("#placeList > div").length;
         var newPlaceInput = `<input type="hidden" name="postPlaces[${index}].id" value="${selectedData.id}"/>
+        <input type="hidden" name="postPlaces[${index}].la" value="${selectedData.y}"/>
+        <input type="hidden" name="postPlaces[${index}].ma" value="${selectedData.x}"/>
+
         <div class="bg-gray-100 p-4 rounded-md mb-4">
             <div class="form-group">
                 <label class="block text-sm font-medium text-gray-700">장소 이름</label>
@@ -118,7 +121,7 @@
             </div>
             <div class="form-group">
                 <label class="block text-sm font-medium text-gray-700">주소</label>
-                <input type="text" name="postPlaces[${index}].coordinate" value="${selectedData.address_name}" placeholder="주소를 입력하세요" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-lg border-gray-300 rounded-md">
+                <input type="text" name="postPlaces[${index}].address" value="${selectedData.address_name}" placeholder="주소를 입력하세요" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm text-lg border-gray-300 rounded-md">
             </div>
             <div class="form-group">
                 <label class="block text-sm font-medium text-gray-700">평점</label>

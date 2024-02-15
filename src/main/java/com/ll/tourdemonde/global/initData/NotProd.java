@@ -57,10 +57,10 @@ public class NotProd {
         Member member2 = memberService.createMember("user2", "1234", "test2@test.com", "서강준", null, null, "user2Nick");
 
         // 장소 등록
-        placeService.save(new PlaceDto("장소1", "33.1, 37.1"));
-        placeService.save(new PlaceDto("장소2", "33.2, 37.2"));
-        placeService.save(new PlaceDto("장소3", "33.3, 37.3"));
-        placeService.save(new PlaceDto("장소4", "33.4, 37.4"));
+        placeService.save(new PlaceDto("장소1", "서울특별시", 33.1, 37.1));
+        placeService.save(new PlaceDto("장소2", "서울특별시", 33.2, 37.2));
+        placeService.save(new PlaceDto("장소3", "서울특별시", 33.3, 37.3));
+        placeService.save(new PlaceDto("장소4", "서울특별시", 33.4, 37.4));
 
         Place place1 = placeRepository.findById(1L).get();
         Place place2 = placeRepository.findById(2L).get();

@@ -22,13 +22,17 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final com.ll.tourdemonde.post.entity.QBaseTime _super = new com.ll.tourdemonde.post.entity.QBaseTime(this);
 
-    public final StringPath coordinate = createString("coordinate");
+    public final StringPath address = createString("address");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
 
     //inherited
     public final NumberPath<Long> id = _super.id;
+
+    public final NumberPath<Double> la = createNumber("la", Double.class);
+
+    public final NumberPath<Double> ma = createNumber("ma", Double.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifyDate = _super.modifyDate;

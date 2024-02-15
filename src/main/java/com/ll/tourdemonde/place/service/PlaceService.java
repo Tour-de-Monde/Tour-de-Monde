@@ -25,20 +25,24 @@ public class PlaceService {
     public void save(PlaceDto dto) {
         Place place = Place.builder()
                 .name(dto.getName())
-                .coordinate(dto.getCoordinate())
+                .la(dto.getLa())
+                .ma(dto.getMa())
+                .address(dto.getAddress())
                 .build();
 
         placeRepository.save(place);
     }
     public Place findByCoordinateOrCreate(PlaceDto dto) {
-        Optional<Place> opPlace = placeRepository.findByCoordinate(dto.getCoordinate());
+        Optional<Place> opPlace = placeRepository.findByAddress(dto.getAddress());
 
         if (opPlace.isPresent()) {
             return opPlace.get();
         }
 
         Place place = Place.builder()
-                .coordinate(dto.getCoordinate())
+                .address(dto.getAddress())
+                .la(dto.getLa())
+                .ma(dto.getMa())
                 .name(dto.getName())
                 .build();
 
