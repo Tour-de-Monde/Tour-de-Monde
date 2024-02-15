@@ -1,7 +1,9 @@
 package com.ll.tourdemonde.place.entity;
 
 import com.ll.tourdemonde.member.entity.Member;
+import com.ll.tourdemonde.place.repository.PlaceRepository;
 import com.ll.tourdemonde.post.entity.BaseTime;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.OneToMany;
@@ -21,8 +23,17 @@ import static jakarta.persistence.CascadeType.PERSIST;
 @EntityListeners(AuditingEntityListener.class)
 public class Place extends BaseTime {
 
+    @Column(nullable = false)
     private String name;
-    private String coordinate;
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
+    private Double la;
+
+    @Column(nullable = false)
+    private Double ma;
 
     @OneToMany(mappedBy = "place", cascade = PERSIST)
     @Builder.Default

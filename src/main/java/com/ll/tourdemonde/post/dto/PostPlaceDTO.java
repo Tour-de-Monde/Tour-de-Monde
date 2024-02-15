@@ -16,9 +16,13 @@ public class PostPlaceDTO {
     @NotEmpty(message="장소 이름은 필수항목입니다.")
     private String placeName;
     @NotEmpty(message="주소는 필수항목입니다.")
-    private String coordinate;
+    private String address;
     @NotEmpty(message="리뷰는 필수항목입니다.")
     private String review;
     @NotNull(message="평점은 필수항목입니다.")
     private Integer rating;
+    @NotNull(message="위도는 필수항목입니다.")
+    private Double la;
+    @NotNull(message="경도는 필수항목입니다.")
+    private Double ma;
 }
