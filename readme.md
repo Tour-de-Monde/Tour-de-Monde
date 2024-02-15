@@ -28,13 +28,56 @@
 
 
 ## 📝 주요기능
-1. 
+1. 지도를 기반으로 지도위에 다양한 여행장소에 대한 리뷰와 게시글을 작성
+   1. 카카오 지도 API를 이용하여 다양한 장소를 검색
+   2. 검색한 장소를 순서대로 마킹하고 경로를 작성
+   3. 각 장소별 평점과 리뷰를 작성
+   4. 카테고리(지역)별로 분류하여 검색
+2. 게시글을 열람하고 다양한 피드백이 가능
+   1. 지도를 통해 여행 경로를 확인
+   2. 각 장소의 평점 및 리뷰를 볼 수 있다.
+   3. 게시글 추천
+   4. 댓글 작성, 수정, 삭제
+3. 방문자들이 여행한 장소를 검색하고 예약 목록 검색 및 예약가능
+   1. 날짜별로 예약이 가능한 항목을 검색
+   2. 인원수에 따라 예약
+   3. 토스페이먼츠를 이용한 결제
+   4. 결제 상태(결제여부, 취소여부, 환불여부)에 따른 주문 목록 확인
+4. 예약을 위한 예약 관리
+   1. 장소별 예약분류(식당, 레져, 숙박)별 예약 생성, 수정, 삭제
+   2. 예약별 상세 옵션 생성, 수정, 삭제
+5. 회원 기능
+   1. 일반회원 가입기능
+   2. 카카오 로그인
+   3. 아이디/비밀번호 찾기
+
 
 
 ## 💻 기술스택
+<img src="https://img.shields.io/badge/Java-orange?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/Springboot-green?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/Springsecurity-ffffff?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/JWT-yellow?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/JPA-00ffff?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/MySql-blue?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/html-orange?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/Thymeleaf-green?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/NCP-555555?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/GithubAction-red?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
 
 
 ## ✨ 페이지 이미지
+|                                        메인페이지                                         |                                        로그인 페이지                                         |
+|:------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------:|
+|    <img src="src/main/resources/static/images/readme/main_page.png" width="400">     |       <img src="src/main/resources/static/images/readme/login.png" width="400">        |
+|                                        게시글 작성                                        |                                        게시글 상세1                                         |
+|   <img src="src/main/resources/static/images/readme/create_post.png" width="400">    |   <img src="src/main/resources/static/images/readme/post_detail_1.png" width="400">    |
+|                                       게시글 상세2                                        |                                         장소 목록                                          |
+|  <img src="src/main/resources/static/images/readme/post_detail_2.png" width="400">   |     <img src="src/main/resources/static/images/readme/place_list.png" width="400">     |
+|                                        예약 목록                                         |                                         예약 관리                                          |
+| <img src="src/main/resources/static/images/readme/reservation_list.png" width="400"> | <img src="src/main/resources/static/images/readme/reservation_manage.png" width="400"> |
+|                                        결제 페이지                                        |                                         결제 목록                                          |
+|    <img src="src/main/resources/static/images/readme/order_page.png" width="400">    |     <img src="src/main/resources/static/images/readme/order_list.png" width="400">     |
 
 
 ## 📇 ERD
