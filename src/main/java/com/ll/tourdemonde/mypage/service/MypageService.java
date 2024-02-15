@@ -12,8 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,32 +30,18 @@ public class MypageService {
 
     //현재 로그인한 사용자가 작성한 글 리스트 반환
     public Page<Post> myPostList(String username, int page){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
         Optional<Member> member = memberRepository.findByUsername(username);
-        Pageable pageable = PageRequest.of(page, 3);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return this.postRepository.findAllByAuthor(member.get(), pageable);
     }
-    /*public List<Post> myPostList(String username) {
-        List<Post> postList = postRepository.findAll();
-        Optional<Member> member = memberRepository.findByUsername(username);
-        Long id = member.get().getId();
-
-        List<Post> myPostList = postList.stream()
-                .filter(post -> post.getAuthor().getId().equals(id))
-                .collect(Collectors.toList());
-
-        return myPostList;
-    }*/
 
     //현재 로그인한 사용자가 좋아요 한 글 리스트 반환
-    public List<Post> votePostList(String username) {
-        List<Post> postList = postRepository.findAll();
+    public Page<Post> votePostList(String username, int page) {
         Optional<Member> member = memberRepository.findByUsername(username);
-
-        List<Post> votePostList = postList.stream()
-                .filter(post -> post.getVoter().stream().anyMatch(v -> v.equals(member.get())))
-                .collect(Collectors.toList());
-
-        return votePostList;
+        Pageable pageable = PageRequest.of(page, 10);
+        return this.postRepository.findAllByVoterContains(member.get(), pageable);
     }
 
     //현재 로그인한 사용자의 예약 리스트 반환

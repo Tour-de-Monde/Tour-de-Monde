@@ -36,12 +36,14 @@ public class MypageController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")
-    public String mypage(Principal principal, Model model, @RequestParam(value="myPostPage", defaultValue="0") int myPostPage){
+    public String mypage(Principal principal, Model model,
+                         @RequestParam(value="myPostPage", defaultValue="0") int myPostPage,
+                         @RequestParam(value="myVotePage", defaultValue="0") int myVotePage){
         Optional<Member> member = this.memberService.findByUsername(principal.getName());
         String username = memberService.findUsername(member.get());
 
         Page<Post> myPostList = mypageService.myPostList(username, myPostPage);
-        List<Post> votePostList = mypageService.votePostList(username);
+        Page<Post> votePostList = mypageService.votePostList(username, myVotePage);
         List<Order> myOrderList = mypageService.myOrderList(username);
 
         model.addAttribute("myPostList", myPostList); //현재 로그인한 사용자가 작성한 글 리스트 전달
