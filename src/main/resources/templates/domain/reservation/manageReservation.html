@@ -16,49 +16,50 @@
                 <a class="btn btn-primary" th:if="${reservationList == null}"
                    th:href="|/reserve/${place.getId()}/create|">예약 만들기</a>
             </div>
-            <div class="m-4 collapse collapse-arrow bg-base-200" th:each="reservation, index : ${reservationList}">
-                <input type="radio" name="my-accordion-2"/>
-                <article class="collapse-title">
-                    <h3 class="text-xl font-medium">예약 [[${index.index + 1}]]</h3>
-                    <div><span>구분 : </span><span th:text="${reservation.type}"></span>
-                    </div>
-                    <div th:if="${!reservation.getOptions().isEmpty()}">
-                        <span>옵션 개수 : </span><span th:text="${reservation.getOptions().size()}"></span>
-                    </div>
-                    <div class="flex justify-between">
+            <div th:each="reservation, index : ${reservationList}">
+                <div class="flex justify-end">
+                    <a class="btn btn-primary m-2" th:href="|/reserve/modify/${reservation.id}|">수정하기</a>
+                    <a class="btn btn-primary m-2" th:href="|/reserve/create/${reservation.id}/detail|">옵션
+                        추가</a>
+                    <a class="btn btn-primary m-2" method="DELETE"
+                       th:href="|/reserve/delete/${reservation.id}|"
+                       onclick="return confirm('정말로 삭제하시겠습니까?');">삭제하기</a>
+                </div>
+                <div class="m-4 collapse collapse-arrow bg-base-200">
+                    <input type="radio" name="my-accordion-2"/>
+                    <article class="collapse-title">
+                        <h3 class="text-xl font-medium">예약 [[${index.index + 1}]]</h3>
+                        <div><span>구분 : </span><span th:text="${reservation.type}"></span>
+                        </div>
+                        <div th:if="${!reservation.getOptions().isEmpty()}">
+                            <span>옵션 개수 : </span><span th:text="${reservation.getOptions().size()}"></span>
+                        </div>
                         <h4>옵션 목록</h4>
-                        <div>
-                            <a class="btn btn-primary m-2" th:href="|/reserve/modify/${reservation.id}|">수정하기</a>
-                            <a class="btn btn-primary" th:href="|/reserve/create/${reservation.id}/detail|">옵션
-                                추가</a>
-                            <a class="btn btn-primary m-2" method="DELETE"
-                               th:href="|/reserve/delete/${reservation.id}|"
-                               onclick="return confirm('정말로 삭제하시겠습니까?');">삭제하기</a>
-                        </div>
-                    </div>
-                    <hr>
-                </article>
-                <article class="m-4 collapse-content">
-                    <div th:each="option, index : ${reservation.getOptions()}"
-                         class="card card-bordered card-compact bg-base-100 shadow-xl mt-2">
-                        <div class="card-body">
-                            <h5 class="card-title">옵션 세부사항 [[${index.index + 1}]]</h5>
-                            <div>시작 날짜 : <span th:text="${#temporals.format(option.startDate,'yyyy-MM-dd')}"></span>
-                            </div>
-                            <div>끝 날짜 : <span th:text="${#temporals.format(option.endDate,'yyyy-MM-dd')}"></span></div>
-                            <div>시간 : [[${option.time}]]</div>
-                            <div>성인 가격 : [[${option.adultPrice}]]</div>
-                            <div>어린이 가격 : [[${option.childrenPrice}]]</div>
-                            <div class="card-actions justify-end">
-                                <a class="btn btn-secondary"
-                                   th:href="|/reserve/modify/${reservation.id}/detail/${option.id}|">옵션설정</a>
-                                <a class="btn btn-secondary" method="DELETE"
-                                   th:href="|/reserve/delete/${reservation.id}/detail/${option.id}|"
-                                   onclick="return confirm('정말로 삭제하시겠습니까?');">옵션 삭제</a>
+                        <hr>
+                    </article>
+                    <article class="m-4 collapse-content">
+                        <div th:each="option, index : ${reservation.getOptions()}"
+                             class="card card-bordered card-compact bg-base-100 shadow-xl mt-2">
+                            <div class="card-body">
+                                <h5 class="card-title">옵션 세부사항 [[${index.index + 1}]]</h5>
+                                <div>시작 날짜 : <span th:text="${#temporals.format(option.startDate,'yyyy-MM-dd')}"></span>
+                                </div>
+                                <div>끝 날짜 : <span th:text="${#temporals.format(option.endDate,'yyyy-MM-dd')}"></span>
+                                </div>
+                                <div>시간 : [[${option.time}]]</div>
+                                <div>성인 가격 : [[${option.adultPrice}]]</div>
+                                <div>어린이 가격 : [[${option.childrenPrice}]]</div>
+                                <div class="card-actions justify-end">
+                                    <a class="btn btn-secondary"
+                                       th:href="|/reserve/modify/${reservation.id}/detail/${option.id}|">옵션설정</a>
+                                    <a class="btn btn-secondary" method="DELETE"
+                                       th:href="|/reserve/delete/${reservation.id}/detail/${option.id}|"
+                                       onclick="return confirm('정말로 삭제하시겠습니까?');">옵션 삭제</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </article>
+                    </article>
+                </div>
             </div>
 
         </section>
