@@ -132,6 +132,25 @@
                             </tr>
                             </tbody>
                         </table>
+                        <!-- 페이징처리 -->
+                        <div class="flex justify-center" th:if="${!myOrderList.isEmpty()}">
+                            <div class="join">
+                                <input class="join-item btn btn-square" type="radio" name="options" aria-label="이전"
+                                       th:if="${myOrderList.hasPrevious()}" th:data-page="${myOrderList.number-1}"
+                                       onclick="navigateToMyOrderPage(this.getAttribute('data-page'))" />
+
+                                <input th:each="myOrderPage: ${#numbers.sequence(0, myOrderList.totalPages-1)}"
+                                       class="join-item btn btn-square" type="radio" name="options" th:attr="aria-label=''+(${myOrderPage+1})"
+                                       th:if="${myOrderPage >= vmyOrderList.number-3 and myOrderPage <= myOrderList.number+3}"
+                                       th:data-page="${myOrderPage}"
+                                       onclick="navigateToMyOrderPage(this.getAttribute('data-page'))"/>
+
+                                <input class="join-item btn btn-square" type="radio" name="options" aria-label="다음"
+                                       th:if="${myOrderList.hasNext()}" th:data-page="${myOrderList.number+1}"
+                                       onclick="navigateToMyOrderPage(this.getAttribute('data-page'))" />
+                            </div>
+                        </div>
+                        <!-- 페이징처리 -->
                     </div>
                 </div>
             </div>
@@ -148,6 +167,10 @@
 
     function navigateToMyVotePage(page) {
         location.href = '?myVotePage=' + page;
+    }
+
+    function navigateToMyOrderPage(page) {
+        location.href = '?myOrderPage=' + page;
     }
 </script>
 
