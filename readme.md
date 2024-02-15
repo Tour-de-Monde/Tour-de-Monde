@@ -88,10 +88,8 @@
 </div>
 </details>
 
-<hr>
 
 ## 👨‍👨‍👧‍👧 구성원 소개
-<hr>
 
 <table>
   <tbody>
