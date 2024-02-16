@@ -88,7 +88,7 @@
 
 ## 💣 트러블 슈팅
 <details>
-<summary>✔️ 배포한 서버에서 소셜 로그인 REST API 키가 맞지 않아 KOE101 에러 발생 - 손경이</summary>
+<summary><b>✔️ 배포한 서버에서 소셜 로그인 REST API 키가 맞지 않아 KOE101 에러 발생 - 손경이</b></summary>
 <div>
 
 <br/>
@@ -136,7 +136,7 @@
 </details>
 
 <details>
-<summary>✔️ 카카오맵 렌더링 에서 엔티티수정 에러  - 김동하</summary>
+<summary><b>✔️ 카카오맵 렌더링 에서 엔티티수정 에러  - 김동하</b></summary>
 <div>
 <h3>문제점 : REST API가 아닌 thymeleaf 를 사용해서 저장된 동선 만 카카오지도 api 렌더링 처리</h3>
 <h4>💭 1 번 접근 :실시간으로 마커 랜더링이 필요한 경우, 사용자 액션 후 새로운 데이터를 받아서 마커를 생성</h4>
