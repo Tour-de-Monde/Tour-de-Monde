@@ -5,12 +5,18 @@
 
     <div layout:fragment="content" class="grid-container grid gap-6 justify-center">
 
-        <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.23/dist/full.min.css" rel="stylesheet" type="text/css"/>
         <script src="https://cdn.tailwindcss.com"></script>
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        </head>
 
         <div class="flex justify-center items-center">
-            <input type="text" id="search_kw" th:value="${kw}" class="input input-bordered input-info w-1/2">
-            <button type="button" id="btn_search" class="btn btn-info mx-2">검색</button>
+            <input type="text" id="search_kw" th:value="${kw}"
+                   class="input input-bordered input-info w-1/2 rounded-full">
+            <button type="button" id="btn_search" class="icon-btn" onclick="searchFunction()">
+                <i class="fas fa-search" style="margin-left: 10px;"></i> <!-- 돋보기 아이콘 -->
+            </button>
         </div>
 
         <div class="flex justify-center items-center space-x-20">
@@ -29,7 +35,8 @@
 
         <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl">
             <th:block th:each="post : ${paging}">
-                <a th:href="@{/post/detail/{id}(id=${post.id})}" class="grid-item border p-3 max-w-md rounded-lg flex flex-col items-start justify-start hover:shadow-md hover:border-gray-300 transition duration-300">
+                <a th:href="@{/post/detail/{id}(id=${post.id})}"
+                   class="grid-item border p-3 max-w-md rounded-lg flex flex-col items-start justify-start hover:shadow-md hover:border-gray-300 transition duration-300">
                     <img th:src="@{/images/card-image.png}" alt="Card Image" class="max-w-full h-auto">
                     <h5 th:text="${post.title}" class="mt-2 text-lg font-semibold leading-tight"></h5>
                     <div class="flex justify-between w-full mt-2">
@@ -52,15 +59,20 @@
         <div class="join flex justify-center" th:if="${!paging.isEmpty()}">
             <ul class="flex">
                 <li th:classappend="${!paging.hasPrevious} ? 'disabled'">
-                    <button class="join-item btn" type="button" th:if="${paging.hasPrevious}" th:data-page="${paging.number-1}" onclick="changePage(this.dataset.page)">
+                    <button class="join-item btn" type="button" th:if="${paging.hasPrevious}"
+                            th:data-page="${paging.number-1}" onclick="changePage(this.dataset.page)">
                         <span>이전</span>
                     </button>
                 </li>
-                <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}" th:classappend="${page == paging.number} ? 'active'">
-                    <button type="button" th:text="${page+1}" th:data-page="${page}" onclick="changePage(this.dataset.page)" th:class="${page == paging.number ? 'join-item btn btn-md btn-active' : 'join-item btn'}"></button>
+                <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                    th:classappend="${page == paging.number} ? 'active'">
+                    <button type="button" th:text="${page+1}" th:data-page="${page}"
+                            onclick="changePage(this.dataset.page)"
+                            th:class="${page == paging.number ? 'join-item btn btn-md btn-active' : 'join-item btn'}"></button>
                 </li>
                 <li th:classappend="${!paging.hasNext} ? 'disabled'">
-                    <button class="join-item btn" type="button" th:if="${paging.hasNext}" th:data-page="${paging.number+1}" onclick="changePage(this.dataset.page)">
+                    <button class="join-item btn" type="button" th:if="${paging.hasNext}"
+                            th:data-page="${paging.number+1}" onclick="changePage(this.dataset.page)">
                         <span>다음</span>
                     </button>
                 </li>
