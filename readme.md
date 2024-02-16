@@ -27,6 +27,7 @@
 10. 모르는 거 있으면 물어보고 대답해주기 몰라도 같이 고민해주기
 
 
+
 ## 📝 주요기능
 1. 지도를 기반으로 지도위에 다양한 여행장소에 대한 리뷰와 게시글을 작성
     1. 카카오 지도 API를 이용하여 다양한 장소를 검색
@@ -131,10 +132,15 @@
 <h3>💡 해결</h3>
 
 - 에러가 난 이유
+
     - 카카오 로그인하는 url을 보면 client_id가 ON_SECRET으로 application-secret.yml에 있는 client_id를 받아오지 못해서 생긴 에러이다.
 - 새롭게 알게 된 것
     - application.yml에 카카오 설정이 있다면 application-prod.yml에는 없어도 된다.
     - application-secret.yml을 GitHub Actions 시크릿 환경변수로 만들 때는 주석은 없애고 값만 넣어야 한다.
+
+   - 카카오 로그인하는 url을 보면 client_id가 ON_SECRET으로 application-secret.yml에 있는 client_id를 받아오지 못해서 생긴 에러이다.
+.
+
 
 </div>
 </details>
@@ -261,3 +267,6 @@ return query.fetch();
     </tr>
   </tbody>
 </table>
+
+
+
