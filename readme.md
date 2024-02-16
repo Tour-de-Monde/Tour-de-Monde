@@ -29,28 +29,34 @@
 
 ## 📝 주요기능
 1. 지도를 기반으로 지도위에 다양한 여행장소에 대한 리뷰와 게시글을 작성
-   1. 카카오 지도 API를 이용하여 다양한 장소를 검색
-   2. 검색한 장소를 순서대로 마킹하고 경로를 작성
-   3. 각 장소별 평점과 리뷰를 작성
-   4. 카테고리(지역)별로 분류하여 검색
+    1. 카카오 지도 API를 이용하여 다양한 장소를 검색
+    2. 검색한 장소를 순서대로 마킹하고 경로를 작성
+    3. 각 장소별 평점과 리뷰를 작성
+    4. 카테고리(지역)별로 분류하여 검색
 2. 게시글을 열람하고 다양한 피드백이 가능
-   1. 지도를 통해 여행 경로를 확인
-   2. 각 장소의 평점 및 리뷰를 볼 수 있다.
-   3. 게시글 추천
-   4. 댓글 작성, 수정, 삭제
+    1. 지도를 통해 여행 경로를 확인
+    2. 각 장소의 평점 및 리뷰를 볼 수 있다.
+    3. 게시글 추천
+    4. 댓글 작성, 수정, 삭제
 3. 방문자들이 여행한 장소를 검색하고 예약 목록 검색 및 예약가능
-   1. 날짜별로 예약이 가능한 항목을 검색
-   2. 인원수에 따라 예약
-   3. 토스페이먼츠를 이용한 결제
-   4. 결제 상태(결제여부, 취소여부, 환불여부)에 따른 주문 목록 확인
+    1. 날짜별로 예약이 가능한 항목을 검색
+    2. 인원수에 따라 예약
+    3. 토스페이먼츠를 이용한 결제
+    4. 결제 상태(결제여부, 취소여부, 환불여부)에 따른 주문 목록 확인
 4. 예약을 위한 예약 관리
-   1. 장소별 예약분류(식당, 레져, 숙박)별 예약 생성, 수정, 삭제
-   2. 예약별 상세 옵션 생성, 수정, 삭제
+    1. 장소별 예약분류(식당, 레져, 숙박)별 예약 생성, 수정, 삭제
+    2. 예약별 상세 옵션 생성, 수정, 삭제
 5. 회원 기능
-   1. 일반회원 가입기능
-   2. 카카오 로그인
-   3. 아이디/비밀번호 찾기
-   4. 마이페이지에서 자신의 글만 확인
+    1. 일반회원 가입기능
+    2. 카카오 로그인
+    3. 아이디/비밀번호 찾기
+    4. 마이페이지에서 자신의 글만 확인
+
+    1. 일반회원 가입기능
+    2. 카카오 로그인
+    3. 아이디/비밀번호 찾기
+
+
 
 
 
@@ -125,16 +131,59 @@
 <h3>💡 해결</h3>
 
 - 에러가 난 이유
-  - 카카오 로그인하는 url을 보면 client_id가 ON_SECRET으로 application-secret.yml에 있는 client_id를 받아오지 못해서 생긴 에러이다.
+    - 카카오 로그인하는 url을 보면 client_id가 ON_SECRET으로 application-secret.yml에 있는 client_id를 받아오지 못해서 생긴 에러이다.
 - 새롭게 알게 된 것
-  - application.yml에 카카오 설정이 있다면 application-prod.yml에는 없어도 된다.
-  - application-secret.yml을 GitHub Actions 시크릿 환경변수로 만들 때는 주석은 없애고 값만 넣어야 한다.
+    - application.yml에 카카오 설정이 있다면 application-prod.yml에는 없어도 된다.
+    - application-secret.yml을 GitHub Actions 시크릿 환경변수로 만들 때는 주석은 없애고 값만 넣어야 한다.
 
 </div>
 </details>
 
 <details>
-<summary><b>queryDSL 사용 시 상속관계의 데이터를 반환할 때 반복하여 반환되는 문제</b></summary>
+<summary>✔️ 카카오맵 렌더링 에서 엔티티수정 에러  - 김동하</summary>
+<div>
+<h3>문제점 : REST API가 아닌 thymeleaf 를 사용해서 저장된 동선 만 카카오지도 api 렌더링 처리</h3>
+<h4>💭 1 번 접근 :실시간으로 마커 랜더링이 필요한 경우, 사용자 액션 후 새로운 데이터를 받아서 마커를 생성</h4>
+<h4> 1번 해결: address , La, Ma 엔티티 생성 후 DTO 에 적용</h4>
+<h4>2 번 문제점: 경도 , 위도가 null 로 뜸</h4>
+<h4>💭 2 번 접근: 이노테이션으로 nullable 처리 </h4>
+
+```java
+    @Column(nullable = false)
+    private Double la;
+
+    @Column(nullable = false)
+    private Double ma;
+```
+<h4>💭 3 번 접근:double 타입으로 바꾸기 java.place 에서  경도위도 받기 </h4>
+```java
+form.getPostPlaces().forEach(postPlaceDTO -> {
+            Place place = placeService.findByCoordinateOrCreate(PlaceDto.builder()
+                    .name(postPlaceDTO.getPlaceName())
+                    .address(postPlaceDTO.getAddress())
+                    .la(postPlaceDTO.getLa())
+                    .ma(postPlaceDTO.getMa())
+                    .build());
+            PlaceReview placeReview = place.addReview(postPlaceDTO.getReview(), postPlaceDTO.getRating(), author);
+            post.addPlace(place, placeReview);
+        });
+```
+
+<h4>💭 4 번 접근:selectedData object에서 받은 데이터를 json으로 문자열변환하기 </h4>
+```javascript
+const laMas = JSON.parse(/*[[${laMas}]]*/ []);
+
+        laMas.forEach((lama, index) => {
+            addSelectedMarker(lama, index);
+        })
+```
+<h3>해결 완료. </h3>
+
+</div>
+
+</details>
+<details>
+<summary><b>️✔️queryDSL 사용 시 상속관계의 데이터를 반환할 때 반복하여 반환되는 문제 - 전희영</b></summary>
 <div>
 <img src="src/main/resources/static/images/readme/troubleshooting/queryDSL_1.png" width="300">
 <img src="src/main/resources/static/images/readme/troubleshooting/queryDSL_2.png" width="300">
@@ -145,8 +194,8 @@
 * thymeleaf에서 queryDSL 사용 시 상속관계에 있는 데이터를 반환하여 th:each를 사용할 경우 부모Entitiy가 의도한 개수보다 많이 반환됨.
 * 이미지의 Reservation Entity가 2개 존재하고 각각 ReservationOption Entity가 4개, 3개 존재하는 경우 데이터는 총 25개의 데이터가 반환
 * 구체적인 예시
-다음과 같은 데이터가 있을 경우
-<img src="src/main/resources/static/images/readme/troubleshooting/sqldata.png">
+  다음과 같은 데이터가 있을 경우
+  <img src="src/main/resources/static/images/readme/troubleshooting/sqldata.png">
 ```java
 JPAQuery<Reservation> query = queryFactory.select(reservation)
         .from(reservation)
@@ -154,7 +203,6 @@ JPAQuery<Reservation> query = queryFactory.select(reservation)
         .where(condition); //reservationOption에 대한 조건문
 return query.fetch();
 ```
-
 ```html
 <th:block th:each="reservation : ${reservations}">
 <th:block th:each="option : ${reservation.getReservationOptions()}">
@@ -170,10 +218,10 @@ Reservation의 데이터와 ReservationOption의 데이터가 모두 필요하�
 데이터의 reservationOptions의 크기가 각각 4, 2, 0, 1, 0개이므로 반환되는 데이터는 (16 + 4 + 0 + 1 + 0)로 총 21개를 반환했다.
 
 ##### 해결
-* 원인 분석   
-  * sqlData이미지를 확인하면 문제가 발생했던 query로 데이터 조회시 Join으로 인해 부모entity(Reservation)가 반복적으로 조회되는 것을 확인 할 수 있다.  
-  * 자식Entity(ReservationOption)가 조회되는 개수만큼 부모Entity의 개수가 List에 포함되게 됨.
-  * 부모Entity가 자식Entity의 개수만큼 조회 되고 거기서 다시 자식Entity를 전체 조회하므로 자식Entity의 제곱만큼 데이터를 조회하게 됨.
+* 원인 분석
+    * sqlData이미지를 확인하면 문제가 발생했던 query로 데이터 조회시 Join으로 인해 부모entity(Reservation)가 반복적으로 조회되는 것을 확인 할 수 있다.
+    * 자식Entity(ReservationOption)가 조회되는 개수만큼 부모Entity의 개수가 List에 포함되게 됨.
+    * 부모Entity가 자식Entity의 개수만큼 조회 되고 거기서 다시 자식Entity를 전체 조회하므로 자식Entity의 제곱만큼 데이터를 조회하게 됨.
 * 반환되는 데이터를 변경 : Reservation -> ReservationOption
 * 반환되는 데이터를 자식으로 변경하여 원하는 만큼의 데이터만 조회하고 부모의 데이터를 가져오는 방식으로 변경
 ```java
@@ -181,8 +229,7 @@ JPAQuery<Reservation> query = queryFactory.select(reservationOption)
         .from(reservationOption)
         .where(condition); //reservationOption에 대한 조건문
 return query.fetch();
-```  
-
+```
 ```html
 <th:block th:each="option : ${reservationOptions}">
   <div>
@@ -194,10 +241,11 @@ return query.fetch();
 
 
 
- 
+
 </div>
 
 </details>
+
 
 ## 👨‍👨‍👧‍👧 구성원 소개
 
