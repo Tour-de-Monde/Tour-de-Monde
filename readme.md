@@ -26,3 +26,123 @@
 9. 도메인 별로 작업하더라도 문제사항 또는 의견차이 발생시 모두에게 공유
 10. 모르는 거 있으면 물어보고 대답해주기 몰라도 같이 고민해주기
 
+
+## 📝 주요기능
+1. 지도를 기반으로 지도위에 다양한 여행장소에 대한 리뷰와 게시글을 작성
+   1. 카카오 지도 API를 이용하여 다양한 장소를 검색
+   2. 검색한 장소를 순서대로 마킹하고 경로를 작성
+   3. 각 장소별 평점과 리뷰를 작성
+   4. 카테고리(지역)별로 분류하여 검색
+2. 게시글을 열람하고 다양한 피드백이 가능
+   1. 지도를 통해 여행 경로를 확인
+   2. 각 장소의 평점 및 리뷰를 볼 수 있다.
+   3. 게시글 추천
+   4. 댓글 작성, 수정, 삭제
+3. 방문자들이 여행한 장소를 검색하고 예약 목록 검색 및 예약가능
+   1. 날짜별로 예약이 가능한 항목을 검색
+   2. 인원수에 따라 예약
+   3. 토스페이먼츠를 이용한 결제
+   4. 결제 상태(결제여부, 취소여부, 환불여부)에 따른 주문 목록 확인
+4. 예약을 위한 예약 관리
+   1. 장소별 예약분류(식당, 레져, 숙박)별 예약 생성, 수정, 삭제
+   2. 예약별 상세 옵션 생성, 수정, 삭제
+5. 회원 기능
+   1. 일반회원 가입기능
+   2. 카카오 로그인
+   3. 아이디/비밀번호 찾기
+
+
+
+## 💻 기술스택
+<img src="https://img.shields.io/badge/Java-orange?style=for-the-badge&logo=Java&logoColor=white">
+<img src="https://img.shields.io/badge/Springboot-green?style=for-the-badge&logo=Springboot&logoColor=white">
+<img src="https://img.shields.io/badge/Springsecurity-ffffff?style=for-the-badge&logo=Springsecurity&logoColor=black">
+<img src="https://img.shields.io/badge/JWT-yellow?style=for-the-badge&logo=JWT&logoColor=white">
+<img src="https://img.shields.io/badge/JPA-00ffff?style=for-the-badge&logo=JPA&logoColor=white">
+<img src="https://img.shields.io/badge/MySql-blue?style=for-the-badge&logo=MySql&logoColor=white">
+<img src="https://img.shields.io/badge/html-orange?style=for-the-badge&logo=HTML&logoColor=white">
+<img src="https://img.shields.io/badge/Thymeleaf-green?style=for-the-badge&logo=Thymeleaf&logoColor=white">
+<img src="https://img.shields.io/badge/NCP-555555?style=for-the-badge&logo=NCP&logoColor=white">
+<img src="https://img.shields.io/badge/GithubActions-red?style=for-the-badge&logo=GithubActions&logoColor=white">
+
+
+## ✨ 페이지 이미지
+|                                        메인페이지                                         |                                        로그인 페이지                                         |
+|:------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------:|
+|    <img src="src/main/resources/static/images/readme/main_page.png" width="400">     |       <img src="src/main/resources/static/images/readme/login.png" width="400">        |
+|                                        게시글 작성                                        |                                        게시글 상세1                                         |
+|   <img src="src/main/resources/static/images/readme/create_post.png" width="400">    |   <img src="src/main/resources/static/images/readme/post_detail_1.png" width="400">    |
+|                                       게시글 상세2                                        |                                         장소 목록                                          |
+|  <img src="src/main/resources/static/images/readme/post_detail_2.png" width="400">   |     <img src="src/main/resources/static/images/readme/place_list.png" width="400">     |
+|                                        예약 목록                                         |                                         예약 관리                                          |
+| <img src="src/main/resources/static/images/readme/reservation_list.png" width="400"> | <img src="src/main/resources/static/images/readme/reservation_manage.png" width="400"> |
+|                                        결제 페이지                                        |                                         결제 목록                                          |
+|    <img src="src/main/resources/static/images/readme/order_page.png" width="400">    |     <img src="src/main/resources/static/images/readme/order_list.png" width="400">     |
+
+
+## 📇 ERD
+<img src="https://i.imgur.com/Jlj2DvV.png" width="600">
+
+## 💣 트러블 슈팅
+<details>
+<summary>✔️ 배포한 서버에서 소셜 로그인 REST API 키가 맞지 않아 KOE101 에러 발생 - 손경이</summary>
+<div>
+
+<br/>
+
+<img src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fc69962b0-3951-485b-b10a-5bb29576bba8%2Fc11bb9f3-f92b-48f0-b349-5d8adab713dd%2FUntitled.png?table=block&id=3839353a-ff97-4beb-a303-28f7f0788741&spaceId=c69962b0-3951-485b-b10a-5bb29576bba8&width=2000&userId=253c7ac7-ea76-405c-a201-0833bde7deeb&cache=v2" width="400">
+
+<br/>
+
+<h4>💭 첫 번째 시도</h4>
+
+- application-prod.yml에 카카오 관련 정보 넣어봄 → 실패
+
+<h4>💭 두 번째 시도</h4>
+
+- application-prod.yml에 temp 디렉토리가 applicaton.yml과 달라서 똑같이 맞춰주기 → 실패
+- <img src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fc69962b0-3951-485b-b10a-5bb29576bba8%2F779e0986-792f-46fb-8a80-f2d374903f0d%2FUntitled.png?table=block&id=3036a040-0b2d-484b-bd3c-49638c7a52d3&spaceId=c69962b0-3951-485b-b10a-5bb29576bba8&width=770&userId=253c7ac7-ea76-405c-a201-0833bde7deeb&cache=v2" width="200">
+
+<h4>💭 세 번째 시도</h4>
+
+- deploy.yml 코드 변경 - APPLICATION_SECRET_YML에 $ 추가 → 실패
+- run: echo "$APPLICATION_SECRET_YML" > src/main/resources/application-secret.yml
+
+<h4>💭 네 번째 시도</h4>
+
+- 프로젝트 빌드할 때 테스트 코드 빼고 빌드 했었다.
+- Dockerfile 코드 변경 - 소스 코드 복사에서 테스트 추가 → 실패
+- COPY src/main src/main => COPY src src
+
+<h4>💭 다섯 번째 시도</h4>
+
+- 프로젝트 빌드할 때 테스트 코드 빼고 빌드 했었다.
+
+<hr>
+
+<h3>💡 해결</h3>
+
+- 에러가 난 이유
+  - 카카오 로그인하는 url을 보면 client_id가 ON_SECRET으로 application-secret.yml에 있는 client_id를 받아오지 못해서 생긴 에러이다.
+- 새롭게 알게 된 것
+  - application.yml에 카카오 설정이 있다면 application-prod.yml에는 없어도 된다.
+  - application-secret.yml을 GitHub Actions 시크릿 환경변수로 만들 때는 주석은 없애고 값만 넣어야 한다.
+
+</div>
+</details>
+
+
+## 👨‍👨‍👧‍👧 구성원 소개
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/79827000?v=4" width="100px;" alt="https://github.com/s2hmuel"/><br /><sub><b>BE 팀장 : 이성규 </b></sub></a><br /></td>
+      <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/79620776?v=4" width="100px;" alt="https://github.com/Dongha922"/><br /><sub><b>BE 팀원 : 김동하 </b></sub></a><br /></td>
+      <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/78200199?v=4" width="100px;" alt="https://github.com/Son-Gyeongi"/><br /><sub><b>BE 팀원 : 손경이 </b></sub></a><br /></td>
+      <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/102494128?v=4" width="100px;" alt="https://github.com/kds98"/><br /><sub><b>BE 팀원 : 심규대 </b></sub></a><br /></td>
+      <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/99163851?v=4" width="100px;" alt="https://github.com/AidennnLee"/><br /><sub><b>BE 팀원 : 이예원 </b></sub></a><br /></td>
+      <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/129508219?v=4" width="100px;" alt="https://github.com/geniushee"/><br /><sub><b>BE 팀원 : 전희영 </b></sub></a><br /></td>
+    </tr>
+  </tbody>
+</table>
