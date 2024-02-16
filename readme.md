@@ -52,11 +52,6 @@
     3. 아이디/비밀번호 찾기
     4. 마이페이지에서 자신의 글만 확인
 
-    1. 일반회원 가입기능
-    2. 카카오 로그인
-    3. 아이디/비밀번호 찾기
-
-
 
 
 
@@ -131,6 +126,7 @@
 <h3>💡 해결</h3>
 
 - 에러가 난 이유
+
    - 카카오 로그인하는 url을 보면 client_id가 ON_SECRET으로 application-secret.yml에 있는 client_id를 받아오지 못해서 생긴 에러이다.
 - 새롭게 알게 된 것
    - application.yml에 카카오 설정이 있다면 application-prod.yml에는 없어도 된다.
