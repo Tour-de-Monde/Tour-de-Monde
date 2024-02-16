@@ -55,16 +55,17 @@
 
 
 ## 💻 기술스택
-<img src="https://img.shields.io/badge/Java-orange?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/Springboot-6DB33F?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/Springsecurity-ffffff?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/JWT-yellow?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/JPA-00ffff?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/MySql-blue?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/html-orange?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/Thymeleaf-green?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/NCP-555555?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/GithubAction-red?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/Java-orange?style=for-the-badge&logo=Java&logoColor=white">
+<img src="https://img.shields.io/badge/Springboot-green?style=for-the-badge&logo=Springboot&logoColor=white">
+<img src="https://img.shields.io/badge/Springsecurity-ffffff?style=for-the-badge&logo=Springsecurity&logoColor=black">
+<img src="https://img.shields.io/badge/JWT-yellow?style=for-the-badge&logo=JWT&logoColor=white">
+<img src="https://img.shields.io/badge/JPA-00ffff?style=for-the-badge&logo=JPA&logoColor=white">
+<img src="https://img.shields.io/badge/MySql-blue?style=for-the-badge&logo=MySql&logoColor=black">
+<img src="https://img.shields.io/badge/html-orange?style=for-the-badge&logo=HTML&logoColor=white">
+<img src="https://img.shields.io/badge/Thymeleaf-green?style=for-the-badge&logo=Thymeleaf&logoColor=white">
+<img src="https://img.shields.io/badge/NCP-555555?style=for-the-badge&logo=NCP&logoColor=white">
+<img src="https://img.shields.io/badge/GithubActions-red?style=for-the-badge&logo=GithubActions&logoColor=white">
+
 
 
 ## ✨ 페이지 이미지
@@ -142,9 +143,16 @@
 #### 문제점
 
 * thymeleaf에서 queryDSL 사용 시 상속관계에 있는 데이터를 반환하여 th:each를 사용할 경우 부모Entitiy가 의도한 개수보다 많이 반환됨.
-* 예) 이미지의 Reservation Entity가 2개 존재하고 각각 ReservationOption Entity가 4개, 3개 존재하는 경우 데이터는 총 25개의 데이터가 반환
+* 이미지의 Reservation Entity가 2개 존재하고 각각 ReservationOption Entity가 4개, 3개 존재하는 경우 데이터는 총 25개의 데이터가 반환
+* 구체적인 예시
+다음과 같은 데이터가 있을 경우
+<img src="src/main/resources/static/images/readme/troubleshooting/sqldata.png">
 ```java
-
+JPAQuery<Reservation> query = queryFactory.select(reservation)
+        .from(reservation)
+        .leftJoin(reservationOption).on(reservationOption.reservation.eq(reservation))
+        .where(condition); //reservationOption에 대한 조건문
+return query.fetch();
 ```
 ```html
 <th:block th:each="reservation : ${reservations}">
@@ -155,6 +163,15 @@
 </th:block>  
 </th:block>
 ```
+Reservation의 데이터와 ReservationOption의 데이터가 모두 필요하여 이렇게 쿼리를 작성하고 데이터를 반환했다.  
+그리고, 위의 html처럼 2중 반복문을 사용하여 출력한 결과, 예상 데이터의 reservationOptions의 제곱의 합에 해당하는 데이터를 반환하는 문제가 발생했다.  
+데이터의 reservationOptions의 크기가 각각 4, 2, 0, 1, 0개이므로 반환되는 데이터는 (16 + 4 + 0 + 1 + 0)로 총 21개를 반환했다.
+
+#### 해결
+* 반환되는 데이터를 변경
+
+
+
  
 </div>
 
