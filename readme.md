@@ -153,7 +153,7 @@ JPAQuery<Reservation> query = queryFactory.select(reservation)
         .leftJoin(reservationOption).on(reservationOption.reservation.eq(reservation))
         .where(condition); //reservationOption에 대한 조건문
 return query.fetch();
-```  
+```
 
 ```html
 <th:block th:each="reservation : ${reservations}">
