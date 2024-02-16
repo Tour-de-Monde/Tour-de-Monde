@@ -152,8 +152,10 @@
     private Double ma;
 ```
 <h4>💭 3 번 접근:double 타입으로 바꾸기 java.place 에서  경도위도 받기 </h4>
+
 ```java
-form.getPostPlaces().forEach(postPlaceDTO -> {
+
+    form.getPostPlaces().forEach(postPlaceDTO -> {
             Place place = placeService.findByCoordinateOrCreate(PlaceDto.builder()
                     .name(postPlaceDTO.getPlaceName())
                     .address(postPlaceDTO.getAddress())
@@ -163,15 +165,19 @@ form.getPostPlaces().forEach(postPlaceDTO -> {
             PlaceReview placeReview = place.addReview(postPlaceDTO.getReview(), postPlaceDTO.getRating(), author);
             post.addPlace(place, placeReview);
         });
+
 ```
 
 <h4>💭 4 번 접근:selectedData object에서 받은 데이터를 json으로 문자열변환하기 </h4>
+
 ```javascript
+
 const laMas = JSON.parse(/*[[${laMas}]]*/ []);
 
         laMas.forEach((lama, index) => {
             addSelectedMarker(lama, index);
         })
+
 ```
 <h3>해결 완료. </h3>
 
