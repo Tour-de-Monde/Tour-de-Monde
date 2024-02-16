@@ -60,7 +60,6 @@
 
 
 
-
 ## 💻 기술스택
 <img src="https://img.shields.io/badge/Java-orange?style=for-the-badge&logo=Java&logoColor=white">
 <img src="https://img.shields.io/badge/Springboot-green?style=for-the-badge&logo=Springboot&logoColor=white">
@@ -132,21 +131,13 @@
 <h3>💡 해결</h3>
 
 - 에러가 난 이유
-<<<<<<< HEAD
     - 카카오 로그인하는 url을 보면 client_id가 ON_SECRET으로 application-secret.yml에 있는 client_id를 받아오지 못해서 생긴 에러이다.
 - 새롭게 알게 된 것
     - application.yml에 카카오 설정이 있다면 application-prod.yml에는 없어도 된다.
     - application-secret.yml을 GitHub Actions 시크릿 환경변수로 만들 때는 주석은 없애고 값만 넣어야 한다.
-=======
-   - 카카오 로그인하는 url을 보면 client_id가 ON_SECRET으로 application-secret.yml에 있는 client_id를 받아오지 못해서 생긴 에러이다.
-- 새롭게 알게 된 것
-   - application.yml에 카카오 설정이 있다면 application-prod.yml에는 없어도 된다.
-   - application-secret.yml을 GitHub Actions 시크릿 환경변수로 만들 때는 주석은 없애고 값만 넣어야 한다.
->>>>>>> 6a31ec0 (ㅡãreade.me ãmain 충돌)
 
 </div>
 </details>
-
 
 <details>
 <summary>✔️ 카카오맵 렌더링 에서 엔티티수정 에러  - 김동하</summary>
