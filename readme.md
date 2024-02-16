@@ -54,16 +54,16 @@
 
 
 ## 💻 기술스택
-<img src="https://img.shields.io/badge/Java-orange?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/Springboot-green?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/Springsecurity-ffffff?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/JWT-yellow?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/JPA-00ffff?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/MySql-blue?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/html-orange?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/Thymeleaf-green?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/NCP-555555?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/GithubAction-red?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/Java-orange?style=for-the-badge&logo=Java&logoColor=white">
+<img src="https://img.shields.io/badge/Springboot-green?style=for-the-badge&logo=Springboot&logoColor=white">
+<img src="https://img.shields.io/badge/Springsecurity-ffffff?style=for-the-badge&logo=Springsecurity&logoColor=black">
+<img src="https://img.shields.io/badge/JWT-yellow?style=for-the-badge&logo=JWT&logoColor=white">
+<img src="https://img.shields.io/badge/JPA-00ffff?style=for-the-badge&logo=JPA&logoColor=white">
+<img src="https://img.shields.io/badge/MySql-blue?style=for-the-badge&logo=MySql&logoColor=black">
+<img src="https://img.shields.io/badge/html-orange?style=for-the-badge&logo=HTML&logoColor=white">
+<img src="https://img.shields.io/badge/Thymeleaf-green?style=for-the-badge&logo=Thymeleaf&logoColor=white">
+<img src="https://img.shields.io/badge/NCP-555555?style=for-the-badge&logo=NCP&logoColor=white">
+<img src="https://img.shields.io/badge/GithubActions-red?style=for-the-badge&logo=GithubActions&logoColor=white">
 
 
 ## ✨ 페이지 이미지
