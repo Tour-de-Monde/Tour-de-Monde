@@ -9,6 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAll(Pageable pageable);
@@ -27,4 +31,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
 
     Page<Post> findAllByCategory(@Param("category") String category, Pageable pageable);
+
+    Page<Post> findAllByAuthor(Member member, Pageable pageable);
+
+    Page<Post> findAllByVoterContains(Member member, Pageable pageable);
 }

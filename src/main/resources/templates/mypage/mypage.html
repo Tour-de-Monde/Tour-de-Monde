@@ -1,4 +1,12 @@
-<html layout:decorate="~{global/usrlayout}">
+<html layout:decorate="~{global/usrLayout}">
+
+<style>
+    .join {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
 
 <body>
 <div layout:fragment="content">
@@ -8,91 +16,162 @@
         </div>
         <span th:text="${@rq.member.nickname}" style="font-size: 20px; font-weight: bold;"></span>
         <p>
-            <a class="btn btn-link" href="/member/info">내 정보</a>
+            <a class="btn btn-link" href="/member/changeInfo">회원정보 수정</a>
         </p>
 
         <div class="w-4/5 mx-auto">
-        <div role="tablist" class="tabs tabs-lifted grid grid-cols-3">
-            <input type="radio" name="my_tabs_2" role="tab" class="tab text-center" aria-label="내가 쓴 글" checked />
-            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
-                <div class="overflow-x-auto">
-                    <table class="table">
-                        <!-- head -->
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th>제목</th>
-                            <th>조회수</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- row -->
-                        <tr th:each="post,loop : ${myPostList}">
-                            <td th:text="${loop.count}"></td>
-                            <td>
-                                <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
-                            </td>
-                            <td th:text="${post.view}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <div role="tablist" class="tabs tabs-lifted grid grid-cols-3">
+                <input type="radio" name="my_tabs_2" role="tab" class="tab text-center" aria-label="내가 쓴 글" checked />
+                <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
+                    <div class="overflow-x-auto">
+                        <table class="table">
+                            <!-- head -->
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>제목</th>
+                                <th>조회수</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- row -->
+                            <tr th:each="post,loop : ${myPostList}">
+                                <td th:text="${loop.count}"></td>
+                                <td>
+                                    <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                                </td>
+                                <td th:text="${post.view}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!-- 페이징처리 -->
+                        <div class="flex justify-center" th:if="${!myPostList.isEmpty()}">
+                            <div class="join">
+                                <input class="join-item btn btn-square" type="radio" name="options" aria-label="이전"
+                                       th:if="${myPostList.hasPrevious()}" th:data-page="${myPostList.number-1}"
+                                       onclick="navigateToMyPostPage(this.getAttribute('data-page'))" />
 
-            <input type="radio" name="my_tabs_2" role="tab" class="tab text-center" aria-label="좋아요 누른 글" />
-            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
-                <div class="overflow-x-auto">
-                    <table class="table">
-                        <!-- head -->
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th>제목</th>
-                            <th>조회수</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- row -->
-                        <tr th:each="post, loop : ${votePostList}">
-                            <td th:text="${loop.count}"></td>
-                            <td>
-                                <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
-                            </td>
-                            <td th:text="${post.view}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                <input th:each="myPostPage: ${#numbers.sequence(0, myPostList.totalPages-1)}"
+                                       class="join-item btn btn-square" type="radio" name="options" th:attr="aria-label=''+(${myPostPage+1})"
+                                       th:if="${myPostPage >= myPostList.number-3 and myPostPage <= myPostList.number+3}"
+                                       th:data-page="${myPostPage}"
+                                       onclick="navigateToMyPostPage(this.getAttribute('data-page'))"/>
 
-            <input type="radio" name="my_tabs_2" role="tab" class="tab text-center" aria-label="예약 내역" />
-            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
-                <div class="overflow-x-auto">
-                    <table class="table">
-                        <!-- head -->
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th>예약 장소</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- row -->
-                        <tr th:each="order, loop : ${myOrderList}">
-                            <td th:text="${loop.count}"></td>
-                            <td>
-                                <a th:href="@{|/order/${order.id}|}" th:text="${order.getPlaceName()}"></a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                <input class="join-item btn btn-square" type="radio" name="options" aria-label="다음"
+                                       th:if="${myPostList.hasNext()}" th:data-page="${myPostList.number+1}"
+                                       onclick="navigateToMyPostPage(this.getAttribute('data-page'))" />
+                            </div>
+                        </div>
+                        <!-- 페이징처리 -->
+                    </div>
+                </div>
+
+                <input type="radio" name="my_tabs_2" role="tab" class="tab text-center" aria-label="좋아요 누른 글" />
+                <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
+                    <div class="overflow-x-auto">
+                        <table class="table">
+                            <!-- head -->
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>제목</th>
+                                <th>조회수</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- row -->
+                            <tr th:each="post, loop : ${votePostList}">
+                                <td th:text="${loop.count}"></td>
+                                <td>
+                                    <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.title}"></a>
+                                </td>
+                                <td th:text="${post.view}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!-- 페이징처리 -->
+                        <div class="flex justify-center" th:if="${!votePostList.isEmpty()}">
+                            <div class="join">
+                                <input class="join-item btn btn-square" type="radio" name="options" aria-label="이전"
+                                       th:if="${votePostList.hasPrevious()}" th:data-page="${votePostList.number-1}"
+                                       onclick="navigateToMyVotePage(this.getAttribute('data-page'))" />
+
+                                <input th:each="myVotePage: ${#numbers.sequence(0, votePostList.totalPages-1)}"
+                                       class="join-item btn btn-square" type="radio" name="options" th:attr="aria-label=''+(${myVotePage+1})"
+                                       th:if="${myVotePage >= votePostList.number-3 and myVotePage <= votePostList.number+3}"
+                                       th:data-page="${myVotePage}"
+                                       onclick="navigateToMyVotePage(this.getAttribute('data-page'))"/>
+
+                                <input class="join-item btn btn-square" type="radio" name="options" aria-label="다음"
+                                       th:if="${votePostList.hasNext()}" th:data-page="${votePostList.number+1}"
+                                       onclick="navigateToMyVotePage(this.getAttribute('data-page'))" />
+                            </div>
+                        </div>
+                        <!-- 페이징처리 -->
+                    </div>
+                </div>
+
+                <input type="radio" name="my_tabs_2" role="tab" class="tab text-center" aria-label="예약 내역" />
+                <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-none p-6">
+                    <div class="overflow-x-auto">
+                        <table class="table">
+                            <!-- head -->
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>예약 장소</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- row -->
+                            <tr th:each="order, loop : ${myOrderList}">
+                                <td th:text="${loop.count}"></td>
+                                <td>
+                                    <a th:href="@{|/order/${order.id}|}" th:text="${order.getPlaceName()}"></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!-- 페이징처리 -->
+                        <div class="flex justify-center" th:if="${!myOrderList.isEmpty()}">
+                            <div class="join">
+                                <input class="join-item btn btn-square" type="radio" name="options" aria-label="이전"
+                                       th:if="${myOrderList.hasPrevious()}" th:data-page="${myOrderList.number-1}"
+                                       onclick="navigateToMyOrderPage(this.getAttribute('data-page'))" />
+
+                                <input th:each="myOrderPage: ${#numbers.sequence(0, myOrderList.totalPages-1)}"
+                                       class="join-item btn btn-square" type="radio" name="options" th:attr="aria-label=''+(${myOrderPage+1})"
+                                       th:if="${myOrderPage >= vmyOrderList.number-3 and myOrderPage <= myOrderList.number+3}"
+                                       th:data-page="${myOrderPage}"
+                                       onclick="navigateToMyOrderPage(this.getAttribute('data-page'))"/>
+
+                                <input class="join-item btn btn-square" type="radio" name="options" aria-label="다음"
+                                       th:if="${myOrderList.hasNext()}" th:data-page="${myOrderList.number+1}"
+                                       onclick="navigateToMyOrderPage(this.getAttribute('data-page'))" />
+                            </div>
+                        </div>
+                        <!-- 페이징처리 -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
 </div>
 
 </body>
+
+<script layout:fragment="script" type='text/javascript'>
+    function navigateToMyPostPage(page) {
+        location.href = '?myPostPage=' + page;
+    }
+
+    function navigateToMyVotePage(page) {
+        location.href = '?myVotePage=' + page;
+    }
+
+    function navigateToMyOrderPage(page) {
+        location.href = '?myOrderPage=' + page;
+    }
+</script>
 
 </html>
