@@ -122,7 +122,8 @@
                     <input type="text" name="nickname" placeholder="닉네임" class="input input-bordered">
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-3" style="color: #000000">닉네임 중복 확인</button>
+                <button type=submit class="btn btn-primary mt-3">닉네임 중복 확인</button>
+
             </form>
             <!-- 닉네임 중복 확인 폼 끝 -->
 
@@ -134,7 +135,6 @@
             </div>
             <!-- 에러 메시지 끝 -->
 
-            <label class="block text-gray-700 font-bold mb-2">닉네임 변경:</label>
             <!-- 닉네임 변경 폼 -->
             <form th:action="@{/member/change-nickname}" method="POST">
                 <input type="hidden" name="_method" value="PUT">
@@ -144,12 +144,16 @@
                 </div>
 
                 <button type=submit class="btn btn-primary mt-3">닉네임 변경</button>
+
             </form>
             <!-- 닉네임 변경 폼 끝 -->
-
-            <script src="https:cdn.tailwindcss.com/3.4.1">
-            </script>
         </div>
+
+        </form>
+        <!-- 닉네임 변경 폼 끝 -->
+
+        <script src="https:cdn.tailwindcss.com/3.4.1">
+        </script>
     </div>
 </div>
 </body>
