@@ -50,12 +50,13 @@
    1. 일반회원 가입기능
    2. 카카오 로그인
    3. 아이디/비밀번호 찾기
+   4. 마이페이지에서 자신의 글만 확인
 
 
 
 ## 💻 기술스택
 <img src="https://img.shields.io/badge/Java-orange?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
-<img src="https://img.shields.io/badge/Springboot-green?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
+<img src="https://img.shields.io/badge/Springboot-6DB33F?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
 <img src="https://img.shields.io/badge/Springsecurity-ffffff?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
 <img src="https://img.shields.io/badge/JWT-yellow?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
 <img src="https://img.shields.io/badge/JPA-00ffff?style=for-the-badge&logo=기술스택아이콘&logoColor=white">
@@ -131,6 +132,33 @@
 </div>
 </details>
 
+<details>
+<summary><b>queryDSL 사용 시 상속관계의 데이터를 반환할 때 반복하여 반환되는 문제</b></summary>
+<div>
+<img src="src/main/resources/static/images/readme/troubleshooting/queryDSL_1.png" width="300">
+<img src="src/main/resources/static/images/readme/troubleshooting/queryDSL_2.png" width="300">
+
+### Thymeleaf에서 queryDSL 사용 시 상속관계에 있는 데이터를 반환하여 2중 반복문을 사용할 경우 데이터를 반복하여 반환하는 문제 발생.
+#### 문제점
+
+* thymeleaf에서 queryDSL 사용 시 상속관계에 있는 데이터를 반환하여 th:each를 사용할 경우 부모Entitiy가 의도한 개수보다 많이 반환됨.
+* 예) 이미지의 Reservation Entity가 2개 존재하고 각각 ReservationOption Entity가 4개, 3개 존재하는 경우 데이터는 총 25개의 데이터가 반환
+```java
+
+```
+```html
+<th:block th:each="reservation : ${reservations}">
+<th:block th:each="option : ${reservation.getReservationOptions()}">
+  <div>
+    <p th:text="${option.id}"></p>
+  </div>
+</th:block>  
+</th:block>
+```
+ 
+</div>
+
+</details>
 
 ## 👨‍👨‍👧‍👧 구성원 소개
 
