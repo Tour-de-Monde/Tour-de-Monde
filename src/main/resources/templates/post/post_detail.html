@@ -92,10 +92,12 @@
         </div>
     </div>
     <script th:inline="javascript">
-
+        const laMas = JSON.parse(/*[[${laMas}]]*/ []);
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div
             mapOption = {
-                center: new kakao.maps.LatLng(37.498095,127.027610), // 지도의 중심좌표
+                //지도의 중심좌표
+                center: new kakao.maps.LatLng(parseFloat(laMas[0].la),parseFloat(laMas[0].ma)),
+
                 level: 7 // 지도의 확대 레벨
             };
 
@@ -105,16 +107,11 @@
 
         let isFirst = true;
 
-        const laMas = JSON.parse(/*[[${laMas}]]*/ []);
+
 
         laMas.forEach((lama, index) => {
             addSelectedMarker(lama, index);
-            // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-            // LatLngBounds 객체에 좌표를 추가합니다
-            console.log(laMas[1]);
 
-            bounds.extend(new kakao.maps.LatLng(laMas[0]));
-            // bounds.extend(new window.kakao.maps.LatLng(laMas[1]));
         })
         function addSelectedMarker({la, ma}, index) {
 
