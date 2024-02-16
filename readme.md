@@ -60,7 +60,7 @@
 <img src="https://img.shields.io/badge/Springsecurity-ffffff?style=for-the-badge&logo=Springsecurity&logoColor=black">
 <img src="https://img.shields.io/badge/JWT-yellow?style=for-the-badge&logo=JWT&logoColor=white">
 <img src="https://img.shields.io/badge/JPA-00ffff?style=for-the-badge&logo=JPA&logoColor=white">
-<img src="https://img.shields.io/badge/MySql-blue?style=for-the-badge&logo=MySql&logoColor=black">
+<img src="https://img.shields.io/badge/MySql-blue?style=for-the-badge&logo=MySql&logoColor=white">
 <img src="https://img.shields.io/badge/html-orange?style=for-the-badge&logo=HTML&logoColor=white">
 <img src="https://img.shields.io/badge/Thymeleaf-green?style=for-the-badge&logo=Thymeleaf&logoColor=white">
 <img src="https://img.shields.io/badge/NCP-555555?style=for-the-badge&logo=NCP&logoColor=white">
