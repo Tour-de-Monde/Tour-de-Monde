@@ -139,8 +139,8 @@
 <img src="src/main/resources/static/images/readme/troubleshooting/queryDSL_1.png" width="300">
 <img src="src/main/resources/static/images/readme/troubleshooting/queryDSL_2.png" width="300">
 
-### Thymeleaf에서 queryDSL 사용 시 상속관계에 있는 데이터를 반환하여 2중 반복문을 사용할 경우 데이터를 반복하여 반환하는 문제 발생.
-#### 문제점
+#### Thymeleaf에서 queryDSL 사용 시 상속관계에 있는 데이터를 반환하여 2중 반복문을 사용할 경우 데이터를 반복하여 반환하는 문제 발생.
+##### 문제점
 
 * thymeleaf에서 queryDSL 사용 시 상속관계에 있는 데이터를 반환하여 th:each를 사용할 경우 부모Entitiy가 의도한 개수보다 많이 반환됨.
 * 이미지의 Reservation Entity가 2개 존재하고 각각 ReservationOption Entity가 4개, 3개 존재하는 경우 데이터는 총 25개의 데이터가 반환
@@ -158,6 +158,7 @@ return query.fetch();
 <th:block th:each="reservation : ${reservations}">
 <th:block th:each="option : ${reservation.getReservationOptions()}">
   <div>
+     <p th:text="${reservation.type}"></p>
     <p th:text="${option.id}"></p>
   </div>
 </th:block>  
@@ -167,8 +168,27 @@ Reservation의 데이터와 ReservationOption의 데이터가 모두 필요하�
 그리고, 위의 html처럼 2중 반복문을 사용하여 출력한 결과, 예상 데이터의 reservationOptions의 제곱의 합에 해당하는 데이터를 반환하는 문제가 발생했다.  
 데이터의 reservationOptions의 크기가 각각 4, 2, 0, 1, 0개이므로 반환되는 데이터는 (16 + 4 + 0 + 1 + 0)로 총 21개를 반환했다.
 
-#### 해결
-* 반환되는 데이터를 변경
+##### 해결
+* 원인 분석   
+  * sqlData이미지를 확인하면 문제가 발생했던 query로 데이터 조회시 Join으로 인해 부모entity(Reservation)가 반복적으로 조회되는 것을 확인 할 수 있다.  
+  * 자식Entity(ReservationOption)가 조회되는 개수만큼 부모Entity의 개수가 List에 포함되게 됨.
+  * 부모Entity가 자식Entity의 개수만큼 조회 되고 거기서 다시 자식Entity를 전체 조회하므로 자식Entity의 제곱만큼 데이터를 조회하게 됨.
+* 반환되는 데이터를 변경 : Reservation -> ReservationOption
+* 반환되는 데이터를 자식으로 변경하여 원하는 만큼의 데이터만 조회하고 부모의 데이터를 가져오는 방식으로 변경
+```java
+JPAQuery<Reservation> query = queryFactory.select(reservationOption)
+        .from(reservationOption)
+        .where(condition); //reservationOption에 대한 조건문
+return query.fetch();
+```
+```html
+<th:block th:each="option : ${reservationOptions}">
+  <div>
+    <p th:text="${option.id}"></p>
+     <p th:text="${option.getReservation.type}"></p>
+  </div>
+</th:block>
+```
 
 
 
