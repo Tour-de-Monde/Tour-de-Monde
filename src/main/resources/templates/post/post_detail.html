@@ -92,21 +92,26 @@
         </div>
     </div>
     <script th:inline="javascript">
-
+        const laMas = JSON.parse(/*[[${laMas}]]*/ []);
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div
             mapOption = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 3 // 지도의 확대 레벨
+                //지도의 중심좌표
+                center: new kakao.maps.LatLng(parseFloat(laMas[0].la),parseFloat(laMas[0].ma)),
+
+                level: 7 // 지도의 확대 레벨
             };
 
         var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+        var bounds = new kakao.maps.LatLngBounds();
 
         let isFirst = true;
 
-        const laMas = JSON.parse(/*[[${laMas}]]*/ []);
+
 
         laMas.forEach((lama, index) => {
             addSelectedMarker(lama, index);
+
         })
         function addSelectedMarker({la, ma}, index) {
 
@@ -127,7 +132,10 @@
 
             var clickPosition = new kakao.maps.LatLng(la, ma)
 
+
+
             if (isFirst) {
+
                 isFirst = false;
                 // 클릭한 위치를 기준으로 선을 생성하고 지도위에 표시합니다
                 clickLine = new kakao.maps.Polyline({
