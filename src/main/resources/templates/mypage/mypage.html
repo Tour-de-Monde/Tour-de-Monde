@@ -12,11 +12,12 @@
 <div layout:fragment="content">
     <div class="grid place-items-center">
         <div class="image-container">
-            <img class="rounded-full" th:src="${@rq.profileImgUrl}" style="width: 100px;">
+            <img class="rounded-full" th:if="${@rq.profileImgUrl != null}" th:src="${@rq.profileImgUrl}" style="width: 100px;">
         </div>
+
         <span th:text="${@rq.member.nickname}" style="font-size: 20px; font-weight: bold;"></span>
         <p>
-            <a class="btn btn-link" href="/member/changeInfo">회원정보 수정</a>
+            <a class="btn btn-link" href="/member/modify">회원정보 수정</a>
         </p>
 
         <div class="w-4/5 mx-auto">

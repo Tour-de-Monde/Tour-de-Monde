@@ -1,4 +1,4 @@
-package com.ll.tourdemonde.global.initData;
+/*package com.ll.tourdemonde.global.initData;
 
 import com.ll.tourdemonde.member.entity.Member;
 import com.ll.tourdemonde.member.service.MemberService;
@@ -98,4 +98,4 @@ public class NotProd {
 //        orderService.payByTossPayments(order1, 100_000L);
         orderService.payByTossPayments(order2, 50_000L);
     }
-}
+}*/
